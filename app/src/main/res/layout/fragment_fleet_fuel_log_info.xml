@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".operations.ui.operations.fuel_log.FleetFuelLogInfoFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar" />
+
+            <LinearLayout style="@style/ParentLinearLayoutForInputForm">
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:layout_marginTop="16.7dp"
+                    android:text="@string/vehicle_name" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText"
+                    android:padding="5dp">
+
+                    <Spinner
+                        android:id="@+id/cboVehicleName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <!--<TextView
+                        android:id="@+id/lblVehicle"
+                        style="@style/TextViewSpinner"
+                        android:text="@string/choose_an_option" />-->
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/purchase_date" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/lblPurchaseDate"
+                        style="@style/TextViewDateSelect"
+                        android:hint="@string/purchase_date" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/odometer" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtOdometer"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/odometer"
+                        android:importantForAutofill="no"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/gallons" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtGallons"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/gallons"
+                        android:importantForAutofill="no"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/total_cost" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtTotalCost"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/total_cost"
+                        android:importantForAutofill="no"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/fuel_type" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/lblFuelType"
+                        style="@style/TextViewSpinner"
+                        android:text="@string/choose_an_option" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/provider_name" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtProviderName"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/provider_name"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/remarks" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtRemarks"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/remarks"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/InputFormButton" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

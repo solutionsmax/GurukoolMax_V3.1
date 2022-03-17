@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.core.ui.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+
+        <action
+            android:id="@+id/action_splashFragment_to_registerSchoolCodeFragment"
+            app:destination="@id/registerSchoolCodeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.core.ui.MainMenuFragment"
+        android:label="fragment_main_menu"
+        tools:layout="@layout/fragment_main_menu">
+
+        <action
+            android:id="@+id/action_mainMenuFragment_to_managementLoginFragment"
+            app:destination="@id/managementLoginFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_operationsLoginFragment"
+            app:destination="@id/operationsLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/managementLoginFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.management.ManagementLoginFragment"
+        android:label="fragment_management_login"
+        tools:layout="@layout/fragment_management_login" />
+    <fragment
+        android:id="@+id/registerSchoolCodeFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.core.ui.RegisterSchoolCodeFragment"
+        android:label="fragment_register_school_code"
+        tools:layout="@layout/fragment_register_school_code">
+        <action
+            android:id="@+id/action_registerSchoolCodeFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/operationsLoginFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsLoginFragment"
+        android:label="fragment_operations_login"
+        tools:layout="@layout/fragment_operations_login">
+        <action
+            android:id="@+id/action_operationsLoginFragment_to_operationsMenuFragment"
+            app:destination="@id/operationsMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/operationsMenuFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsMenuFragment"
+        android:label="fragment_operations_menu"
+        tools:layout="@layout/fragment_operations_menu">
+
+        <action
+            android:id="@+id/action_operationsMenuFragment_to_operationsSubMenuFragment"
+            app:destination="@id/operationsSubMenuFragment" />
+        <action
+            android:id="@+id/action_operationsMenuFragment_to_onBoardAttendanceFragment"
+            app:destination="@id/onBoardAttendanceFragment" />
+        <action
+            android:id="@+id/action_operationsMenuFragment_to_registeredFleetListFragment"
+            app:destination="@id/registeredFleetListFragment" />
+        <action
+            android:id="@+id/action_operationsMenuFragment_to_registeredFleetMovementListFragment"
+            app:destination="@id/registeredFleetMovementListFragment" />
+        <action
+            android:id="@+id/action_operationsMenuFragment_to_fleetFuelLogListFragment"
+            app:destination="@id/fleetFuelLogListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fleetRoutesListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetRoutesListFragment"
+        android:label="fragment_fleet_routes_list"
+        tools:layout="@layout/fragment_fleet_routes_list" />
+    <fragment
+        android:id="@+id/operationsSubMenuFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsSubMenuFragment"
+        android:label="fragment_operations_sub_menu"
+        tools:layout="@layout/fragment_operations_sub_menu">
+        <action
+            android:id="@+id/action_operationsSubMenuFragment_to_fleetRoutesListFragment"
+            app:destination="@id/fleetRoutesListFragment" />
+        <action
+            android:id="@+id/action_operationsSubMenuFragment_to_fleetBusStopsListFragment"
+            app:destination="@id/fleetBusStopsListFragment" />
+        <action
+            android:id="@+id/action_operationsSubMenuFragment_to_fleetSchedulePickupListFragment"
+            app:destination="@id/fleetSchedulePickupListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fleetBusStopsListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetBusStopsListFragment"
+        android:label="fragment_fleet_bus_stops_list"
+        tools:layout="@layout/fragment_fleet_bus_stops_list" />
+    <fragment
+        android:id="@+id/fleetSchedulePickupListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetSchedulePickupListFragment"
+        android:label="fragment_fleet_schedule_pickup_list"
+        tools:layout="@layout/fragment_fleet_schedule_pickup_list" />
+    <fragment
+        android:id="@+id/onBoardAttendanceFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceFragment"
+        android:label="fragment_on_board_attendance"
+        tools:layout="@layout/fragment_on_board_attendance" />
+    <fragment
+        android:id="@+id/registeredFleetListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetListFragment"
+        android:label="fragment_registered_fleet_list"
+        tools:layout="@layout/fragment_registered_fleet_list">
+        <argument
+            android:name="id"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_registeredFleetListFragment_to_registeredFleetInfoFragment"
+            app:destination="@id/registeredFleetInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registeredFleetInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetInfoFragment"
+        android:label="fragment_registered_fleet_info"
+        tools:layout="@layout/fragment_registered_fleet_info">
+    </fragment>
+    <fragment
+        android:id="@+id/registeredFleetMovementListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.RegisteredFleetMovementListFragment"
+        android:label="fragment_registered_fleet_movement_list"
+        tools:layout="@layout/fragment_registered_fleet_movement_list">
+        <action
+            android:id="@+id/action_registeredFleetMovementListFragment_to_registeredFleetMovementInfoFragment"
+            app:destination="@id/registeredFleetMovementInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registeredFleetMovementInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.RegisteredFleetMovementInfoFragment"
+        android:label="fragment_registered_fleet_movement_info"
+        tools:layout="@layout/fragment_registered_fleet_movement_info" />
+    <fragment
+        android:id="@+id/fleetFuelLogListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogListFragment"
+        android:label="fragment_fleet_fuel_log_list"
+        tools:layout="@layout/fragment_fleet_fuel_log_list" />
+    <fragment
+        android:id="@+id/fleetFuelLogInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogInfoFragment"
+        android:label="fragment_fleet_fuel_log_info"
+        tools:layout="@layout/fragment_fleet_fuel_log_info" />
+
+</navigation>

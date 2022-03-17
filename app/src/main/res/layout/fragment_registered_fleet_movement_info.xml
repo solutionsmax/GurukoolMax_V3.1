@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".operations.ui.operations.movement.RegisteredFleetMovementInfoFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar" />
+
+            <LinearLayout style="@style/ParentLinearLayoutForInputForm">
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:layout_marginTop="16.7dp"
+                    android:text="@string/vehicle_name" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText"
+                    android:padding="5dp">
+
+                    <Spinner
+                        android:id="@+id/cboVehicleName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                   <!-- <TextView
+                        android:id="@+id/lblVehicle"
+                        style="@style/TextViewSpinner"
+                        android:text="@string/choose_an_option" />-->
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/date_of_record" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/lblDateOfRecord"
+                        style="@style/TextViewDateSelect"
+                        android:hint="@string/date_of_record" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/opening_reading" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtOpeningRecord"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/opening_reading"
+                        android:inputType="number"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/closing_reading" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtClosingReading"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/closing_reading"
+                        android:inputType="number"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/trip_reading" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtTripReading"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/trip_reading"
+                        android:inputType="number"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/fleet_number" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtFleetNumber"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/fleet_number"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/fuel_coupon_number" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtFuelCoupon"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/fuel_coupon_number"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/fuel_liters" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtFuelLiters"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/fuel_liters"
+                        android:inputType="numberDecimal"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/amount" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtAmount"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/amount"
+                        android:inputType="numberDecimal"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/remarks" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtRemarks"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/remarks"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/InputFormButton" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

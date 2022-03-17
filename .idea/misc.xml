@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable-v24/gray_rect1.xml" value="0.312" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/custom_spinner.xml" value="0.334" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/gray_rect1.xml" value="0.312" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/ic_baseline_arrow_back_ios_40.xml" value="0.3205" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.3675" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.334" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/indicator_selected.xml" value="0.3035" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/indicator_unselected.xml" value="0.3035" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/rectangle_silver_cure.xml" value="0.3675" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/drawable/sign_up.xml" value="0.312" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/custom_edit_text.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fleet_bus_stop_list_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fleet_movement_list_item.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fleet_routes_list_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fleet_schedule_pickup_item.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_fleet_bus_stops_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_fleet_fuel_log_info.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_fleet_fuel_log_list.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_fleet_routes_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_fleet_schedule_pickup_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_main_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_management_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_on_board_attendance.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_operations_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_operations_menu.xml" value="0.33" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_operations_sub_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_register_school_code.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_registered_fleet_info.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_registered_fleet_list.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_registered_fleet_movement_info.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_registered_fleet_movement_list.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_slider_four.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_slider_one.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_slider_three.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_slider_two.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fragment_splash.xml" value="0.33" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/fuel_logs_list_item.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/main_menu_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/main_menu_toolbar.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/operations_menu_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/registered_fleet_item.xml" value="0.3009833262077811" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/spinner_item.xml" value="0.25" />
+        <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/layout/toolbar.xml" value="0.36666666666666664" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
