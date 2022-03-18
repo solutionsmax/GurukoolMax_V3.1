@@ -27,4 +27,5 @@ ext {
     bar_code_scanner_version = "2.1.2"
     material_edit_text = "2.1.4"
     power_spinner = "1.1.9"
+    image_picker = "2.4.5"
 }

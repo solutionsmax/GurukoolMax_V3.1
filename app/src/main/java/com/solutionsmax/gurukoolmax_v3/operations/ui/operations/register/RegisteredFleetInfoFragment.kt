@@ -87,30 +87,35 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                     sToken,
                     binding.txtRegistration.text.toString()
                 )
-                registeredFleetViewModel.checkRegisteredFleetDuplicateMutableData.observe(
-                    viewLifecycleOwner
-                ) { duplicate ->
-                    if (iEditID > 0) {
-                        if (duplicate > 0) {
-                            if (duplicate == iEditID) {
-                                amendInfo()
+                with(registeredFleetViewModel) {
+                    errorLiveData.observe(viewLifecycleOwner) {
+                        showError(error = it.peekContent())
+                    }
+                    checkRegisteredFleetDuplicateMutableData.observe(
+                        viewLifecycleOwner
+                    ) { duplicate ->
+                        if (iEditID > 0) {
+                            if (duplicate > 0) {
+                                if (duplicate == iEditID) {
+                                    amendInfo()
+                                } else {
+                                    showError(
+                                        getString(R.string.duplicate_info),
+                                        getString(R.string.duplicate_info_desc)
+                                    )
+                                }
                             } else {
+                                amendInfo()
+                            }
+                        } else {
+                            if (duplicate > 0) {
                                 showError(
                                     getString(R.string.duplicate_info),
                                     getString(R.string.duplicate_info_desc)
                                 )
+                            } else {
+                                postInfo()
                             }
-                        } else {
-                            amendInfo()
-                        }
-                    } else {
-                        if (duplicate > 0) {
-                            showError(
-                                getString(R.string.duplicate_info),
-                                getString(R.string.duplicate_info_desc)
-                            )
-                        } else {
-                            postInfo()
                         }
                     }
                 }
@@ -127,19 +132,24 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             sAuthorization = sToken,
             id = iEditID
         )
-        registeredFleetViewModel.retrieveRegisteredFleetDetailsMutableData.observe(
-            viewLifecycleOwner
-        ) {
-            if (it.isNotEmpty()) {
-                binding.txtVehicleName.setText(it.first().sVehicleName)
-                binding.txtRegistration.setText(it.first().sRegistrationNumber)
-                binding.txtModel.setText(it.first().sModel)
-                binding.txtMake.setText(it.first().sMake)
-            } else {
-                showError(
-                    getString(R.string.something_went_wrong),
-                    getString(R.string.something_went_wrong_desc)
-                )
+        with(registeredFleetViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(error = it.peekContent())
+            }
+            retrieveRegisteredFleetDetailsMutableData.observe(
+                viewLifecycleOwner
+            ) {
+                if (it.isNotEmpty()) {
+                    binding.txtVehicleName.setText(it.first().sVehicleName)
+                    binding.txtRegistration.setText(it.first().sRegistrationNumber)
+                    binding.txtModel.setText(it.first().sModel)
+                    binding.txtMake.setText(it.first().sMake)
+                } else {
+                    showError(
+                        getString(R.string.something_went_wrong),
+                        getString(R.string.something_went_wrong_desc)
+                    )
+                }
             }
         }
     }
@@ -176,14 +186,19 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             postInfo
         )
         registeredFleetViewModel.postRegisteredFleetInfo(postParamsInfo)
-        registeredFleetViewModel.postRegisteredFleetMutableData.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                currentNavController.navigate(R.id.registeredFleetListFragment)
-            } else {
-                showError(
-                    getString(R.string.could_not_save_info),
-                    getString(R.string.could_not_save_info_desc)
-                )
+        with(registeredFleetViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(error = it.peekContent())
+            }
+            postRegisteredFleetMutableData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.registeredFleetListFragment)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_info),
+                        getString(R.string.could_not_save_info_desc)
+                    )
+                }
             }
         }
     }

@@ -47,7 +47,7 @@ class FleetFuelLogsViewModel @Inject constructor(
         postFuelLogsUseCase(fuelLogsPostParams).fold(
             {
                 Log.d("TAG", "postFuelLog: $it")
-                ::postError
+                postError(it)
             },
             {
                 _postFuelLogsMutableData.postValue(it)
@@ -59,7 +59,7 @@ class FleetFuelLogsViewModel @Inject constructor(
         amendFuelLogsUseCase(fuelLogsPostParams).fold(
             {
                 Log.d("TAG", "amendFuelLog: $it")
-                ::postError
+                postError(it)
             },
             {
                 _amendFuelLogsMutableData.postValue(it)
@@ -88,7 +88,7 @@ class FleetFuelLogsViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "duplicateFuelLog: $it")
-                    ::postError
+                    postError(it)
                 },
                 {
                     _checkDuplicateFuelLogsMutableData.postValue(it)
@@ -111,7 +111,7 @@ class FleetFuelLogsViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "retrieveFuelLogDetails: $it")
-                    ::postError
+                    postError(it)
                 },
                 {
                     _retrieveFuelLogsDetailsMutableData.postValue(it)
@@ -139,7 +139,7 @@ class FleetFuelLogsViewModel @Inject constructor(
         ).fold(
             {
                 Log.d("TAG", "retrieveFuelLogList: $it")
-                ::postError
+                postError(it)
             },
             {
                 _retrieveFuelLogsListMutableData.postValue(it)

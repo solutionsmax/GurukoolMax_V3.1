@@ -113,4 +113,6 @@ dependencies {
 
     // Power Spinner
     api "com.github.skydoves:powerspinner:$power_spinner"
+
+    api "com.github.esafirm:android-image-picker:$image_picker"
 }

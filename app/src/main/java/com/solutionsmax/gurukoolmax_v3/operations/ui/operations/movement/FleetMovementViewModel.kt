@@ -69,7 +69,7 @@ class FleetMovementViewModel @Inject constructor(
             postFleetMovementUseCase(fleetMovementPostParams).fold(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
-                    ::postError
+                    postError(it)
                 },
                 {
                     _postFleetMovementMutableLiveData.postValue(it)
@@ -82,7 +82,7 @@ class FleetMovementViewModel @Inject constructor(
         amendFleetMovementUseCase(fleetMovementPostParams).fold(
             {
                 Log.d("TAG", "postFleetMovement: $it")
-                ::postError
+                postError(it)
             },
             {
                 _amendFleetMovementMutableLiveData.postValue(it)
@@ -113,7 +113,7 @@ class FleetMovementViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
-                    ::postError
+                    postError(it)
                 },
                 {
                     _checkDuplicateFleetMovementMutableLiveData.postValue(it)
@@ -139,7 +139,7 @@ class FleetMovementViewModel @Inject constructor(
             fetchFleetMovementWorkflowStatusUseCase(fleetMovementFetchWorkflowStatus).fold(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
-                    ::postError
+                    postError(it)
                 },
                 {
                     _fetchFleetMovementWorkflowStatusMutableLiveData.postValue(it)
@@ -152,7 +152,7 @@ class FleetMovementViewModel @Inject constructor(
             populateFleetMovementListUseCase(fleetMovementRetrieveList).fold(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
-                    ::postError
+                    postError(it)
                 },
                 {
                     _populateFleetMovementListMutableLiveData.postValue(it)
