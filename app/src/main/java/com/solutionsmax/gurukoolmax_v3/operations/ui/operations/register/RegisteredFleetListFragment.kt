@@ -67,16 +67,22 @@ class RegisteredFleetListFragment : BaseFragment() {
                     token.first().access_token,
                     -1
                 )
-                registeredFleetViewModel.retrieveRegisteredFleetListMutableData.observe(
-                    viewLifecycleOwner
-                ) {
-                    binding.progressBar.visibility = View.GONE
-                    with(binding.registeredFleetList) {
-                        layoutManager = LinearLayoutManager(requireContext())
-                        adapter = RegisteredFleetAdapter(it, RegisteredFleetAdapter.OnItemClick {
-                            val bundle = bundleOf("id" to it)
-                            currentNavController.navigate(R.id.registeredFleetInfoFragment, bundle)
-                        })
+                with(registeredFleetViewModel){
+                    errorLiveData.observe(viewLifecycleOwner){
+                        binding.progressBar.visibility = View.GONE
+                        showError(it.peekContent())
+                    }
+                    retrieveRegisteredFleetListMutableData.observe(
+                        viewLifecycleOwner
+                    ) {
+                        binding.progressBar.visibility = View.GONE
+                        with(binding.registeredFleetList) {
+                            layoutManager = LinearLayoutManager(requireContext())
+                            adapter = RegisteredFleetAdapter(it, RegisteredFleetAdapter.OnItemClick {
+                                val bundle = bundleOf("id" to it)
+                                currentNavController.navigate(R.id.registeredFleetInfoFragment, bundle)
+                            })
+                        }
                     }
                 }
             }

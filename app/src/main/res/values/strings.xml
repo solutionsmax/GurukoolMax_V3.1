@@ -102,4 +102,6 @@
     <string name="could_not_save_info_desc">Something went wrong, Could not save the details provided. Please try again.</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="something_went_wrong_desc">Could not retrieve details</string>
+    <string name="connection_error">Something Went wrong</string>
+    <string name="connection_error_desc">We have trouble connecting</string>
 </resources>

@@ -105,7 +105,7 @@ class RegisteredFleetViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 },
                 {
                     _amendRegisteredFleetMutableData.postValue(it)
@@ -129,7 +129,7 @@ class RegisteredFleetViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 },
                 {
                     _checkRegisteredFleetDuplicateMutableData.postValue(it)
@@ -203,7 +203,7 @@ class RegisteredFleetViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 },
                 {
                     _retrieveRegisteredFleetDetailsMutableData.postValue(it)
@@ -223,7 +223,7 @@ class RegisteredFleetViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 },
                 {
                     _retrieveRegisteredFleetListMutableData.postValue(it)

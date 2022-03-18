@@ -16,6 +16,7 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LOG_CHECK_DUPLICATE_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LOG_CHECK_RETRIEVE_DETAILS
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LOG_POST_INFO
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_POPULATE_LIST
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
@@ -24,7 +25,6 @@ import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetFuelLogInfoBindi
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLogsPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fuel_logs.FuelLogsPostParams
-import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.FleetMovementViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
 import javax.inject.Inject
@@ -87,34 +87,42 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                     retrieveDetails(iEditID)
                 }
                 fleetRegisterViewModel.populateRegisteredFleetList(
-                    license.first().rest_url + MethodConstants.FLEET_REGISTRATION_POPULATE_LIST,
+                    license.first().rest_url + FLEET_REGISTRATION_POPULATE_LIST,
                     token.first().access_token, 1
                 )
-                fleetRegisterViewModel.populateRegisteredFleetMutableData.observe(viewLifecycleOwner) {
-                    binding.cboVehicleName.apply {
-                        it.add(
-                            0,
-                            PopulateRegisteredFleetList(-1, getString(R.string.choose_an_option))
-                        )
-                        adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
-                        onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                p0: AdapterView<*>?,
-                                p1: View?,
-                                p2: Int,
-                                p3: Long
-                            ) {
-                                if (p2 > 0) {
-                                    val vehicleItem =
-                                        binding.cboVehicleName.selectedItem as PopulateRegisteredFleetList
-                                    iVehicleID = vehicleItem.id
+                with(fleetRegisterViewModel) {
+                    errorLiveData.observe(viewLifecycleOwner) {
+                        showError(it.peekContent())
+                    }
+                    populateRegisteredFleetMutableData.observe(viewLifecycleOwner) {
+                        binding.cboVehicleName.apply {
+                            it.add(
+                                0,
+                                PopulateRegisteredFleetList(
+                                    -1,
+                                    getString(R.string.choose_an_option)
+                                )
+                            )
+                            adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
+                            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    p0: AdapterView<*>?,
+                                    p1: View?,
+                                    p2: Int,
+                                    p3: Long
+                                ) {
+                                    if (p2 > 0) {
+                                        val vehicleItem =
+                                            binding.cboVehicleName.selectedItem as PopulateRegisteredFleetList
+                                        iVehicleID = vehicleItem.id
+                                    }
                                 }
-                            }
 
-                            override fun onNothingSelected(p0: AdapterView<*>?) {
-                                TODO("Not yet implemented")
-                            }
+                                override fun onNothingSelected(p0: AdapterView<*>?) {
+                                    TODO("Not yet implemented")
+                                }
 
+                            }
                         }
                     }
                 }
@@ -138,28 +146,33 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                     sBaseURL + FLEET_FUEL_LOG_CHECK_DUPLICATE_INFO, sAuthorization = sToken,
                     iGroupID = iGroupID, iSchoolID = iBranchID, iVehicleID, -1
                 )
-                fuelLogsViewModel.checkDuplicateFuelLogsMutableData.observe(viewLifecycleOwner) { duplicate ->
-                    if (iEditID > 0) {
-                        if (duplicate > 0) {
-                            if (duplicate == iEditID) {
-                                amendInfo()
+                with(fuelLogsViewModel) {
+                    errorLiveData.observe(viewLifecycleOwner) {
+                        showError(it.peekContent())
+                    }
+                    checkDuplicateFuelLogsMutableData.observe(viewLifecycleOwner) { duplicate ->
+                        if (iEditID > 0) {
+                            if (duplicate > 0) {
+                                if (duplicate == iEditID) {
+                                    amendInfo()
+                                } else {
+                                    showError(
+                                        getString(R.string.duplicate_info),
+                                        getString(R.string.duplicate_info_desc)
+                                    )
+                                }
                             } else {
+                                amendInfo()
+                            }
+                        } else {
+                            if (duplicate > 0) {
                                 showError(
                                     getString(R.string.duplicate_info),
                                     getString(R.string.duplicate_info_desc)
                                 )
+                            } else {
+                                postInfo()
                             }
-                        } else {
-                            amendInfo()
-                        }
-                    } else {
-                        if (duplicate > 0) {
-                            showError(
-                                getString(R.string.duplicate_info),
-                                getString(R.string.duplicate_info_desc)
-                            )
-                        } else {
-                            postInfo()
                         }
                     }
                 }
@@ -176,14 +189,19 @@ class FleetFuelLogInfoFragment : BaseFragment() {
             sAuthorization = sToken,
             id = iEditID
         )
-        fuelLogsViewModel.retrieveFuelLogsDetailsMutableData.observe(viewLifecycleOwner) {
-            for (items in it) {
-                binding.lblPurchaseDate.text = items.sDateOfPurchase.substring(0, 10)
-                binding.txtOdometer.setText(items.iOdometer.toString())
-                binding.txtGallons.setText(items.iGallons.toString())
-                binding.txtTotalCost.setText(items.iTotalCost.toString())
-                binding.txtProviderName.setText(items.sProviderName)
-                binding.txtRemarks.setText(items.sNotes)
+        with(fuelLogsViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(it.peekContent())
+            }
+            retrieveFuelLogsDetailsMutableData.observe(viewLifecycleOwner) {
+                for (items in it) {
+                    binding.lblPurchaseDate.text = items.sDateOfPurchase.substring(0, 10)
+                    binding.txtOdometer.setText(items.iOdometer.toString())
+                    binding.txtGallons.setText(items.iGallons.toString())
+                    binding.txtTotalCost.setText(items.iTotalCost.toString())
+                    binding.txtProviderName.setText(items.sProviderName)
+                    binding.txtRemarks.setText(items.sNotes)
+                }
             }
         }
     }
@@ -214,14 +232,19 @@ class FleetFuelLogInfoFragment : BaseFragment() {
             fuelLogsPostInfoItem = postItems
         )
         fuelLogsViewModel.postFuelLogs(postParams)
-        fuelLogsViewModel.postFuelLogsMutableData.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                currentNavController.navigate(R.id.fleetFuelLogListFragment)
-            } else {
-                showError(
-                    getString(R.string.could_not_save_info),
-                    getString(R.string.could_not_save_info_desc)
-                )
+        with(fuelLogsViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(it.peekContent())
+            }
+            postFuelLogsMutableData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.fleetFuelLogListFragment)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_info),
+                        getString(R.string.could_not_save_info_desc)
+                    )
+                }
             }
         }
     }
@@ -253,14 +276,19 @@ class FleetFuelLogInfoFragment : BaseFragment() {
             fuelLogsPostInfoItem = amendItems
         )
         fuelLogsViewModel.amendFuelLogs(amendParams)
-        fuelLogsViewModel.amendFuelLogsMutableData.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                currentNavController.navigate(R.id.fleetFuelLogListFragment)
-            } else {
-                showError(
-                    getString(R.string.could_not_save_info),
-                    getString(R.string.could_not_save_info_desc)
-                )
+        with(fuelLogsViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(it.peekContent())
+            }
+            amendFuelLogsMutableData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.fleetFuelLogListFragment)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_info),
+                        getString(R.string.could_not_save_info_desc)
+                    )
+                }
             }
         }
     }

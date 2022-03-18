@@ -13,6 +13,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.solutionsmax.gurukoolmax_v3.R
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.ui.navigation.MainNavigation
 import dagger.android.support.DaggerFragment
 
@@ -67,6 +68,25 @@ open class BaseFragment : DaggerFragment() {
             message = message,
             onClick = onClick
         )
+    }
+
+    fun showError(
+        error: Failure,
+        onClick: (DialogInterface, Int) -> Unit = { _, _ -> }
+    ) {
+        if (error is Failure.Remote) {
+            showError(
+                title = getString(R.string.connection_error),
+                message = getString(R.string.connection_error_desc),
+                onClick = onClick
+            )
+        } else {
+            showError(
+                title = getString(R.string.connection_error),
+                message = error.localizedMessage ?: "",
+                onClick = onClick
+            )
+        }
     }
 
     fun checkPermission(): Boolean {
