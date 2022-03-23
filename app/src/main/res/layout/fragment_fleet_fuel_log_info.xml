@@ -102,10 +102,10 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <TextView
-                        android:id="@+id/lblFuelType"
-                        style="@style/TextViewSpinner"
-                        android:text="@string/choose_an_option" />
+                    <Spinner
+                        android:id="@+id/cboFuelType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 

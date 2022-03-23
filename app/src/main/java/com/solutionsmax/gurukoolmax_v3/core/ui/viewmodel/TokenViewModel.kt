@@ -50,11 +50,11 @@ class TokenViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                }, { tokenEntity ->
-                    saveToken(tokenEntity)
-                    _getTokenLiveData.postValue(tokenEntity)
                 }
-            )
+            ) { tokenEntity ->
+                saveToken(tokenEntity)
+                _getTokenLiveData.postValue(tokenEntity)
+            }
         }
     }
 
@@ -69,11 +69,10 @@ class TokenViewModel @Inject constructor(
                 {
                     Log.d("TAG", "purgeTokenToLocal: " + it.message)
                     ::postError
-                },
-                {
-                    _deleteAllTokens.postValue(it)
                 }
-            )
+            ) {
+                _deleteAllTokens.postValue(it)
+            }
             insertTokenUseCase(
                 TokenItem(
                     access_token = tokenEntity.access_token,
@@ -84,11 +83,10 @@ class TokenViewModel @Inject constructor(
                 {
                     Log.d("TAG", "saveTokenToLocal: " + it.message)
                     ::postError
-                },
-                {
-                    _insertTokenLiveData.postValue(it)
                 }
-            )
+            ) {
+                _insertTokenLiveData.postValue(it)
+            }
         }
     }
 
@@ -98,11 +96,10 @@ class TokenViewModel @Inject constructor(
                 {
                     Log.d("TAG", "retrieveTokenToLocal: " + it.message)
                     ::postError
-                },
-                {
-                    _retrieveTokenLiveData.postValue(it)
                 }
-            )
+            ) {
+                _retrieveTokenLiveData.postValue(it)
+            }
         }
     }
 

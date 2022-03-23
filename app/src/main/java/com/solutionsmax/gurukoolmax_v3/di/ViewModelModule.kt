@@ -7,6 +7,8 @@ import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFu
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.FleetMovementViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -43,4 +45,14 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FleetFuelLogsViewModel::class)
     abstract fun fleetFuelLogsViewModel(fleetFuelLogsViewModel: FleetFuelLogsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MastersViewModel::class)
+    abstract fun mastersViewModel(mastersViewModel: MastersViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TokenLicenseViewModel::class)
+    abstract fun tokenLicenseViewModel(tokenViewModel:TokenLicenseViewModel):ViewModel
 }

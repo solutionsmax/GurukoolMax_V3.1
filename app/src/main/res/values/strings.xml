@@ -104,4 +104,6 @@
     <string name="something_went_wrong_desc">Could not retrieve details</string>
     <string name="connection_error">Something Went wrong</string>
     <string name="connection_error_desc">We have trouble connecting</string>
+    <string name="could_not_save_image">Could not save Image</string>
+    <string name="could_not_save_image_desc">Could not save Image. Please Try again</string>
 </resources>

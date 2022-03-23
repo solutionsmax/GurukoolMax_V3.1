@@ -4,6 +4,7 @@ object MethodConstants {
     const val RETRIEVE_FLEET_BUS_ROUTES = "/FleetBusRoute/RetrieveList"
     const val RETRIEVE_FLEET_BUS_STOPS = "/FleetBusStop/RetrieveList"
     const val RETRIEVE_FLEET_PICKUP_SCHEDULE = "/FleetBusSchedule/RetrieveList"
+    const val UPLOAD_PHOTO = "/Upload/PostInfo"
 
     // Fleet Registration
     const val FLEET_REGISTRATION_POST_INFO = "/FleetRegistration/PostInfo"
@@ -41,4 +42,13 @@ object MethodConstants {
     const val FLEET_FUEL_LOG_CHECK_RETRIEVE_LIST = "/FleetFuelLogRegistration/RetrieveList"
     const val FLEET_FUEL_LOG_CHECK_RETRIEVE_DETAILS = "/FleetFuelLogRegistration/RetrieveDetails"
     const val FLEET_FUEL_LOG_CHECK_SET_STATUS = "/FleetFuelLogRegistration/SetStatusInfo"
+
+    // Master
+    const val POST_MASTER_INFO = "/Master/PostInfo"
+    const val AMEND_MASTER_INFO = "/Master/AmendInfo"
+    const val CHECK_DUPLICATE_MASTER_INFO = "/Master/CheckDuplicateInfo"
+    const val FETCH_MASTER_DESCRIPTION = "/Master/FetchDescription"
+    const val SET_MASTER_STATUS = "/Master/SetStatusInfo"
+    const val MASTER_POPULATE_INFO_BY_PARENT = "/Master/PopulateInfoByParent"
+    const val POPULATE_MASTER_LIST = "/Master/PopulateList"
 }

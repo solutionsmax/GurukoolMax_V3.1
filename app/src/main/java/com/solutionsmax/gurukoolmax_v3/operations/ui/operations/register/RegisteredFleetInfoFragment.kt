@@ -1,24 +1,45 @@
 package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register
 
+import android.app.DatePickerDialog
+import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import com.esafirm.imagepicker.features.ImagePicker
+import com.esafirm.imagepicker.model.Image
 import com.solutionsmax.gurukoolmax_v3.R
+import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames.MASTERS_CONFIGURATION_CALENDAR_YEAR
+import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames.MASTERS_FLEET_FUEL_TYPES
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_AMEND_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_CHECK_DUPLICATE
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_POST_INFO
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_POST_PHOTO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_RETRIEVE_DETAILS
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POPULATE_MASTER_LIST
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.UPLOAD_PHOTO
+import com.solutionsmax.gurukoolmax_v3.core.common.PhotoConstants.MEDIA_BUS_IMAGE
+import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
+import com.solutionsmax.gurukoolmax_v3.core.utils.CompressImage
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.DATE_FORMAT
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentRegisteredFleetInfoBinding
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetPostPhotoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_register.FleetRegisterPostParams
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_register.PostFleetPhoto
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
@@ -28,10 +49,20 @@ class RegisteredFleetInfoFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var licenseViewModel: LicenseViewModel
     private lateinit var registeredFleetViewModel: RegisteredFleetViewModel
+    private lateinit var mastersViewModel: MastersViewModel
     private var iEditID = -1
+
+    private var images = ArrayList<Image>()
+    private lateinit var file: File
+    private lateinit var mediaName: String
+    private lateinit var compressedImage: String
+
+    private var date: String = ""
+    private var iManufactureYearID: Int = -1
+    private var iFuelTypeID: Int = -1
+
+    private var cal: Calendar = Calendar.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +77,8 @@ class RegisteredFleetInfoFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        date = SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(Date())
+
         binding.toolbar.apply {
             title = getString(R.string.register_fleet)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
@@ -55,27 +88,18 @@ class RegisteredFleetInfoFragment : BaseFragment() {
 
         iEditID = requireArguments().getInt("id", -1)
 
-        tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        licenseViewModel = ViewModelProvider(this, viewModelFactory)[LicenseViewModel::class.java]
         registeredFleetViewModel =
             ViewModelProvider(this, viewModelFactory)[RegisteredFleetViewModel::class.java]
+        mastersViewModel = ViewModelProvider(this, viewModelFactory)[MastersViewModel::class.java]
 
-        tokenViewModel.retrieveTokensFromLocal()
-        tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) { token ->
-            sToken = token.first().access_token
-            licenseViewModel.retrieveLicenseInfo()
-            licenseViewModel.retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) { license ->
-                sBaseURL = license.first().rest_url
-                if (iEditID > 0) {
-                    binding.btnSubmit.text = getString(R.string.edit)
-                    retrieveDetails(iEditID)
-                }
-            }
-        }
+        registeredFleetViewModel.retrieveTokenLicenseInfo()
+
+        setupViewModelObservers()
+
+        binding.lblBusPhoto.setOnClickListener { getImagePicker().start() }
 
         binding.btnSubmit.setOnClickListener {
-            if (TextUtils.isEmpty(binding.txtVehicleName.text) || TextUtils.isEmpty(binding.txtRegistration.text) ||
-                TextUtils.isEmpty(binding.txtModel.text) || TextUtils.isEmpty(binding.txtMake.text)
+            if (TextUtils.isEmpty(binding.txtVehicleName.text) || TextUtils.isEmpty(binding.txtRegistration.text)
             ) {
                 showError(
                     getString(R.string.details_required),
@@ -87,40 +111,223 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                     sToken,
                     binding.txtRegistration.text.toString()
                 )
-                with(registeredFleetViewModel) {
-                    errorLiveData.observe(viewLifecycleOwner) {
-                        showError(error = it.peekContent())
-                    }
-                    checkRegisteredFleetDuplicateMutableData.observe(
-                        viewLifecycleOwner
-                    ) { duplicate ->
-                        if (iEditID > 0) {
-                            if (duplicate > 0) {
-                                if (duplicate == iEditID) {
-                                    amendInfo()
-                                } else {
-                                    showError(
-                                        getString(R.string.duplicate_info),
-                                        getString(R.string.duplicate_info_desc)
-                                    )
-                                }
-                            } else {
-                                amendInfo()
-                            }
+            }
+        }
+
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                purchaseDate()
+            }
+
+        binding.txtPurchaseDate.setOnClickListener {
+            DatePickerDialog(
+                requireContext(), dateSetListener, cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+    }
+
+    private fun purchaseDate() {
+        val sdf = SimpleDateFormat(DATE_FORMAT, Locale.US)
+        binding.txtPurchaseDate.text = sdf.format(cal.time)
+    }
+
+    private fun setupViewModelObservers() {
+        with(registeredFleetViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(error = it.peekContent())
+            }
+            tokenLicenseMutableData.observe(viewLifecycleOwner) {
+                sBaseURL = it.sBaseURL
+                sToken = it.sToken
+                sAssetURL = it.sAssetURL
+                iGroupID = it.iGroupID
+                iBranchID = it.iBranchID
+
+                populateManufactureYear(sBaseURL, sToken)
+                populateFuelType(sBaseURL, sToken)
+
+                if (iEditID > 0) {
+                    binding.btnSubmit.text = getString(R.string.edit)
+                    retrieveDetails(iEditID)
+                }
+            }
+
+            checkRegisteredFleetDuplicateMutableData.observe(
+                viewLifecycleOwner
+            ) { duplicate ->
+                if (iEditID > 0) {
+                    if (duplicate > 0) {
+                        if (duplicate == iEditID) {
+                            amendInfo()
                         } else {
-                            if (duplicate > 0) {
-                                showError(
-                                    getString(R.string.duplicate_info),
-                                    getString(R.string.duplicate_info_desc)
-                                )
-                            } else {
-                                postInfo()
-                            }
+                            showError(
+                                getString(R.string.duplicate_info),
+                                getString(R.string.duplicate_info_desc)
+                            )
                         }
+                    } else {
+                        amendInfo()
+                    }
+                } else {
+                    if (duplicate > 0) {
+                        showError(
+                            getString(R.string.duplicate_info),
+                            getString(R.string.duplicate_info_desc)
+                        )
+                    } else {
+                        postInfo()
                     }
                 }
             }
+
+            postRegisteredFleetMutableData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.registeredFleetListFragment)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_info),
+                        getString(R.string.could_not_save_info_desc)
+                    )
+                }
+            }
+
+            amendRegisteredFleetMutableData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.registeredFleetListFragment)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_info),
+                        getString(R.string.could_not_save_info_desc)
+                    )
+                }
+            }
         }
+    }
+
+    /**
+     * Populate Manufacture Year
+     */
+    private fun populateManufactureYear(sBaseURL: String, sToken: String) {
+        mastersViewModel.populateManufactureYear(
+            url = sBaseURL + POPULATE_MASTER_LIST,
+            sAuthorization = sToken,
+            sTableName = MASTERS_CONFIGURATION_CALENDAR_YEAR
+        )
+        mastersViewModel.errorLiveData.observe(viewLifecycleOwner) {
+            showError(it.peekContent())
+        }
+        mastersViewModel.populateManufactureYearMutableData.observe(viewLifecycleOwner) {
+            binding.cboManufactureYear.apply {
+                it.add(
+                    0,
+                    PopulateMasterListItem(
+                        -1,
+                        getString(R.string.choose_an_option), "", -1, -1, -1, -1
+                    )
+                )
+                adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        p0: AdapterView<*>?,
+                        p1: View?,
+                        p2: Int,
+                        p3: Long
+                    ) {
+                        if (p2 > 0) {
+                            val manufactureYear =
+                                binding.cboManufactureYear.selectedItem as PopulateMasterListItem
+                            iManufactureYearID = manufactureYear.id
+                        }
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        TODO("Not yet implemented")
+                    }
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Populate Fuel Type
+     */
+    private fun populateFuelType(sBaseURL: String, sToken: String) {
+        mastersViewModel.populateFuelType(
+            url = sBaseURL + POPULATE_MASTER_LIST,
+            sAuthorization = sToken,
+            sTableName = MASTERS_FLEET_FUEL_TYPES
+        )
+        mastersViewModel.errorLiveData.observe(viewLifecycleOwner) {
+            showError(it.peekContent())
+        }
+        mastersViewModel.populateFuelTypeMutableData.observe(viewLifecycleOwner) {
+            binding.cboFuelType.apply {
+                it.add(
+                    0,
+                    PopulateMasterListItem(
+                        -1,
+                        getString(R.string.choose_an_option), "", -1, -1, -1, -1
+                    )
+                )
+                adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        p0: AdapterView<*>?,
+                        p1: View?,
+                        p2: Int,
+                        p3: Long
+                    ) {
+                        if (p2 > 0) {
+                            val fuelType =
+                                binding.cboFuelType.selectedItem as PopulateMasterListItem
+                            iFuelTypeID = fuelType.id
+                        }
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        TODO("Not yet implemented")
+                    }
+
+                }
+            }
+        }
+    }
+
+    private fun getImagePicker(): ImagePicker {
+        val imagePicker: ImagePicker = ImagePicker.create(this)
+            .language("en")
+            .theme(R.style.ImagePickerTheme)
+            .includeVideo(false) // include video (false by default)
+            .toolbarArrowColor(Color.WHITE) // set toolbar arrow up color
+            .toolbarFolderTitle("Folder") // folder selection title
+            .toolbarImageTitle("Tap to select") // image selection title
+            .toolbarDoneButtonText("DONE") // done button text
+
+        imagePicker.single() // multi mode (default mode)
+
+        return imagePicker.limit(1) // max images can be selected (99 by default)
+            .showCamera(true) // show camera or not (true by default)
+            .imageDirectory("Camera") // captured image directory name ("Camera" folder by default)
+            .imageFullDirectory(Environment.getExternalStorageDirectory().path) // can be full path
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            images = ImagePicker.getImages(data) as ArrayList<Image>
+            printImages(images)
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun printImages(images: java.util.ArrayList<Image>) {
+        binding.lblBusPhoto.text = images.first().name
     }
 
     /**
@@ -142,8 +349,14 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                 if (it.isNotEmpty()) {
                     binding.txtVehicleName.setText(it.first().sVehicleName)
                     binding.txtRegistration.setText(it.first().sRegistrationNumber)
+                    binding.txtVin.setText(it.first().sVinNumber)
+                    binding.txtPurchaseDate.text = it.first().sPurchaseDate.substring(0, 10)
                     binding.txtModel.setText(it.first().sModel)
                     binding.txtMake.setText(it.first().sMake)
+                    binding.txtColor.setText(it.first().sColor)
+                    binding.txtCubicCapacity.setText(it.first().sCubicCapacity)
+                    binding.txtSeatingCapacity.setText(it.first().iSeatingCapacity.toString())
+                    binding.txtRegistrationAuthority.setText(it.first().sRegistrationAuthority)
                 } else {
                     showError(
                         getString(R.string.something_went_wrong),
@@ -159,20 +372,20 @@ class RegisteredFleetInfoFragment : BaseFragment() {
      */
     private fun postInfo() {
         val postInfo = FleetRegisterPostInfoItem(
-            iGroupID = 1,
-            iBranchID = 1,
+            iGroupID = iGroupID,
+            iBranchID = iBranchID,
             sVehicleName = binding.txtVehicleName.text.toString(),
             sRegistrationNumber = binding.txtRegistration.text.toString(),
             sVinNumber = binding.txtVin.text.toString(),
-            sPurchaseDate = "-1",
+            sPurchaseDate = binding.txtPurchaseDate.text.toString(),
             sModel = binding.txtModel.text.toString(),
             sMake = binding.txtMake.text.toString(),
-            iManufactureYearID = -1,
-            iFuelTypeID = -1,
-            sColor = "-1",
-            sCubicCapacity = "-1",
-            iSeatingCapacity = -1,
-            sRegistrationAuthority = "-1",
+            iManufactureYearID = iManufactureYearID,
+            iFuelTypeID = iFuelTypeID,
+            sColor = binding.txtColor.text.toString(),
+            sCubicCapacity = binding.txtCubicCapacity.text.toString(),
+            iSeatingCapacity = Integer.parseInt(binding.txtSeatingCapacity.text.toString()),
+            sRegistrationAuthority = binding.txtRegistrationAuthority.text.toString(),
             sPhotoRef = "-1",
             sPhotoURL = "-1",
             iUserID = -1,
@@ -186,17 +399,72 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             postInfo
         )
         registeredFleetViewModel.postRegisteredFleetInfo(postParamsInfo)
+
+    }
+
+    private fun uploadImage(images: java.util.ArrayList<Image>, it: Int) {
+        val stringBuffer = StringBuilder()
+        var i = 0
+        val l = images.size
+        while (i < l) {
+            stringBuffer.append(images[i].path).append("\n")
+            file = File(images[i].path)
+            mediaName = file.name
+            compressedImage = CompressImage.resizeAndCompressImageBeforeSend(
+                requireContext(),
+                images[i].path,
+                mediaName
+            )
+            uploadFile(compressedImage, it)
+            i++
+        }
+
+    }
+
+    private fun uploadFile(compressedImage: String, result: Int) {
+        registeredFleetViewModel.uploadFleetImage(
+            sBaseURL + UPLOAD_PHOTO, sToken, compressedImage, requireContext()
+        )
         with(registeredFleetViewModel) {
             errorLiveData.observe(viewLifecycleOwner) {
-                showError(error = it.peekContent())
+                showError(it.peekContent())
             }
-            postRegisteredFleetMutableData.observe(viewLifecycleOwner) {
-                if (it > 0) {
-                    currentNavController.navigate(R.id.registeredFleetListFragment)
+            uploadFleetImageMutableData.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    postImage(result)
                 } else {
                     showError(
-                        getString(R.string.could_not_save_info),
-                        getString(R.string.could_not_save_info_desc)
+                        getString(R.string.could_not_save_image),
+                        getString(R.string.could_not_save_image_desc)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun postImage(result: Int) {
+        val file = File(compressedImage)
+        val photoName = date + file.name
+        val photoItems = FleetPostPhotoItem(
+            iVehicleID = result,
+            sPhotoRef = sAssetURL + MEDIA_BUS_IMAGE + photoName,
+            sPhotoURL = photoName,
+            1
+        )
+        val photo = PostFleetPhoto(
+            url = sBaseURL + FLEET_REGISTRATION_POST_PHOTO,
+            sAuthorization = sToken,
+            photoItems
+        )
+        registeredFleetViewModel.postRegisteredFleetPhoto(photo)
+        with(registeredFleetViewModel) {
+            postRegisteredFleetPhotoMutableData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.registeredFleetList)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_image),
+                        getString(R.string.could_not_save_image_desc)
                     )
                 }
             }
@@ -209,20 +477,20 @@ class RegisteredFleetInfoFragment : BaseFragment() {
     private fun amendInfo() {
         val amendInfo = FleetRegisterPostInfoItem(
             id = iEditID,
-            iGroupID = 1,
-            iBranchID = 1,
+            iGroupID = iGroupID,
+            iBranchID = iBranchID,
             sVehicleName = binding.txtVehicleName.text.toString(),
             sRegistrationNumber = binding.txtRegistration.text.toString(),
             sVinNumber = binding.txtVin.text.toString(),
-            sPurchaseDate = "-1",
+            sPurchaseDate = binding.txtPurchaseDate.text.toString(),
             sModel = binding.txtModel.text.toString(),
             sMake = binding.txtMake.text.toString(),
-            iManufactureYearID = -1,
-            iFuelTypeID = -1,
-            sColor = "-1",
-            sCubicCapacity = "-1",
-            iSeatingCapacity = -1,
-            sRegistrationAuthority = "-1",
+            iManufactureYearID = iManufactureYearID,
+            iFuelTypeID = iFuelTypeID,
+            sColor = binding.txtColor.text.toString(),
+            sCubicCapacity = binding.txtCubicCapacity.text.toString(),
+            iSeatingCapacity = Integer.parseInt(binding.txtSeatingCapacity.text.toString()),
+            sRegistrationAuthority = binding.txtRegistrationAuthority.text.toString(),
             sPhotoRef = "-1",
             sPhotoURL = "-1",
             iUserID = -1,
@@ -236,15 +504,5 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             amendInfo
         )
         registeredFleetViewModel.amendRegisteredFleetInfo(amendParamsInfo)
-        registeredFleetViewModel.amendRegisteredFleetMutableData.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                currentNavController.navigate(R.id.registeredFleetList)
-            } else {
-                showError(
-                    getString(R.string.could_not_save_info),
-                    getString(R.string.could_not_save_info_desc)
-                )
-            }
-        }
     }
 }

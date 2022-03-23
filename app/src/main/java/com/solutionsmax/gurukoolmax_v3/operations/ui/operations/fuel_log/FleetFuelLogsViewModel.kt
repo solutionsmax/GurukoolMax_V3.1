@@ -48,11 +48,10 @@ class FleetFuelLogsViewModel @Inject constructor(
             {
                 Log.d("TAG", "postFuelLog: $it")
                 postError(it)
-            },
-            {
-                _postFuelLogsMutableData.postValue(it)
             }
-        )
+        ) {
+            _postFuelLogsMutableData.postValue(it)
+        }
     }
 
     fun amendFuelLogs(fuelLogsPostParams: FuelLogsPostParams) = launchIOCoroutine {
@@ -60,11 +59,10 @@ class FleetFuelLogsViewModel @Inject constructor(
             {
                 Log.d("TAG", "amendFuelLog: $it")
                 postError(it)
-            },
-            {
-                _amendFuelLogsMutableData.postValue(it)
             }
-        )
+        ) {
+            _amendFuelLogsMutableData.postValue(it)
+        }
     }
 
     fun checkDuplicateFuelLogs(
@@ -89,11 +87,10 @@ class FleetFuelLogsViewModel @Inject constructor(
                 {
                     Log.d("TAG", "duplicateFuelLog: $it")
                     postError(it)
-                },
-                {
-                    _checkDuplicateFuelLogsMutableData.postValue(it)
                 }
-            )
+            ) {
+                _checkDuplicateFuelLogsMutableData.postValue(it)
+            }
         }
 
     fun retrieveFuelLogsDetails(
@@ -112,11 +109,10 @@ class FleetFuelLogsViewModel @Inject constructor(
                 {
                     Log.d("TAG", "retrieveFuelLogDetails: $it")
                     postError(it)
-                },
-                {
-                    _retrieveFuelLogsDetailsMutableData.postValue(it)
                 }
-            )
+            ) {
+                _retrieveFuelLogsDetailsMutableData.postValue(it)
+            }
         }
 
     fun retrieveFuelLogsList(
@@ -140,10 +136,9 @@ class FleetFuelLogsViewModel @Inject constructor(
             {
                 Log.d("TAG", "retrieveFuelLogList: $it")
                 postError(it)
-            },
-            {
-                _retrieveFuelLogsListMutableData.postValue(it)
             }
-        )
+        ) {
+            _retrieveFuelLogsListMutableData.postValue(it)
+        }
     }
 }

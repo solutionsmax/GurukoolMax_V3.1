@@ -17,7 +17,6 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMEN
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMENT_RETRIEVE_DETAILS
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_POPULATE_LIST
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentRegisteredFleetMovementInfoBinding
@@ -25,7 +24,6 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.F
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_movement.FleetMovementPostParams
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
 import javax.inject.Inject
 
 class RegisteredFleetMovementInfoFragment : BaseFragment() {
@@ -34,8 +32,6 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var licenseViewModel: LicenseViewModel
     private lateinit var fleetRegisterViewModel: RegisteredFleetViewModel
     private lateinit var fleetMovementViewModel: FleetMovementViewModel
     private var iVehicleID: Int = -1
@@ -64,67 +60,14 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
         binding.lblDateOfRecord.text =
             DateUtils.todayDateTime().getMediumDateFormat(requireContext())
 
-        tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        licenseViewModel = ViewModelProvider(this, viewModelFactory)[LicenseViewModel::class.java]
         fleetMovementViewModel =
             ViewModelProvider(this, viewModelFactory)[FleetMovementViewModel::class.java]
         fleetRegisterViewModel =
             ViewModelProvider(this, viewModelFactory)[RegisteredFleetViewModel::class.java]
 
-        tokenViewModel.retrieveTokensFromLocal()
-        tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) { token ->
-            licenseViewModel.retrieveLicenseInfo()
-            licenseViewModel.retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) { license ->
-                iGroupID = license.first().group_id
-                iBranchID = license.first().branch_id
-                sToken = token.first().access_token
-                sBaseURL = license.first().rest_url
-                if (iEditID > 0) {
-                    binding.btnSubmit.text = getString(R.string.edit)
-                    retrieveDetails(iEditID)
-                }
-                fleetRegisterViewModel.populateRegisteredFleetList(
-                    license.first().rest_url + FLEET_REGISTRATION_POPULATE_LIST,
-                    token.first().access_token, 1
-                )
-                with(fleetRegisterViewModel) {
-                    errorLiveData.observe(viewLifecycleOwner) {
-                        showError(it.peekContent())
-                    }
-                    populateRegisteredFleetMutableData.observe(viewLifecycleOwner) {
-                        binding.cboVehicleName.apply {
-                            it.add(
-                                0,
-                                PopulateRegisteredFleetList(
-                                    -1,
-                                    getString(R.string.choose_an_option)
-                                )
-                            )
-                            adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
-                            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                                override fun onItemSelected(
-                                    p0: AdapterView<*>?,
-                                    p1: View?,
-                                    p2: Int,
-                                    p3: Long
-                                ) {
-                                    if (p2 > 0) {
-                                        val vehicleItem =
-                                            binding.cboVehicleName.selectedItem as PopulateRegisteredFleetList
-                                        iVehicleID = vehicleItem.id
-                                    }
-                                }
+        fleetRegisterViewModel.retrieveTokenLicenseInfo()
 
-                                override fun onNothingSelected(p0: AdapterView<*>?) {
-                                    TODO("Not yet implemented")
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        setupViewModelObservers()
 
         binding.btnSubmit.setOnClickListener {
             if (TextUtils.isEmpty(binding.txtOpeningRecord.text) || TextUtils.isEmpty(binding.txtClosingReading.text) ||
@@ -149,39 +92,124 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                     iOpeningReading = Integer.parseInt(binding.txtOpeningRecord.text.toString()),
                     dMovementDate = binding.lblDateOfRecord.text.toString()
                 )
-                with(fleetMovementViewModel) {
-                    errorLiveData.observe(viewLifecycleOwner) {
-                        showError(it.peekContent())
-                    }
-                    checkDuplicateFleetMovement.observe(viewLifecycleOwner) { duplicate ->
-                        if (iEditID > 0) {
-                            if (duplicate > 0) {
-                                if (duplicate == iEditID) {
-                                    amendInfo()
-                                } else {
-                                    showError(
-                                        getString(R.string.duplicate_info),
-                                        getString(R.string.duplicate_info_desc)
-                                    )
-                                }
-                            } else {
-                                amendInfo()
-                            }
-                        } else {
-                            if (duplicate > 0) {
-                                showError(
-                                    getString(R.string.duplicate_info),
-                                    getString(R.string.duplicate_info_desc)
-                                )
-                            } else {
-                                postInfo()
-                            }
-                        }
-                    }
-                }
             }
         }
 
+    }
+
+    private fun setupViewModelObservers() {
+        with(fleetRegisterViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(error = it.peekContent())
+            }
+            tokenLicenseMutableData.observe(viewLifecycleOwner) {
+                sBaseURL = it.sBaseURL
+                sToken = it.sToken
+                sAssetURL = it.sAssetURL
+                iGroupID = it.iGroupID
+                iBranchID = it.iBranchID
+
+                populateVehicleName(sBaseURL, sToken)
+
+                if (iEditID > 0) {
+                    binding.btnSubmit.text = getString(R.string.edit)
+                    retrieveDetails(iEditID)
+                }
+            }
+        }
+        with(fleetMovementViewModel) {
+            errorLiveData.observe(viewLifecycleOwner) {
+                showError(it.peekContent())
+            }
+            checkDuplicateFleetMovement.observe(viewLifecycleOwner) { duplicate ->
+                if (iEditID > 0) {
+                    if (duplicate > 0) {
+                        if (duplicate == iEditID) {
+                            amendInfo()
+                        } else {
+                            showError(
+                                getString(R.string.duplicate_info),
+                                getString(R.string.duplicate_info_desc)
+                            )
+                        }
+                    } else {
+                        amendInfo()
+                    }
+                } else {
+                    if (duplicate > 0) {
+                        showError(
+                            getString(R.string.duplicate_info),
+                            getString(R.string.duplicate_info_desc)
+                        )
+                    } else {
+                        postInfo()
+                    }
+                }
+            }
+
+            postFleetMovementMutableLiveData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.registeredFleetMovementListFragment)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_info),
+                        getString(R.string.could_not_save_info_desc)
+                    )
+                }
+            }
+
+            amendFleetMovementMutableLiveData.observe(viewLifecycleOwner) {
+                if (it > 0) {
+                    currentNavController.navigate(R.id.registeredFleetMovementListFragment)
+                } else {
+                    showError(
+                        getString(R.string.could_not_save_info),
+                        getString(R.string.could_not_save_info_desc)
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * Populate Vehicle Name
+     */
+    private fun populateVehicleName(sBaseURL: String, sToken: String) {
+        fleetRegisterViewModel.populateRegisteredFleetList(
+            sBaseURL + FLEET_REGISTRATION_POPULATE_LIST,
+            sToken, -1
+        )
+        fleetRegisterViewModel.populateRegisteredFleetMutableData.observe(viewLifecycleOwner) {
+            binding.cboVehicleName.apply {
+                it.add(
+                    0,
+                    PopulateRegisteredFleetList(
+                        -1,
+                        getString(R.string.choose_an_option)
+                    )
+                )
+                adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        p0: AdapterView<*>?,
+                        p1: View?,
+                        p2: Int,
+                        p3: Long
+                    ) {
+                        if (p2 > 0) {
+                            val vehicleItem =
+                                binding.cboVehicleName.selectedItem as PopulateRegisteredFleetList
+                            iVehicleID = vehicleItem.id
+                        }
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        TODO("Not yet implemented")
+                    }
+
+                }
+            }
+        }
     }
 
     /**
@@ -244,21 +272,6 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
             fleetMovementPostInfoItem = postInfo
         )
         fleetMovementViewModel.postFleetMovement(postParams)
-        with(fleetMovementViewModel) {
-            errorLiveData.observe(viewLifecycleOwner) {
-                showError(it.peekContent())
-            }
-            postFleetMovementMutableLiveData.observe(viewLifecycleOwner) {
-                if (it > 0) {
-                    currentNavController.navigate(R.id.registeredFleetMovementListFragment)
-                } else {
-                    showError(
-                        getString(R.string.could_not_save_info),
-                        getString(R.string.could_not_save_info_desc)
-                    )
-                }
-            }
-        }
     }
 
     /**
@@ -290,21 +303,6 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
             fleetMovementPostInfoItem = amendInfo
         )
         fleetMovementViewModel.amendFleetMovement(amendParams)
-        with(fleetMovementViewModel) {
-            errorLiveData.observe(viewLifecycleOwner) {
-                showError(it.peekContent())
-            }
-            amendFleetMovementMutableLiveData.observe(viewLifecycleOwner) {
-                if (it > 0) {
-                    currentNavController.navigate(R.id.registeredFleetMovementListFragment)
-                } else {
-                    showError(
-                        getString(R.string.could_not_save_info),
-                        getString(R.string.could_not_save_info_desc)
-                    )
-                }
-            }
-        }
     }
 
 

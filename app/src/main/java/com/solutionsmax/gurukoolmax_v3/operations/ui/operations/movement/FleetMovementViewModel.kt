@@ -70,11 +70,10 @@ class FleetMovementViewModel @Inject constructor(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
                     postError(it)
-                },
-                {
-                    _postFleetMovementMutableLiveData.postValue(it)
                 }
-            )
+            ) {
+                _postFleetMovementMutableLiveData.postValue(it)
+            }
         }
     }
 
@@ -83,11 +82,10 @@ class FleetMovementViewModel @Inject constructor(
             {
                 Log.d("TAG", "postFleetMovement: $it")
                 postError(it)
-            },
-            {
-                _amendFleetMovementMutableLiveData.postValue(it)
             }
-        )
+        ) {
+            _amendFleetMovementMutableLiveData.postValue(it)
+        }
     }
 
     fun checkDuplicateFleetMovement(
@@ -114,11 +112,10 @@ class FleetMovementViewModel @Inject constructor(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
                     postError(it)
-                },
-                {
-                    _checkDuplicateFleetMovementMutableLiveData.postValue(it)
                 }
-            )
+            ) {
+                _checkDuplicateFleetMovementMutableLiveData.postValue(it)
+            }
         }
 
     fun fetchFleetMovementClosingRange(fleetMovementFetchWorkflowStatus: FleetMovementFetchWorkflowStatus) =
@@ -127,11 +124,10 @@ class FleetMovementViewModel @Inject constructor(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
                     ::postError
-                },
-                {
-                    _fetchFleetMovementClosingRangeMutableLiveData.postValue(it)
                 }
-            )
+            ) {
+                _fetchFleetMovementClosingRangeMutableLiveData.postValue(it)
+            }
         }
 
     fun fetchFleetMovementWorkflowStatus(fleetMovementFetchWorkflowStatus: FleetMovementFetchWorkflowStatus) =
@@ -140,11 +136,10 @@ class FleetMovementViewModel @Inject constructor(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
                     postError(it)
-                },
-                {
-                    _fetchFleetMovementWorkflowStatusMutableLiveData.postValue(it)
                 }
-            )
+            ) {
+                _fetchFleetMovementWorkflowStatusMutableLiveData.postValue(it)
+            }
         }
 
     fun populateFleetMovementList(fleetMovementRetrieveList: FleetMovementRetrieveList) =
@@ -153,11 +148,10 @@ class FleetMovementViewModel @Inject constructor(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
                     postError(it)
-                },
-                {
-                    _populateFleetMovementListMutableLiveData.postValue(it)
                 }
-            )
+            ) {
+                _populateFleetMovementListMutableLiveData.postValue(it)
+            }
         }
 
     fun retrieveFleetMovementDetails(url: String, sAuthorization: String, id: Int) =
@@ -172,11 +166,10 @@ class FleetMovementViewModel @Inject constructor(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
                     ::postError
-                },
-                {
-                    _retrieveFleetMovementDetailsMutableLiveData.postValue(it)
                 }
-            )
+            ) {
+                _retrieveFleetMovementDetailsMutableLiveData.postValue(it)
+            }
         }
 
     fun retrieveFleetMovementList(
@@ -199,11 +192,10 @@ class FleetMovementViewModel @Inject constructor(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
                     ::postError
-                },
-                {
-                    _retrieveFleetMovementListMutableLiveData.postValue(it)
                 }
-            )
+            ) {
+                _retrieveFleetMovementListMutableLiveData.postValue(it)
+            }
         }
 
     fun setFleetMovementStatus(fleetMovementSetStatus: FleetMovementSetStatus) = launchIOCoroutine {
@@ -211,11 +203,10 @@ class FleetMovementViewModel @Inject constructor(
             {
                 Log.d("TAG", "postFleetMovement: $it")
                 ::postError
-            },
-            {
-                _setFleetMovementStatusMutableLiveData.postValue(it)
             }
-        )
+        ) {
+            _setFleetMovementStatusMutableLiveData.postValue(it)
+        }
     }
 
 }

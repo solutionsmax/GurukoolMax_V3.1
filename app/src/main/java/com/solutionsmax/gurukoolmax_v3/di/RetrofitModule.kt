@@ -2,6 +2,7 @@ package com.solutionsmax.gurukoolmax_v3.di
 
 import com.solutionsmax.gurukoolmax_v3.core.common.BaseURL
 import com.solutionsmax.gurukoolmax_v3.remote.FleetApi
+import com.solutionsmax.gurukoolmax_v3.remote.MasterApi
 import com.solutionsmax.gurukoolmax_v3.remote.TokenApi
 import dagger.Module
 import dagger.Provides
@@ -46,4 +47,8 @@ class RetrofitModule {
     @Singleton
     @Provides
     fun provideFleetApi(retrofit: Retrofit): FleetApi = retrofit.create(FleetApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideMastersApi(retrofit: Retrofit): MasterApi = retrofit.create(MasterApi::class.java)
 }

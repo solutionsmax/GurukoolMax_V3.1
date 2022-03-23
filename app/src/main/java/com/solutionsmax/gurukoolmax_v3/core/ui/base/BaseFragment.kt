@@ -29,6 +29,7 @@ open class BaseFragment : DaggerFragment() {
 
     var sToken: String = ""
     var sBaseURL: String = ""
+    var sAssetURL: String = ""
     var iGroupID: Int = -1
     var iBranchID: Int = -1
     var allPermissionGranted: Boolean = false

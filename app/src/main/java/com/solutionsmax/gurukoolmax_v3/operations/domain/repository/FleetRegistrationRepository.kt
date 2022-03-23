@@ -3,6 +3,7 @@ package com.solutionsmax.gurukoolmax_v3.operations.domain.repository
 import com.solutionsmax.gurukoolmax_v3.core.common.TokenConstants
 import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.functional.Either
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetPostPhotoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterRetrieveListItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
@@ -61,11 +62,11 @@ class FleetRegistrationRepository @Inject constructor(
     suspend fun postFleetPhoto(
         url: String,
         sAuthorization: String,
-        fleetRegistrationPostInfoItem: FleetRegisterPostInfoItem
+        fleetPostPhotoItem: FleetPostPhotoItem
     ): Either<Failure, Int> =
         Either.Right(
             fleetApi.postFleetPhoto(
-                url, "${TokenConstants.BEARER} $sAuthorization", fleetRegistrationPostInfoItem
+                url, "${TokenConstants.BEARER} $sAuthorization", fleetPostPhotoItem
             )
         )
 

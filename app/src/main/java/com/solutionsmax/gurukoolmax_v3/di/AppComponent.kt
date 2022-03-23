@@ -2,7 +2,6 @@ package com.solutionsmax.gurukoolmax_v3.di
 
 import android.app.Application
 import com.solutionsmax.gurukoolmax_v3.MyApp
-import com.solutionsmax.gurukoolmax_v3.core.utils.NetworkHandler
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -28,5 +27,18 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
+    /*@Component.Factory
+    interface Factory {
+        fun create(utilsModule: UtilsModule): AppComponent
+    }*/
+
     fun inject(myApp: MyApp)
 }
+
+/*
+@Module
+class UtilsModule(private val context: Context) {
+    @ApplicationScope
+    @Provides
+    fun provideApplicationContext(): Context = context
+}*/

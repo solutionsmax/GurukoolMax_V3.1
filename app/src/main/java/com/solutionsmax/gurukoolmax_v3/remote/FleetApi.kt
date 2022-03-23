@@ -6,11 +6,15 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupSched
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPopulateList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementRetrieveItem
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetPostPhotoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterRetrieveListItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLogsPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLogsRetrieveItems
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface FleetApi {
@@ -67,11 +71,20 @@ interface FleetApi {
         @Query("sRegistrationNumber") sRegistrationNumber: String
     ): Int
 
-    @GET
+    @Multipart
+    @POST
+    suspend fun uploadPhoto(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Part file: MultipartBody.Part,
+        @PartMap content: Map<String, @JvmSuppressWildcards RequestBody>
+    ): ResponseBody
+
+    @POST
     suspend fun postFleetPhoto(
         @Url url: String,
         @Header("Authorization") sAuthorization: String,
-        @Body fleetRegisterPostInfoItem: FleetRegisterPostInfoItem
+        @Body fleetPostPhotoItem: FleetPostPhotoItem
     ): Int
 
     @GET

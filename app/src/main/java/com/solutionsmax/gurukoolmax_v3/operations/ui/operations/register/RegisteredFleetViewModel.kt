@@ -1,5 +1,6 @@
 package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,8 +9,14 @@ import com.solutionsmax.gurukoolmax_v3.core.functional.SingleLiveEvent
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterRetrieveListItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.UploadPhotoParams
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_register.*
 import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.fleet_register.*
+import com.solutionsmax.gurukoolmax_v3.remote.entity.TokenLicenseItem
+import com.solutionsmax.gurukoolmax_v3.remote.interactor.GetTokenLicenseUseCase
+import com.solutionsmax.gurukoolmax_v3.room.interactors.license.RetrieveLicenseUseCase
+import com.solutionsmax.gurukoolmax_v3.room.interactors.token.RetrieveTokensUseCase
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class RegisteredFleetViewModel @Inject constructor(
@@ -21,18 +28,20 @@ class RegisteredFleetViewModel @Inject constructor(
     private val postRegisteredFleetPhotoUseCase: PostRegisteredFleetPhotoUseCase,
     private val retrieveRegisteredFleetDetailsUseCase: RetrieveRegisteredFleetDetailsUseCase,
     private val retrieveRegisteredFleetListUseCase: RetrieveRegisteredFleetListUseCase,
-    private val setRegisteredFleetStatusUseCase: SetRegisteredFleetStatusUseCase
+    private val setRegisteredFleetStatusUseCase: SetRegisteredFleetStatusUseCase,
+    private val uploadFleetImageUseCase: UploadFleetImageUseCase,
+    private val getTokenLicenseUseCase: GetTokenLicenseUseCase
 ) : BaseViewModel() {
 
-    private val _postRegisteredFleetMutableData: MutableLiveData<Int> = MutableLiveData()
+    private val _postRegisteredFleetMutableData: SingleLiveEvent<Int> = SingleLiveEvent()
     val postRegisteredFleetMutableData: LiveData<Int>
         get() = _postRegisteredFleetMutableData
 
-    private val _amendRegisteredFleetMutableData: MutableLiveData<Int> = MutableLiveData()
+    private val _amendRegisteredFleetMutableData: SingleLiveEvent<Int> = SingleLiveEvent()
     val amendRegisteredFleetMutableData: LiveData<Int>
         get() = _amendRegisteredFleetMutableData
 
-    private val _checkRegisteredFleetDuplicateMutableData: MutableLiveData<Int> = MutableLiveData()
+    private val _checkRegisteredFleetDuplicateMutableData: SingleLiveEvent<Int> = SingleLiveEvent()
     val checkRegisteredFleetDuplicateMutableData: LiveData<Int>
         get() = _checkRegisteredFleetDuplicateMutableData
 
@@ -63,16 +72,36 @@ class RegisteredFleetViewModel @Inject constructor(
     val setRegisteredFleetMutableData: LiveData<Int>
         get() = _setRegisteredFleetMutableData
 
+    private val _uploadFleetImageMutableData: MutableLiveData<ResponseBody> = MutableLiveData()
+    val uploadFleetImageMutableData: LiveData<ResponseBody>
+        get() = _uploadFleetImageMutableData
+
     private val _stateLiveData: MutableLiveData<ViewState> = MutableLiveData()
     val stateLiveData: LiveData<ViewState>
         get() = _stateLiveData
+
+    private val _tokenLicenseMutableData: MutableLiveData<TokenLicenseItem> = MutableLiveData()
+    val tokenLicenseMutableData: LiveData<TokenLicenseItem>
+        get() = _tokenLicenseMutableData
 
     init {
         _stateLiveData.value = ViewState.Default
     }
 
+
     // Cannot leave the form if the State is DataSaving
     fun isCanLeave(): Boolean = _stateLiveData.value != ViewState.DataSaving
+
+    fun retrieveTokenLicenseInfo() = launchIOCoroutine {
+        getTokenLicenseUseCase(Unit).fold(
+            {
+                postError(it)
+            },
+            {
+                _tokenLicenseMutableData.postValue(it)
+            }
+        )
+    }
 
     fun postRegisteredFleetInfo(fleetRegisterPostInfoItem: FleetRegisterPostParams) {
         launchIOCoroutine {
@@ -85,14 +114,39 @@ class RegisteredFleetViewModel @Inject constructor(
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     postError(it)
                     postState(ViewState.DataSaveFailed(it))
-                },
-                {
-                    postState(ViewState.DataSaved)
-                    _postRegisteredFleetMutableData.postValue(it)
                 }
-            )
+            ) {
+                postState(ViewState.DataSaved)
+                _postRegisteredFleetMutableData.postValue(it)
+            }
         }
     }
+
+    fun uploadFleetImage(
+        url: String,
+        sAuthorization: String,
+        sImagePath: String,
+        context: Context
+    ) =
+        launchIOCoroutine {
+            uploadFleetImageUseCase(
+                UploadPhotoParams(
+                    url = url,
+                    sAuthorization = sAuthorization,
+                    context = context,
+                    sImagePath = sImagePath,
+                    file = null,
+                    content = null
+                )
+            ).fold(
+                {
+                    Log.d("TAG", "getRemoteToken: " + it.message)
+                    postError(it)
+                }
+            ) {
+                _uploadFleetImageMutableData.postValue(it)
+            }
+        }
 
     private fun postState(state: ViewState) {
         _stateLiveData.postValue(state)
@@ -106,11 +160,10 @@ class RegisteredFleetViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     postError(it)
-                },
-                {
-                    _amendRegisteredFleetMutableData.postValue(it)
                 }
-            )
+            ) {
+                _amendRegisteredFleetMutableData.postValue(it)
+            }
         }
     }
 
@@ -130,11 +183,10 @@ class RegisteredFleetViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     postError(it)
-                },
-                {
-                    _checkRegisteredFleetDuplicateMutableData.postValue(it)
                 }
-            )
+            ) {
+                _checkRegisteredFleetDuplicateMutableData.postValue(it)
+            }
         }
     }
 
@@ -144,11 +196,10 @@ class RegisteredFleetViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _fetchRegisteredFleetPhotoMutableLData.postValue(it)
                 }
-            )
+            ) {
+                _fetchRegisteredFleetPhotoMutableLData.postValue(it)
+            }
         }
     }
 
@@ -168,25 +219,23 @@ class RegisteredFleetViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _populateRegisteredFleetMutableData.postValue(it)
                 }
-            )
+            ) {
+                _populateRegisteredFleetMutableData.postValue(it)
+            }
         }
     }
 
-    fun postRegisteredFleetPhotoUseCase(fleetRegisterPostInfoItem: FleetRegisterPostParams) {
+    fun postRegisteredFleetPhoto(postFleetPhoto: PostFleetPhoto) {
         launchIOCoroutine {
-            postRegisteredFleetPhotoUseCase(params = fleetRegisterPostInfoItem).fold(
+            postRegisteredFleetPhotoUseCase(params = postFleetPhoto).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _postRegisteredFleetPhotoMutableData.postValue(it)
                 }
-            )
+            ) {
+                _postRegisteredFleetPhotoMutableData.postValue(it)
+            }
         }
     }
 
@@ -204,15 +253,18 @@ class RegisteredFleetViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     postError(it)
-                },
-                {
-                    _retrieveRegisteredFleetDetailsMutableData.postValue(it)
                 }
-            )
+            ) {
+                _retrieveRegisteredFleetDetailsMutableData.postValue(it)
+            }
         }
     }
 
-    fun retrieveRegisteredFleetList(url: String, sAuthorization: String, iWorkflowStatusID: Int) {
+    fun retrieveRegisteredFleetList(
+        url: String,
+        sAuthorization: String,
+        iWorkflowStatusID: Int
+    ) {
         launchIOCoroutine {
             retrieveRegisteredFleetListUseCase(
                 FleetRegisteredListParams(
@@ -224,11 +276,10 @@ class RegisteredFleetViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     postError(it)
-                },
-                {
-                    _retrieveRegisteredFleetListMutableData.postValue(it)
                 }
-            )
+            ) {
+                _retrieveRegisteredFleetListMutableData.postValue(it)
+            }
         }
     }
 
@@ -238,11 +289,10 @@ class RegisteredFleetViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _setRegisteredFleetMutableData.postValue(it)
                 }
-            )
+            ) {
+                _setRegisteredFleetMutableData.postValue(it)
+            }
         }
     }
 }

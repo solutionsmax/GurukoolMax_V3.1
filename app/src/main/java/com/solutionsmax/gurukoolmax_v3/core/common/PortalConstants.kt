@@ -39,3 +39,7 @@ object TokenConstants {
 object RequestBodyConstants {
     const val REQUEST_BODY = "text/plain"
 }
+
+object PhotoConstants {
+    const val MEDIA_BUS_IMAGE = "Media/Fleet/"
+}

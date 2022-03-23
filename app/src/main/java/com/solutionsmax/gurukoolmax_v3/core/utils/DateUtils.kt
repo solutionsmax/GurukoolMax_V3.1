@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 object DateUtils {
     private const val DEFAULT_FORMAT_DATE_WITHOUT_TIME = "yyyy-MM-dd"
     private const val DEFAULT_FORMAT_DATE = "yyyy-MM-dd HH:mm:ss"
-    private const val DATE_FORMAT = "yyyy-MM-dd"
+      const val DATE_FORMAT = "yyyy-MM-dd"
     val BASETIME = BigDecimal("60.00")
     private val DATE_PATTERN =
         Pattern.compile("^(?:(?!0000)[0-9]{4}([-/.]?)(?:(?:0?[1-9]|1[0-2])([-/.]?)(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])([-/.]?)(?:29|30)|(?:0?[13578]|1[02])([-/.]?)31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2([-/.]?)29)$")

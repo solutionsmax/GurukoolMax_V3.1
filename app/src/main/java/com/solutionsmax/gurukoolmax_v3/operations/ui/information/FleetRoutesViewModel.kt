@@ -48,11 +48,10 @@ class FleetRoutesViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _fleetRoutesMutableData.postValue(it)
                 }
-            )
+            ) {
+                _fleetRoutesMutableData.postValue(it)
+            }
         }
     }
 
@@ -68,11 +67,10 @@ class FleetRoutesViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _fleetBusStopMutableData.postValue(it)
                 }
-            )
+            ) {
+                _fleetBusStopMutableData.postValue(it)
+            }
         }
     }
 
@@ -94,11 +92,10 @@ class FleetRoutesViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _fleetPickupScheduleMutableData.postValue(it)
                 }
-            )
+            ) {
+                _fleetPickupScheduleMutableData.postValue(it)
+            }
         }
     }
 }

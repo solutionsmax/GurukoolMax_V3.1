@@ -69,12 +69,11 @@ class LicenseViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    saveInfo(it)
-                    _retrieveInfoBySideCodeLiveData.postValue(it)
                 }
-            )
+            ) {
+                saveInfo(it)
+                _retrieveInfoBySideCodeLiveData.postValue(it)
+            }
         }
     }
 
@@ -84,20 +83,18 @@ class LicenseViewModel @Inject constructor(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _deleteAllLicenseMutableData.postValue(it)
                 }
-            )
+            ) {
+                _deleteAllLicenseMutableData.postValue(it)
+            }
             insertLicenseUseCase(it.first().toItem()).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
                     ::postError
-                },
-                {
-                    _insertLicenseUseCaseLiveData.postValue(it)
                 }
-            )
+            ) {
+                _insertLicenseUseCaseLiveData.postValue(it)
+            }
         }
     }
 
@@ -107,11 +104,10 @@ class LicenseViewModel @Inject constructor(
                 {
                     Log.d("TAG", "retrieveTokenToLocal: " + it.message)
                     ::postError
-                },
-                {
-                    _retrieveLicenseInfoUseCase.postValue(it)
                 }
-            )
+            ) {
+                _retrieveLicenseInfoUseCase.postValue(it)
+            }
         }
     }
 }

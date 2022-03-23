@@ -15,6 +15,7 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentRegisteredFleetMovementListBinding
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
 
@@ -24,9 +25,8 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var licenseViewModel: LicenseViewModel
     private lateinit var fleetMovementViewModel: FleetMovementViewModel
+    private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +48,8 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
             setNavigationOnClickListener { currentNavController.navigate(R.id.operationsMenuFragment) }
         }
 
-        tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        licenseViewModel = ViewModelProvider(this, viewModelFactory)[LicenseViewModel::class.java]
+        tokenLicenseViewModel =
+            ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
         fleetMovementViewModel =
             ViewModelProvider(this, viewModelFactory)[FleetMovementViewModel::class.java]
 
@@ -58,33 +58,34 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
             currentNavController.navigate(R.id.registeredFleetMovementInfoFragment, bundle)
         }
 
-        tokenViewModel.retrieveTokensFromLocal()
-        tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) { token ->
-            licenseViewModel.retrieveLicenseInfo()
-            licenseViewModel.retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) { license ->
-                fleetMovementViewModel.retrieveFleetMovementList(
-                    license.first().rest_url + FLEET_MOVEMENT_RETRIEVE_LIST,
-                    token.first().access_token, license.first().group_id, license.first().branch_id,
-                    1
-                )
-                with(fleetMovementViewModel){
-                    retrieveFleetMovementListMutableLiveData.observe(
-                        viewLifecycleOwner
-                    ) {
-                        errorLiveData.observe(viewLifecycleOwner){
-                            showError(it.peekContent())
-                        }
-                        binding.progressBar.visibility = View.GONE
-                        with(binding.registeredFleetList) {
-                            layoutManager = LinearLayoutManager(requireContext())
-                            adapter = FleetMovementAdapter(it, FleetMovementAdapter.OnItemClick {
-                                val bundle = bundleOf("id" to it)
-                                currentNavController.navigate(
-                                    R.id.registeredFleetMovementInfoFragment,
-                                    bundle
-                                )
-                            })
-                        }
+        tokenLicenseViewModel.retrieveTokenLicenseInfo()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        tokenLicenseViewModel.tokenLicenseMutableData.observe(viewLifecycleOwner) {
+            fleetMovementViewModel.retrieveFleetMovementList(
+                it.sBaseURL + FLEET_MOVEMENT_RETRIEVE_LIST,
+                it.sToken, it.iGroupID, it.iBranchID,
+                -1
+            )
+            with(fleetMovementViewModel) {
+                retrieveFleetMovementListMutableLiveData.observe(
+                    viewLifecycleOwner
+                ) {
+                    errorLiveData.observe(viewLifecycleOwner) {
+                        showError(it.peekContent())
+                    }
+                    binding.progressBar.visibility = View.GONE
+                    with(binding.registeredFleetList) {
+                        layoutManager = LinearLayoutManager(requireContext())
+                        adapter = FleetMovementAdapter(it, FleetMovementAdapter.OnItemClick {
+                            val bundle = bundleOf("id" to it)
+                            currentNavController.navigate(
+                                R.id.registeredFleetMovementInfoFragment,
+                                bundle
+                            )
+                        })
                     }
                 }
             }

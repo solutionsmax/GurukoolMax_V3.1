@@ -10,13 +10,10 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
-import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LOG_CHECK_RETRIEVE_LIST
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetFuelLogListBinding
-import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.FleetMovementAdapter
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
 
@@ -25,9 +22,8 @@ class FleetFuelLogListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var licenseViewModel: LicenseViewModel
     private lateinit var fuelLogsViewModel: FleetFuelLogsViewModel
+    private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,8 +45,9 @@ class FleetFuelLogListFragment : BaseFragment() {
             setNavigationOnClickListener { currentNavController.navigate(R.id.operationsMenuFragment) }
         }
 
-        tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        licenseViewModel = ViewModelProvider(this, viewModelFactory)[LicenseViewModel::class.java]
+        tokenLicenseViewModel =
+            ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
+
         fuelLogsViewModel =
             ViewModelProvider(this, viewModelFactory)[FleetFuelLogsViewModel::class.java]
 
@@ -59,33 +56,34 @@ class FleetFuelLogListFragment : BaseFragment() {
             currentNavController.navigate(R.id.fleetFuelLogInfoFragment, bundle)
         }
 
-        tokenViewModel.retrieveTokensFromLocal()
-        tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) { token ->
-            licenseViewModel.retrieveLicenseInfo()
-            licenseViewModel.retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) { license ->
-                fuelLogsViewModel.retrieveFuelLogsList(
-                    license.first().rest_url + FLEET_FUEL_LOG_CHECK_RETRIEVE_LIST,
-                    token.first().access_token, license.first().group_id, license.first().branch_id,
-                    -1, -1
-                )
-                with(fuelLogsViewModel) {
-                    retrieveFuelLogsListMutableData.observe(
-                        viewLifecycleOwner
-                    ) {
-                        errorLiveData.observe(viewLifecycleOwner) {
-                            showError(it.peekContent())
-                        }
-                        binding.progressBar.visibility = View.GONE
-                        with(binding.registeredFleetList) {
-                            layoutManager = LinearLayoutManager(requireContext())
-                            adapter = FleetFuelLogsAdapter(it, FleetFuelLogsAdapter.OnItemClick {
-                                val bundle = bundleOf("id" to it)
-                                currentNavController.navigate(
-                                    R.id.fleetFuelLogInfoFragment,
-                                    bundle
-                                )
-                            })
-                        }
+        tokenLicenseViewModel.retrieveTokenLicenseInfo()
+        setUpObservers()
+    }
+
+    private fun setUpObservers() {
+        tokenLicenseViewModel.tokenLicenseMutableData.observe(viewLifecycleOwner) {
+            fuelLogsViewModel.retrieveFuelLogsList(
+                it.sBaseURL + FLEET_FUEL_LOG_CHECK_RETRIEVE_LIST,
+                it.sToken, it.iGroupID, it.iBranchID,
+                -1, -1
+            )
+            with(fuelLogsViewModel) {
+                retrieveFuelLogsListMutableData.observe(
+                    viewLifecycleOwner
+                ) {
+                    errorLiveData.observe(viewLifecycleOwner) {
+                        showError(it.peekContent())
+                    }
+                    binding.progressBar.visibility = View.GONE
+                    with(binding.registeredFleetList) {
+                        layoutManager = LinearLayoutManager(requireContext())
+                        adapter = FleetFuelLogsAdapter(it, FleetFuelLogsAdapter.OnItemClick {
+                            val bundle = bundleOf("id" to it)
+                            currentNavController.navigate(
+                                R.id.fleetFuelLogInfoFragment,
+                                bundle
+                            )
+                        })
                     }
                 }
             }
