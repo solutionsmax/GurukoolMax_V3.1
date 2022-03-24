@@ -3,6 +3,7 @@ package com.solutionsmax.gurukoolmax_v3.di
 import androidx.lifecycle.ViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetRoutesViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.FleetMovementViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
@@ -54,5 +55,10 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(TokenLicenseViewModel::class)
-    abstract fun tokenLicenseViewModel(tokenViewModel:TokenLicenseViewModel):ViewModel
+    abstract fun tokenLicenseViewModel(tokenViewModel: TokenLicenseViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OnBoardAttendanceViewModel::class)
+    abstract fun onBoardAttendanceViewModel(onBoardAttendanceViewModel: OnBoardAttendanceViewModel): ViewModel
 }

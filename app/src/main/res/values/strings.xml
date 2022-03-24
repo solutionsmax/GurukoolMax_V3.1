@@ -106,4 +106,18 @@
     <string name="connection_error_desc">We have trouble connecting</string>
     <string name="could_not_save_image">Could not save Image</string>
     <string name="could_not_save_image_desc">Could not save Image. Please Try again</string>
+
+    <string name="invalid_code_scanned">Invalid code scanned</string>
+    <string name="invalid_code_scanned_desc">The barcode scanned is not valid. Please scan a valid code</string>
+
+    <string name="invalid_student_attendance">Invalid Student code scanned</string>
+    <string name="invalid_student_attendance_desc">The barcode scanned is not tagged to this Route</string>
+
+    <string name="duplicate_student_attendance">Student barcode already scanned</string>
+    <string name="duplicate_student_attendance_desc">Student barcode has already been scanned</string>
+
+    <string name="route">Fleet Route</string>
+
+    <string name="select_bus_route">Select Bus Route</string>
+    <string name="select_bus_route_desc">Select a bus route to register student fleet attendance</string>
 </resources>
