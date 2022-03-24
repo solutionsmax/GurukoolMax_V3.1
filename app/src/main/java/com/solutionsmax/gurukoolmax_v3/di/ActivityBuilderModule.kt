@@ -16,6 +16,7 @@ import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetBusStopsLi
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetRoutesListFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetSchedulePickupListFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceFragment
+import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceSelectRouteFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogInfoFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogListFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.RegisteredFleetMovementInfoFragment
@@ -92,4 +93,7 @@ abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun provideFleetFuelLogInfoFragment(): FleetFuelLogInfoFragment
+
+    @ContributesAndroidInjector
+    abstract fun provideOnBoardAttendanceSelectRouteFragment(): OnBoardAttendanceSelectRouteFragment
 }

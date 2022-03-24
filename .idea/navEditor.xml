@@ -111,8 +111,20 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1276" />
-                            <option name="y" value="200" />
+                            <option name="x" value="1613" />
+                            <option name="y" value="336" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="onBoardAttendanceSelectRouteFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1289" />
+                            <option name="y" value="210" />
                           </Point>
                         </option>
                       </LayoutPositions>

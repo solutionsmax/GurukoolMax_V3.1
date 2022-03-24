@@ -3,6 +3,7 @@ package com.solutionsmax.gurukoolmax_v3.remote
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusPickupPointsList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusRouteList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupScheduleList
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.PopulateFleetBusRoutesItems
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPopulateList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementRetrieveItem
@@ -12,6 +13,7 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.F
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLogsPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLogsRetrieveItems
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.on_board_attendance.OnBoardAttendancePostItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -46,6 +48,15 @@ interface FleetApi {
         @Query("iRouteID") iRouteID: Int,
         @Query("iStatusID") iStatusID: Int
     ): List<FleetPickupScheduleList>
+
+    @GET
+    suspend fun populateFleetBusRoutes(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): MutableList<PopulateFleetBusRoutesItems>
 
     // Fleet Registration
     @POST
@@ -257,5 +268,67 @@ interface FleetApi {
         @Header("Authorization") sAuthorization: String,
         @Query("iStatusID") iStatusID: Int,
         @Query("id") id: Int
+    ): Int
+
+    /**
+     * Student OnBoard Attendance
+     */
+    @GET
+    suspend fun checkValidAdmissionNumber(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("sAdmissionNum") sAdmissionNum: String
+    ): Int
+
+    @GET
+    suspend fun checkStudentAttendance(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iStudentID") iStudentID: Int,
+        @Query("sAdmissionNum") sAdmissionNum: String,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("dDateOfTravel") dDateOfTravel: String
+    ): Int
+
+    @GET
+    suspend fun checkDuplicateAttendance(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iStudentID") iStudentID: Int,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("dDateOfTravel") dDateOfTravel: String
+    ): Int
+
+    @GET
+    suspend fun postFleetStudentAttendance(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body onBoardAttendancePostItem: OnBoardAttendancePostItem
+    ): Int
+
+    @GET
+    suspend fun amendFleetStudentAttendance(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body onBoardAttendancePostItem: OnBoardAttendancePostItem
+    ): Int
+
+    @POST
+    suspend fun postFleetStudentAttendanceManually(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iStudentID") iStudentID: Int,
+        @Query("sAdmissionNum") sAdmissionNum: String,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("dDateOfTravel") dDateOfTravel: String,
+        @Query("iAttendanceStatusID") niAttendanceStatusID: Int
     ): Int
 }

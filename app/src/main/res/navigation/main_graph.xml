@@ -61,9 +61,7 @@
         <action
             android:id="@+id/action_operationsMenuFragment_to_operationsSubMenuFragment"
             app:destination="@id/operationsSubMenuFragment" />
-        <action
-            android:id="@+id/action_operationsMenuFragment_to_onBoardAttendanceFragment"
-            app:destination="@id/onBoardAttendanceFragment" />
+
         <action
             android:id="@+id/action_operationsMenuFragment_to_registeredFleetListFragment"
             app:destination="@id/registeredFleetListFragment" />
@@ -73,6 +71,9 @@
         <action
             android:id="@+id/action_operationsMenuFragment_to_fleetFuelLogListFragment"
             app:destination="@id/fleetFuelLogListFragment" />
+        <action
+            android:id="@+id/action_operationsMenuFragment_to_onBoardAttendanceSelectRouteFragment"
+            app:destination="@id/onBoardAttendanceSelectRouteFragment" />
     </fragment>
     <fragment
         android:id="@+id/fleetRoutesListFragment"
@@ -152,5 +153,14 @@
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogInfoFragment"
         android:label="fragment_fleet_fuel_log_info"
         tools:layout="@layout/fragment_fleet_fuel_log_info" />
+    <fragment
+        android:id="@+id/onBoardAttendanceSelectRouteFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceSelectRouteFragment"
+        android:label="fragment_on_board_attendance_select_route"
+        tools:layout="@layout/fragment_on_board_attendance_select_route" >
+        <action
+            android:id="@+id/action_onBoardAttendanceSelectRouteFragment_to_onBoardAttendanceFragment"
+            app:destination="@id/onBoardAttendanceFragment" />
+    </fragment>
 
 </navigation>

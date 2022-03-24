@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class OnBoardAttendancePostItem(
     @SerializedName("ID")
-    val id: Int,
+    var id: Int?=0,
     @SerializedName("GROUP_ID")
     val iGroupID: Int,
     @SerializedName("SCHOOL_ID")

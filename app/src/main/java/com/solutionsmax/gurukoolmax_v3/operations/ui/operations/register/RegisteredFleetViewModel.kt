@@ -7,10 +7,13 @@ import androidx.lifecycle.MutableLiveData
 import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.functional.SingleLiveEvent
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.PopulateFleetBusRoutesItems
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterRetrieveListItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.PopulateFleetBusRoutesParams
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.UploadPhotoParams
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_register.*
+import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.PopulateFleetsRoutesUseCase
 import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.fleet_register.*
 import com.solutionsmax.gurukoolmax_v3.remote.entity.TokenLicenseItem
 import com.solutionsmax.gurukoolmax_v3.remote.interactor.GetTokenLicenseUseCase
@@ -30,7 +33,8 @@ class RegisteredFleetViewModel @Inject constructor(
     private val retrieveRegisteredFleetListUseCase: RetrieveRegisteredFleetListUseCase,
     private val setRegisteredFleetStatusUseCase: SetRegisteredFleetStatusUseCase,
     private val uploadFleetImageUseCase: UploadFleetImageUseCase,
-    private val getTokenLicenseUseCase: GetTokenLicenseUseCase
+    private val getTokenLicenseUseCase: GetTokenLicenseUseCase,
+    private val populateFleetsRoutesUseCase: PopulateFleetsRoutesUseCase
 ) : BaseViewModel() {
 
     private val _postRegisteredFleetMutableData: SingleLiveEvent<Int> = SingleLiveEvent()
@@ -83,6 +87,11 @@ class RegisteredFleetViewModel @Inject constructor(
     private val _tokenLicenseMutableData: MutableLiveData<TokenLicenseItem> = MutableLiveData()
     val tokenLicenseMutableData: LiveData<TokenLicenseItem>
         get() = _tokenLicenseMutableData
+
+    private val _populateFleetRoutesMutableData: SingleLiveEvent<MutableList<PopulateFleetBusRoutesItems>> =
+        SingleLiveEvent()
+    val populateFleetRoutesMutableData: LiveData<MutableList<PopulateFleetBusRoutesItems>>
+        get() = _populateFleetRoutesMutableData
 
     init {
         _stateLiveData.value = ViewState.Default
@@ -294,6 +303,31 @@ class RegisteredFleetViewModel @Inject constructor(
                 _setRegisteredFleetMutableData.postValue(it)
             }
         }
+    }
+
+    fun populateFleetRoutesList(
+        url: String,
+        sAuthorization: String,
+        iGroupID: Int,
+        iSchoolID: Int,
+        iStatusID: Int
+    ) = launchIOCoroutine {
+        populateFleetsRoutesUseCase(
+            PopulateFleetBusRoutesParams(
+                url = url,
+                sAuthorization = sAuthorization,
+                iGroupID = iGroupID,
+                iSchoolID = iSchoolID,
+                iStatusID = iStatusID
+            )
+        ).fold(
+            {
+                postError(it)
+            },
+            {
+                _populateFleetRoutesMutableData.postValue(it)
+            }
+        )
     }
 }
 

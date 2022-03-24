@@ -59,7 +59,7 @@ class OperationsMenuFragment : BaseFragment() {
                         R.id.operationsSubMenuFragment,
                         bundleOf("menu" to it)
                     )
-                    ON_BOARD_ATTENDANCE -> currentNavController.navigate(R.id.onBoardAttendanceFragment)
+                    ON_BOARD_ATTENDANCE -> currentNavController.navigate(R.id.onBoardAttendanceSelectRouteFragment)
                     FLEET_OPERATIONS -> currentNavController.navigate(
                         R.id.operationsSubMenuFragment,
                         bundleOf("menu" to it)

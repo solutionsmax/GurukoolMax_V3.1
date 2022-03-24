@@ -15,12 +15,17 @@ object MethodConstants {
     const val FLEET_REGISTRATION_RETRIEVE_DETAILS = "/FleetRegistration/RetrieveDetails"
     const val FLEET_REGISTRATION_RETRIEVE_LIST = "/FleetRegistration/RetrieveList"
     const val FLEET_REGISTRATION_POPULATE_LIST = "/FleetRegistration/PopulateList"
+    const val STUDENT_CHECK_VALID_ADMISSION_NUMBER = "/Student/CheckValidAdmissionNum"
 
     // Fleet Student Attendance
     const val FLEET_STUDENT_ATTENDANCE_POST_INFO = "/FleetStudentAttendance/PostInfo"
+    const val FLEET_STUDENT_ATTENDANCE_POST_MANUALLY =
+        "/FleetStudentAttendance/PostAttendanceManually"
     const val FLEET_STUDENT_ATTENDANCE_AMEND_INFO = "/FleetStudentAttendance/AmendInfo"
     const val FLEET_STUDENT_ATTENDANCE_CHECK_DUPLICATE =
         "/FleetStudentAttendance/CheckDuplicateInfo"
+    const val FLEET_STUDENT_ATTENDANCE_CHECK_ATTENDANCE =
+        "/FleetStudentAttendance/CheckStudentAttendance"
     const val FLEET_STUDENT_ATTENDANCE_RETRIEVE_DETAILS = "/FleetStudentAttendance/RetrieveDetails"
     const val FLEET_STUDENT_ATTENDANCE_RETRIEVE_LIST = "/FleetStudentAttendance/RetrieveList"
 
@@ -51,4 +56,7 @@ object MethodConstants {
     const val SET_MASTER_STATUS = "/Master/SetStatusInfo"
     const val MASTER_POPULATE_INFO_BY_PARENT = "/Master/PopulateInfoByParent"
     const val POPULATE_MASTER_LIST = "/Master/PopulateList"
+
+    // Fleet Bus Routes
+    const val FLEET_POPULATE_BUS_ROUTES = "/FleetBusRoute/PopulateList"
 }

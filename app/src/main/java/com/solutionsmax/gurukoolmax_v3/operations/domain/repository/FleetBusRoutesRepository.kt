@@ -6,6 +6,7 @@ import com.solutionsmax.gurukoolmax_v3.core.functional.Either
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusPickupPointsList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusRouteList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupScheduleList
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.PopulateFleetBusRoutesItems
 import com.solutionsmax.gurukoolmax_v3.remote.FleetApi
 import javax.inject.Inject
 
@@ -45,6 +46,19 @@ class FleetBusRoutesRepository @Inject constructor(
             fleetApi.retrieveBusPickupSchedule(
                 url, "${TokenConstants.BEARER} $sAuthorization", 1, 1,
                 iRouteID, iStatusID
+            )
+        )
+
+    suspend fun populateFleetBusRoutes(
+        url: String,
+        sAuthorization: String,
+        iGroupID: Int,
+        iSchoolID: Int,
+        iStatusID: Int,
+    ): Either<Failure, MutableList<PopulateFleetBusRoutesItems>> =
+        Either.Right(
+            fleetApi.populateFleetBusRoutes(
+                url, "${TokenConstants.BEARER} $sAuthorization", iGroupID, iSchoolID, iStatusID
             )
         )
 
