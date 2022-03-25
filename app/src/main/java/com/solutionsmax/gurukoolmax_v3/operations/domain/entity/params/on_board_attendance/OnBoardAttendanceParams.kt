@@ -31,6 +31,16 @@ data class OnBoardCheckDuplicateAttendanceParams(
     val dDateOfTravel: String
 )
 
+data class OnBoardCheckDuplicateAttendanceByAdmissionNumberParams(
+    val url: String,
+    val sAuthorization: String,
+    val iGroupID: Int,
+    val iSchoolID: Int,
+    val sAdmissionNum: String,
+    val iRouteID: Int,
+    val dDateOfTravel: String
+)
+
 data class OnBoardPostFleetAttendanceParams(
     val url: String,
     val sAuthorization: String,

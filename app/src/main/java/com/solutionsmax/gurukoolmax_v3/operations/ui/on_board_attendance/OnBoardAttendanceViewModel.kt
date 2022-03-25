@@ -12,6 +12,7 @@ class OnBoardAttendanceViewModel @Inject constructor(
     private val checkValidAdmissionNumberUseCase: CheckValidAdmissionNumberUseCase,
     private val checkStudentAttendanceUseCase: CheckStudentAttendanceUseCase,
     private val checkDuplicateStudentAttendanceUseCase: CheckDuplicateStudentAttendanceUseCase,
+    private val checkDuplicateOnBoardAttendanceByAdmissionNumberUseCase:CheckDuplicateOnBoardAttendanceByAdmissionNumberUseCase,
     private val amendFleetStudentAttendanceInfoUseCase: AmendFleetStudentAttendanceInfoUseCase,
     private val postFleetStudentAttendanceManuallyUseCase: PostFleetStudentAttendanceManuallyUseCase,
     private val postFleetStudentAttendanceInfoUseCase: PostFleetStudentAttendanceInfoUseCase
@@ -42,6 +43,10 @@ class OnBoardAttendanceViewModel @Inject constructor(
         MutableLiveData()
     val postFleetStudentAttendanceManuallyMutableData: LiveData<Int>
         get() = _postFleetStudentAttendanceManuallyMutableData
+
+    private val _checkDuplicateOnBoardAttendanceByAdmissionNumber:MutableLiveData<Int> = MutableLiveData()
+    val checkDuplicateOnBoardAttendanceByAdmissionNumber:LiveData<Int>
+        get() = _checkDuplicateOnBoardAttendanceByAdmissionNumber
 
     fun checkValidAdmissionNumber(
         url: String,
@@ -124,6 +129,35 @@ class OnBoardAttendanceViewModel @Inject constructor(
             },
             {
                 _checkDuplicateStudentAttendanceMutableData.postValue(it)
+            }
+        )
+    }
+
+    fun checkDuplicateAttendanceByAdmissionNum(
+        url: String,
+        sAuthorization: String,
+        iGroupID: Int,
+        iSchoolID: Int,
+        sAdmissionNum: String,
+        iRouteID: Int,
+        dDateOfTravel: String
+    ) = launchIOCoroutine {
+        checkDuplicateOnBoardAttendanceByAdmissionNumberUseCase(
+            OnBoardCheckDuplicateAttendanceByAdmissionNumberParams(
+                url = url,
+                sAuthorization = sAuthorization,
+                iGroupID = iGroupID,
+                iSchoolID = iSchoolID,
+                sAdmissionNum = sAdmissionNum,
+                iRouteID = iRouteID,
+                dDateOfTravel = dDateOfTravel
+            )
+        ).fold(
+            {
+                postError(it)
+            },
+            {
+                _checkDuplicateOnBoardAttendanceByAdmissionNumber.postValue(it)
             }
         )
     }

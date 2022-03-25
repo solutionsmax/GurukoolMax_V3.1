@@ -11,7 +11,7 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_STUDENT_ATTENDANCE_CHECK_ATTENDANCE
-import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_STUDENT_ATTENDANCE_CHECK_DUPLICATE
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_STUDENT_ATTENDANCE_CHECK_DUPLICATE_BY_ADMISSION_NUMBER
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_STUDENT_ATTENDANCE_POST_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.STUDENT_CHECK_VALID_ADMISSION_NUMBER
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
@@ -166,13 +166,13 @@ class OnBoardAttendanceFragment : BaseFragment() {
     }
 
     private fun checkDuplicateAttendanceScanned() {
-        onBoardAttendanceViewModel.checkDuplicateStudentAttendance(
-            url = sBaseURL + FLEET_STUDENT_ATTENDANCE_CHECK_DUPLICATE,
+        onBoardAttendanceViewModel.checkDuplicateAttendanceByAdmissionNum(
+            url = sBaseURL + FLEET_STUDENT_ATTENDANCE_CHECK_DUPLICATE_BY_ADMISSION_NUMBER,
             sAuthorization = sToken,
             iGroupID = iGroupID,
             iSchoolID = iBranchID,
             iRouteID = iBusRouteID,
-            iStudentID = -1,
+            sAdmissionNum = sScannedValue,
             dDateOfTravel = DateUtils.todayDateTime()
                 .getMediumDateFormat(requireContext())
         )
@@ -185,7 +185,7 @@ class OnBoardAttendanceFragment : BaseFragment() {
             iGroupID = iGroupID,
             iSchoolID = iBranchID,
             sAdmissionNum = sScannedValue,
-            iRouteID = 1,
+            iRouteID = iBusRouteID,
             iStudentID = -1,
             dDateOfTravel = DateUtils.todayDateTime()
                 .getMediumDateFormat(requireContext())

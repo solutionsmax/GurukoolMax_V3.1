@@ -68,6 +68,27 @@ class StudentOnBoardAttendanceRepository @Inject constructor(
             )
         )
 
+    suspend fun checkDuplicateOnBoardAttendanceByAdmissionNumber(
+        url: String,
+        sAuthorization: String,
+        iGroupID: Int,
+        iSchoolID: Int,
+        sAdmissionNumber: String,
+        iRouteID: Int,
+        dDateOfTravel: String
+    ):Either<Failure,Int> =
+        Either.Right(
+            fleetApi.checkDuplicateAttendanceByAdmissionNumber(
+                url,
+                "${TokenConstants.BEARER} $sAuthorization",
+                iGroupID,
+                iSchoolID,
+                sAdmissionNumber,
+                iRouteID,
+                dDateOfTravel
+            )
+        )
+
     suspend fun postFleetAttendanceInfo(
         url: String,
         sAuthorization: String,

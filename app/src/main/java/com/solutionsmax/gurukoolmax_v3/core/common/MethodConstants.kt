@@ -26,6 +26,8 @@ object MethodConstants {
         "/FleetStudentAttendance/CheckDuplicateInfo"
     const val FLEET_STUDENT_ATTENDANCE_CHECK_ATTENDANCE =
         "/FleetStudentAttendance/CheckStudentAttendance"
+    const val FLEET_STUDENT_ATTENDANCE_CHECK_DUPLICATE_BY_ADMISSION_NUMBER =
+        "/FleetStudentAttendance/CheckDuplicateByAdmissionNumInfo"
     const val FLEET_STUDENT_ATTENDANCE_RETRIEVE_DETAILS = "/FleetStudentAttendance/RetrieveDetails"
     const val FLEET_STUDENT_ATTENDANCE_RETRIEVE_LIST = "/FleetStudentAttendance/RetrieveList"
 

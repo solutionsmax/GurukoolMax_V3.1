@@ -306,6 +306,17 @@ interface FleetApi {
     ): Int
 
     @GET
+    suspend fun checkDuplicateAttendanceByAdmissionNumber(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("sAdmissionNumber") sAdmissionNumber: String,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("dDateOfTravel") dDateOfTravel: String
+    ):Int
+
+    @GET
     suspend fun postFleetStudentAttendance(
         @Url url: String,
         @Header("Authorization") sAuthorization: String,
