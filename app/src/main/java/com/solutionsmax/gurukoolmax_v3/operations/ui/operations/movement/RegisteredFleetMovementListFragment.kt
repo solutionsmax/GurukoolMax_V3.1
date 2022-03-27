@@ -10,11 +10,17 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMENT_RETRIEVE_LIST
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentRegisteredFleetMovementListBinding
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
@@ -27,6 +33,7 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var fleetMovementViewModel: FleetMovementViewModel
     private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +59,8 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
             ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
         fleetMovementViewModel =
             ViewModelProvider(this, viewModelFactory)[FleetMovementViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
 
         binding.fabCreateNew.setOnClickListener {
             val bundle = bundleOf("id" to -1)
@@ -72,15 +81,19 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
             with(fleetMovementViewModel) {
                 retrieveFleetMovementListMutableLiveData.observe(
                     viewLifecycleOwner
-                ) {
+                ) { fleetMovement->
                     errorLiveData.observe(viewLifecycleOwner) {
                         showError(it.peekContent())
+                        with(errorLogsViewModel) {
+                            postErrors(it)
+                            postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                        }
                     }
                     binding.progressBar.visibility = View.GONE
                     with(binding.registeredFleetList) {
                         layoutManager = LinearLayoutManager(requireContext())
-                        adapter = FleetMovementAdapter(it, FleetMovementAdapter.OnItemClick {
-                            val bundle = bundleOf("id" to it)
+                        adapter = FleetMovementAdapter(fleetMovement, FleetMovementAdapter.OnItemClick {
+                            val bundle = bundleOf("id" to fleetMovement)
                             currentNavController.navigate(
                                 R.id.registeredFleetMovementInfoFragment,
                                 bundle
@@ -90,6 +103,29 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + MethodConstants.POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = RegisteredFleetMovementListFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
 }

@@ -12,11 +12,17 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_POPULATE_BUS_ROUTES
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POST_ERROR_LOGS
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants.MANAGEMENT_PORTAL
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOnBoardAttendanceBinding
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOnBoardAttendanceSelectRouteBinding
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.PopulateFleetBusRoutesItems
-import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
@@ -30,6 +36,7 @@ class OnBoardAttendanceSelectRouteFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var registeredFleetViewModel: RegisteredFleetViewModel
     private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
 
     private var iBusRouteID: Int = -1
 
@@ -47,16 +54,18 @@ class OnBoardAttendanceSelectRouteFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.apply {
-            title = getString(R.string.fleet_movement)
+            title = getString(R.string.on_board_attendance_initiation)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            setNavigationOnClickListener { currentNavController.navigate(R.id.registeredFleetMovementListFragment) }
+            setNavigationOnClickListener { currentNavController.navigate(R.id.mainMenuFragment) }
         }
 
         registeredFleetViewModel =
             ViewModelProvider(this, viewModelFactory)[RegisteredFleetViewModel::class.java]
         tokenLicenseViewModel =
             ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
 
         tokenLicenseViewModel.retrieveTokenLicenseInfo()
         setupObservers()
@@ -86,8 +95,35 @@ class OnBoardAttendanceSelectRouteFragment : BaseFragment() {
         with(registeredFleetViewModel) {
             errorLiveData.observe(viewLifecycleOwner) {
                 showError(it.peekContent())
+                with(errorLogsViewModel) {
+                    postErrors(it)
+                    postErrorLogsMutableData.observe(viewLifecycleOwner){}
+                }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = OnBoardAttendanceSelectRouteFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
     private fun populateFleetBusRoute(sBaseURL: String, sToken: String) {
@@ -120,7 +156,6 @@ class OnBoardAttendanceSelectRouteFragment : BaseFragment() {
                         override fun onNothingSelected(p0: AdapterView<*>?) {
                             TODO("Not yet implemented")
                         }
-
                     }
                 }
             }

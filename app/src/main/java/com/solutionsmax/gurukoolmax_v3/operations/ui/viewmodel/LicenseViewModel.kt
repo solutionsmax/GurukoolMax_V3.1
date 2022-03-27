@@ -103,7 +103,7 @@ class LicenseViewModel @Inject constructor(
             retrieveLicenseUseCase(Unit).fold(
                 {
                     Log.d("TAG", "retrieveTokenToLocal: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _retrieveLicenseInfoUseCase.postValue(it)

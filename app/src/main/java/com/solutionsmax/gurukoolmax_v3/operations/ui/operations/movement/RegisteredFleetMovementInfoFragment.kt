@@ -11,12 +11,18 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.solutionsmax.gurukoolmax_v3.R
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMENT_AMEND_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMENT_CHECK_DUPLICATE_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMENT_POST_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMENT_RETRIEVE_DETAILS
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_POPULATE_LIST
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentRegisteredFleetMovementInfoBinding
@@ -34,6 +40,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var fleetRegisterViewModel: RegisteredFleetViewModel
     private lateinit var fleetMovementViewModel: FleetMovementViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
     private var iVehicleID: Int = -1
     private var iEditID: Int = -1
 
@@ -64,6 +71,8 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
             ViewModelProvider(this, viewModelFactory)[FleetMovementViewModel::class.java]
         fleetRegisterViewModel =
             ViewModelProvider(this, viewModelFactory)[RegisteredFleetViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
 
         fleetRegisterViewModel.retrieveTokenLicenseInfo()
 
@@ -101,6 +110,10 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
         with(fleetRegisterViewModel) {
             errorLiveData.observe(viewLifecycleOwner) {
                 showError(error = it.peekContent())
+                with(errorLogsViewModel) {
+                    postErrors(it)
+                    postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                }
             }
             tokenLicenseMutableData.observe(viewLifecycleOwner) {
                 sBaseURL = it.sBaseURL
@@ -169,6 +182,29 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + MethodConstants.POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = RegisteredFleetMovementInfoFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
     /**

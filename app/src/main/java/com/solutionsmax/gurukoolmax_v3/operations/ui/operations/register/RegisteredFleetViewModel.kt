@@ -17,8 +17,6 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.PopulateFle
 import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.fleet_register.*
 import com.solutionsmax.gurukoolmax_v3.remote.entity.TokenLicenseItem
 import com.solutionsmax.gurukoolmax_v3.remote.interactor.GetTokenLicenseUseCase
-import com.solutionsmax.gurukoolmax_v3.room.interactors.license.RetrieveLicenseUseCase
-import com.solutionsmax.gurukoolmax_v3.room.interactors.token.RetrieveTokensUseCase
 import okhttp3.ResponseBody
 import javax.inject.Inject
 

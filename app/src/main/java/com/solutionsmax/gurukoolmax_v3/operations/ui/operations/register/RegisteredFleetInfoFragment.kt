@@ -19,6 +19,7 @@ import com.esafirm.imagepicker.model.Image
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames.MASTERS_CONFIGURATION_CALENDAR_YEAR
 import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames.MASTERS_FLEET_FUEL_TYPES
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_AMEND_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_CHECK_DUPLICATE
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_POST_INFO
@@ -27,10 +28,17 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTR
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POPULATE_MASTER_LIST
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.UPLOAD_PHOTO
 import com.solutionsmax.gurukoolmax_v3.core.common.PhotoConstants.MEDIA_BUS_IMAGE
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
 import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.CompressImage
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.DATE_FORMAT
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentRegisteredFleetInfoBinding
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetPostPhotoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterPostInfoItem
@@ -51,6 +59,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var registeredFleetViewModel: RegisteredFleetViewModel
     private lateinit var mastersViewModel: MastersViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
     private var iEditID = -1
 
     private var images = ArrayList<Image>()
@@ -91,6 +100,8 @@ class RegisteredFleetInfoFragment : BaseFragment() {
         registeredFleetViewModel =
             ViewModelProvider(this, viewModelFactory)[RegisteredFleetViewModel::class.java]
         mastersViewModel = ViewModelProvider(this, viewModelFactory)[MastersViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
 
         registeredFleetViewModel.retrieveTokenLicenseInfo()
 
@@ -140,6 +151,10 @@ class RegisteredFleetInfoFragment : BaseFragment() {
         with(registeredFleetViewModel) {
             errorLiveData.observe(viewLifecycleOwner) {
                 showError(error = it.peekContent())
+                with(errorLogsViewModel) {
+                    postErrors(it)
+                    postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                }
             }
             tokenLicenseMutableData.observe(viewLifecycleOwner) {
                 sBaseURL = it.sBaseURL
@@ -207,6 +222,29 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + MethodConstants.POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = RegisteredFleetInfoFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
     /**

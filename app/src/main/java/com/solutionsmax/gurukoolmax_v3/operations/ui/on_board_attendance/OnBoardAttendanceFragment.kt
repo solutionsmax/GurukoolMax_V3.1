@@ -13,8 +13,14 @@ import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_STUDENT_ATTENDANCE_CHECK_ATTENDANCE
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_STUDENT_ATTENDANCE_CHECK_DUPLICATE_BY_ADMISSION_NUMBER
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_STUDENT_ATTENDANCE_POST_INFO
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POST_ERROR_LOGS
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.STUDENT_CHECK_VALID_ADMISSION_NUMBER
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOnBoardAttendanceBinding
@@ -33,6 +39,8 @@ class OnBoardAttendanceFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
     private lateinit var onBoardAttendanceViewModel: OnBoardAttendanceViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
+
     private var sScannedValue: String = ""
     private var iBusRouteID: Int = -1
 
@@ -62,6 +70,8 @@ class OnBoardAttendanceFragment : BaseFragment() {
             ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
         onBoardAttendanceViewModel =
             ViewModelProvider(this, viewModelFactory)[OnBoardAttendanceViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
 
         tokenLicenseViewModel.retrieveTokenLicenseInfo()
         setupObservers()
@@ -95,12 +105,18 @@ class OnBoardAttendanceFragment : BaseFragment() {
         with(onBoardAttendanceViewModel) {
             errorLiveData.observe(viewLifecycleOwner) {
                 showError(it.peekContent())
+                with(errorLogsViewModel) {
+                    postErrors(it)
+                    postErrorLogsMutableData.observe(viewLifecycleOwner){}
+                }
             }
             checkValidAdmissionNumberMutableData.observe(viewLifecycleOwner) {
                 if (it > 0) {
+                    // Check if the code scanned is valid
                     checkStudentAttendanceValid()
                     checkStudentAttendanceMutableData.observe(viewLifecycleOwner) { validStudentAttendance ->
                         if (validStudentAttendance > 0) {
+                            // check if the code scanned is duplicate
                             checkDuplicateAttendanceScanned()
                             checkDuplicateStudentAttendanceMutableData.observe(viewLifecycleOwner) { duplicateStudentAttendance ->
                                 if (duplicateStudentAttendance > 0) {
@@ -138,6 +154,29 @@ class OnBoardAttendanceFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = OnBoardAttendanceFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
     private fun postStudentAttendanceFleet() {

@@ -1,6 +1,7 @@
 package com.solutionsmax.gurukoolmax_v3.di
 
 import androidx.lifecycle.ViewModel
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetRoutesViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceViewModel
@@ -61,4 +62,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(OnBoardAttendanceViewModel::class)
     abstract fun onBoardAttendanceViewModel(onBoardAttendanceViewModel: OnBoardAttendanceViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ErrorLogsViewModel::class)
+    abstract fun errorLogsViewModel(errorLogsViewModel: ErrorLogsViewModel): ViewModel
 }
