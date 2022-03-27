@@ -120,4 +120,6 @@
 
     <string name="select_bus_route">Select Bus Route</string>
     <string name="select_bus_route_desc">Select a bus route to register student fleet attendance</string>
+
+    <string name="on_board_attendance_initiation">OnBoard Attendance Initiation</string>
 </resources>

@@ -18,8 +18,13 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LOG_CHECK_RETRIEVE_DETAILS
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_FUEL_LOG_POST_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_REGISTRATION_POPULATE_LIST
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
 import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetFuelLogInfoBinding
@@ -42,6 +47,7 @@ class FleetFuelLogInfoFragment : BaseFragment() {
     private lateinit var fuelLogsViewModel: FleetFuelLogsViewModel
     private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
     private lateinit var mastersViewModel: MastersViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
 
     private var iVehicleID: Int = -1
     private var iFuelTypeID: Int = -1
@@ -77,6 +83,8 @@ class FleetFuelLogInfoFragment : BaseFragment() {
         fleetRegisterViewModel =
             ViewModelProvider(this, viewModelFactory)[RegisteredFleetViewModel::class.java]
         mastersViewModel = ViewModelProvider(this, viewModelFactory)[MastersViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
 
         tokenLicenseViewModel.retrieveTokenLicenseInfo()
         setupObservers()
@@ -121,6 +129,10 @@ class FleetFuelLogInfoFragment : BaseFragment() {
         with(fleetRegisterViewModel) {
             errorLiveData.observe(viewLifecycleOwner) {
                 showError(it.peekContent())
+                with(errorLogsViewModel) {
+                    postErrors(it)
+                    postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                }
             }
             populateRegisteredFleetMutableData.observe(viewLifecycleOwner) {
                 binding.cboVehicleName.apply {
@@ -158,6 +170,10 @@ class FleetFuelLogInfoFragment : BaseFragment() {
         with(fuelLogsViewModel) {
             errorLiveData.observe(viewLifecycleOwner) {
                 showError(it.peekContent())
+                with(errorLogsViewModel) {
+                    postErrors(it)
+                    postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                }
             }
             checkDuplicateFuelLogsMutableData.observe(viewLifecycleOwner) { duplicate ->
                 if (iEditID > 0) {
@@ -217,6 +233,29 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + MethodConstants.POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = FleetFuelLogInfoFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
     /**

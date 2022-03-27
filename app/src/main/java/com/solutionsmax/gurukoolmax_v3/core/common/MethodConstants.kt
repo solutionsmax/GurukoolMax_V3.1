@@ -61,4 +61,7 @@ object MethodConstants {
 
     // Fleet Bus Routes
     const val FLEET_POPULATE_BUS_ROUTES = "/FleetBusRoute/PopulateList"
+
+    // Error Logs
+    const val POST_ERROR_LOGS = "/LogError/PostInfo"
 }
