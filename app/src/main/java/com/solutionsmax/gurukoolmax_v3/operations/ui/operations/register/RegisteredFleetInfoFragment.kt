@@ -117,6 +117,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                     getString(R.string.details_required_desc)
                 )
             } else {
+                binding.progressBar.visibility = View.VISIBLE
                 registeredFleetViewModel.checkRegisteredFleetDuplicateInfo(
                     sBaseURL + FLEET_REGISTRATION_CHECK_DUPLICATE,
                     sToken,
@@ -180,6 +181,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                         if (duplicate == iEditID) {
                             amendInfo()
                         } else {
+                            binding.progressBar.visibility = View.INVISIBLE
                             showError(
                                 getString(R.string.duplicate_info),
                                 getString(R.string.duplicate_info_desc)
@@ -190,6 +192,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                     }
                 } else {
                     if (duplicate > 0) {
+                        binding.progressBar.visibility = View.INVISIBLE
                         showError(
                             getString(R.string.duplicate_info),
                             getString(R.string.duplicate_info_desc)
@@ -204,6 +207,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                 if (it > 0) {
                     currentNavController.navigate(R.id.registeredFleetListFragment)
                 } else {
+                    binding.progressBar.visibility = View.INVISIBLE
                     showError(
                         getString(R.string.could_not_save_info),
                         getString(R.string.could_not_save_info_desc)
@@ -215,6 +219,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                 if (it > 0) {
                     currentNavController.navigate(R.id.registeredFleetListFragment)
                 } else {
+                    binding.progressBar.visibility = View.INVISIBLE
                     showError(
                         getString(R.string.could_not_save_info),
                         getString(R.string.could_not_save_info_desc)
@@ -343,9 +348,9 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             .theme(R.style.ImagePickerTheme)
             .includeVideo(false) // include video (false by default)
             .toolbarArrowColor(Color.WHITE) // set toolbar arrow up color
-            .toolbarFolderTitle("Folder") // folder selection title
-            .toolbarImageTitle("Tap to select") // image selection title
-            .toolbarDoneButtonText("DONE") // done button text
+            .toolbarFolderTitle(getString(R.string.folder)) // folder selection title
+            .toolbarImageTitle(getString(R.string.tap_to_select)) // image selection title
+            .toolbarDoneButtonText(getString(R.string.done)) // done button text
 
         imagePicker.single() // multi mode (default mode)
 

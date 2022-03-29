@@ -123,7 +123,7 @@ class FleetMovementViewModel @Inject constructor(
             fetchFleetMovementClosingRangeUseCase(fleetMovementFetchWorkflowStatus).fold(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _fetchFleetMovementClosingRangeMutableLiveData.postValue(it)
@@ -165,7 +165,7 @@ class FleetMovementViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _retrieveFleetMovementDetailsMutableLiveData.postValue(it)
@@ -191,7 +191,7 @@ class FleetMovementViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "postFleetMovement: $it")
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _retrieveFleetMovementListMutableLiveData.postValue(it)
@@ -202,7 +202,7 @@ class FleetMovementViewModel @Inject constructor(
         setFleetMovementStatusUseCase(fleetMovementSetStatus).fold(
             {
                 Log.d("TAG", "postFleetMovement: $it")
-                ::postError
+                postError(it)
             }
         ) {
             _setFleetMovementStatusMutableLiveData.postValue(it)

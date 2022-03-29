@@ -25,7 +25,7 @@ import com.solutionsmax.gurukoolmax_v3.operations.ui.adapter.OperationsMenuAdapt
 class OperationsSubMenuFragment : BaseFragment() {
 
     private lateinit var binding: FragmentOperationsSubMenuBinding
-    private lateinit var menuType: String
+    private var menuType: String = ""
     private var menuItems = emptyList<OperationsMenuItem>()
 
     override fun onCreateView(
@@ -41,7 +41,7 @@ class OperationsSubMenuFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        menuType = requireArguments().getString("menu").toString()
+        menuType = requireArguments().getString("menu", "-1").toString()
 
         binding.toolbar.apply {
             title = getString(R.string.fleet_options)

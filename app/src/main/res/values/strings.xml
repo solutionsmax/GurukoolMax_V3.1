@@ -122,4 +122,11 @@
     <string name="select_bus_route_desc">Select a bus route to register student fleet attendance</string>
 
     <string name="on_board_attendance_initiation">OnBoard Attendance Initiation</string>
+
+    <string name="site_code_error">Site Code Error</string>
+    <string name="site_code_error_desc">Site code does not exist. Please check and re-enter the information again</string>
+
+    <string name="folder">Folder</string>
+    <string name="tap_to_select">Tap to select</string>
+    <string name="done">DONE</string>
 </resources>

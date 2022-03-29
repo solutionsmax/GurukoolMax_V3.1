@@ -79,16 +79,16 @@ class FleetFuelLogListFragment : BaseFragment() {
                 -1, -1
             )
             with(fuelLogsViewModel) {
+                errorLiveData.observe(viewLifecycleOwner) { error->
+                    showError(error.peekContent())
+                    with(errorLogsViewModel) {
+                        postErrors(error)
+                        postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                    }
+                }
                 retrieveFuelLogsListMutableData.observe(
                     viewLifecycleOwner
                 ) { fuelLogsList ->
-                    errorLiveData.observe(viewLifecycleOwner) {
-                        showError(it.peekContent())
-                        with(errorLogsViewModel) {
-                            postErrors(it)
-                            postErrorLogsMutableData.observe(viewLifecycleOwner) {}
-                        }
-                    }
                     binding.progressBar.visibility = View.GONE
                     with(binding.registeredFleetList) {
                         layoutManager = LinearLayoutManager(requireContext())

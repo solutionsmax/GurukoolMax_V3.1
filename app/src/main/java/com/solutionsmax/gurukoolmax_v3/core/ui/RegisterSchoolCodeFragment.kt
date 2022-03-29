@@ -65,9 +65,19 @@ class RegisterSchoolCodeFragment : BaseFragment() {
                     binding.txtSchoolCode.text.toString()
                 )
                 licenseViewModel.retrieveInfoBySideCodeLiveData.observe(viewLifecycleOwner) {
+                    licenseViewModel.errorLiveData.observe(viewLifecycleOwner) { error ->
+                        showError(error.peekContent())
+                    }
                     sBaseURL = it.first().rest_url
+                    if (sBaseURL.isEmpty()) {
+                        showError(
+                            title = getString(R.string.site_code_error),
+                            message = getString(R.string.site_code_error_desc)
+                        )
+                    } else {
+                        currentNavController.navigate(R.id.mainMenuFragment)
+                    }
                 }
-                currentNavController.navigate(R.id.mainMenuFragment)
             }
         }
     }

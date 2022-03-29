@@ -9,4 +9,13 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">biet.webservices.gurukoolmax.com</domain>
     </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">biet.Administration.VidyaMandir.com/Media</domain>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">MGM.webservices.gurukoolmax.com</domain>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">MGM.Administration.VidyaMandir.com/Media/</domain>
+    </domain-config>
 </network-security-config>

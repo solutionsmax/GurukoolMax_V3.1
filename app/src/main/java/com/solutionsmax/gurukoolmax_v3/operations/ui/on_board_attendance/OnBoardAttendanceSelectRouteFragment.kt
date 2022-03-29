@@ -57,7 +57,7 @@ class OnBoardAttendanceSelectRouteFragment : BaseFragment() {
             title = getString(R.string.on_board_attendance_initiation)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            setNavigationOnClickListener { currentNavController.navigate(R.id.mainMenuFragment) }
+            setNavigationOnClickListener { currentNavController.navigate(R.id.operationsMenuFragment) }
         }
 
         registeredFleetViewModel =

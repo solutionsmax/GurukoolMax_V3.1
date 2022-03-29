@@ -79,16 +79,16 @@ class RegisteredFleetListFragment : BaseFragment() {
                 it.sToken, -1
             )
             with(registeredFleetViewModel) {
+                errorLiveData.observe(viewLifecycleOwner) { error->
+                    showError(error.peekContent())
+                    with(errorLogsViewModel) {
+                        postErrors(error)
+                        postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                    }
+                }
                 retrieveRegisteredFleetListMutableData.observe(
                     viewLifecycleOwner
                 ) { fleetRegister ->
-                    errorLiveData.observe(viewLifecycleOwner) {
-                        showError(it.peekContent())
-                        with(errorLogsViewModel) {
-                            postErrors(it)
-                            postErrorLogsMutableData.observe(viewLifecycleOwner) {}
-                        }
-                    }
                     binding.progressBar.visibility = View.GONE
                     with(binding.registeredFleetList) {
                         layoutManager = LinearLayoutManager(requireContext())

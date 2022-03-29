@@ -92,6 +92,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                 /**
                  * Duplicate Check
                  */
+                binding.progressBar.visibility = View.VISIBLE
                 fleetMovementViewModel.checkDuplicateFleetMovement(
                     url = sBaseURL + FLEET_MOVEMENT_CHECK_DUPLICATE_INFO,
                     sAuthorization = sToken,
@@ -140,6 +141,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                         if (duplicate == iEditID) {
                             amendInfo()
                         } else {
+                            binding.progressBar.visibility = View.INVISIBLE
                             showError(
                                 getString(R.string.duplicate_info),
                                 getString(R.string.duplicate_info_desc)
@@ -150,6 +152,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                     }
                 } else {
                     if (duplicate > 0) {
+                        binding.progressBar.visibility = View.INVISIBLE
                         showError(
                             getString(R.string.duplicate_info),
                             getString(R.string.duplicate_info_desc)
@@ -164,6 +167,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                 if (it > 0) {
                     currentNavController.navigate(R.id.registeredFleetMovementListFragment)
                 } else {
+                    binding.progressBar.visibility = View.INVISIBLE
                     showError(
                         getString(R.string.could_not_save_info),
                         getString(R.string.could_not_save_info_desc)
@@ -175,6 +179,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                 if (it > 0) {
                     currentNavController.navigate(R.id.registeredFleetMovementListFragment)
                 } else {
+                    binding.progressBar.visibility = View.INVISIBLE
                     showError(
                         getString(R.string.could_not_save_info),
                         getString(R.string.could_not_save_info_desc)
@@ -211,6 +216,13 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
      * Populate Vehicle Name
      */
     private fun populateVehicleName(sBaseURL: String, sToken: String) {
+        fleetRegisterViewModel.errorLiveData.observe(viewLifecycleOwner) {
+            showError(error = it.peekContent())
+            with(errorLogsViewModel) {
+                postErrors(it)
+                postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+            }
+        }
         fleetRegisterViewModel.populateRegisteredFleetList(
             sBaseURL + FLEET_REGISTRATION_POPULATE_LIST,
             sToken, -1
@@ -252,6 +264,13 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
      * Retrieve Details
      */
     private fun retrieveDetails(iEditID: Int) {
+        fleetRegisterViewModel.errorLiveData.observe(viewLifecycleOwner) {
+            showError(error = it.peekContent())
+            with(errorLogsViewModel) {
+                postErrors(it)
+                postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+            }
+        }
         fleetMovementViewModel.retrieveFleetMovementDetails(
             url = sBaseURL + FLEET_MOVEMENT_RETRIEVE_DETAILS,
             sAuthorization = sToken,

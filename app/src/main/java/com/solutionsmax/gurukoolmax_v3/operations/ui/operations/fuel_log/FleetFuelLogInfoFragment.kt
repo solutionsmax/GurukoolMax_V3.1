@@ -102,6 +102,7 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                 /**
                  * Duplicate Check
                  */
+                binding.progressBar.visibility = View.VISIBLE
                 fuelLogsViewModel.checkDuplicateFuelLogs(
                     sBaseURL + FLEET_FUEL_LOG_CHECK_DUPLICATE_INFO, sAuthorization = sToken,
                     iGroupID = iGroupID, iSchoolID = iBranchID, iVehicleID, -1
@@ -181,6 +182,7 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                         if (duplicate == iEditID) {
                             amendInfo()
                         } else {
+                            binding.progressBar.visibility = View.INVISIBLE
                             showError(
                                 getString(R.string.duplicate_info),
                                 getString(R.string.duplicate_info_desc)
@@ -191,6 +193,7 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                     }
                 } else {
                     if (duplicate > 0) {
+                        binding.progressBar.visibility = View.INVISIBLE
                         showError(
                             getString(R.string.duplicate_info),
                             getString(R.string.duplicate_info_desc)
@@ -204,6 +207,7 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                 if (it > 0) {
                     currentNavController.navigate(R.id.fleetFuelLogListFragment)
                 } else {
+                    binding.progressBar.visibility = View.INVISIBLE
                     showError(
                         getString(R.string.could_not_save_info),
                         getString(R.string.could_not_save_info_desc)
@@ -215,6 +219,7 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                 if (it > 0) {
                     currentNavController.navigate(R.id.fleetFuelLogListFragment)
                 } else {
+                    binding.progressBar.visibility = View.INVISIBLE
                     showError(
                         getString(R.string.could_not_save_info),
                         getString(R.string.could_not_save_info_desc)

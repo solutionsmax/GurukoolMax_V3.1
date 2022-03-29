@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="okay">ശരി</string>
+    <string name="skip">ഒഴിവാക്കുക</string>
+    <string name="welcome_to">സ്വാഗതം</string>
+    <string name="school_code">സ്കൂൾ കോഡ്</string>
+    <string name="change">മാറ്റുക</string>
+    <string name="login">ലോഗിൻ</string>
+    <string name="dont_have_account">അക്കൗണ്ട് ഇല്ല</string>
+    <string name="create_now">ഇപ്പോൾ സൃഷ്ടിക്കുക</string>
+    <string name="forgot_password">പാസ്വേഡ് മറന്നോ?</string>
+    <string name="request_for_password">പാസ്വേഡിനുള്ള അഭ്യർത്ഥന</string>
+    <string name="gurukool_max_operations">GurukoolMax - പ്രവർത്തനങ്ങൾ</string>
+    <string name="login_to_your_account">നിങ്ങളുടെ അക്കൗണ്ടിൽ ലോഗിൻ ചെയ്യുക</string>
+    <string name="username">ഉപയോക്തൃനാമം</string>
+    <string name="password">പാസ്വേഡ്</string>
+    <string name="submit">സമർപ്പിക്കുക</string>
+
+    <string name="school_under_institution">നിങ്ങളുടെ സ്കൂൾ ഒരു സ്ഥാപനത്തിന്റെ ഗ്രൂപ്പിൽ പെട്ടതാണോ?</string>
+    <string name="welcome_to_gurukool_max_ecosystem">GurukoolMax ഇക്കോസിസ്റ്റം \nസൊല്യൂഷനുകളിലേക്ക് സ്വാഗതം</string>
+    <string name="please_provide_school_code">ദയവായി സ്കൂൾ കോഡ് നൽകുക</string>
+    <string name="agree_with_terms">ഞാൻ നിബന്ധനകളും വ്യവസ്ഥകളും അംഗീകരിക്കുന്നു</string>
+    <string name="enter_school_empty">സ്കൂൾ കോഡ് നൽകുക</string>
+</resources>

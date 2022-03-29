@@ -202,7 +202,7 @@ class RegisteredFleetViewModel @Inject constructor(
             fetchRegisteredFleetPhotoUseCase(params = fleetRegistered).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _fetchRegisteredFleetPhotoMutableLData.postValue(it)
@@ -225,7 +225,7 @@ class RegisteredFleetViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _populateRegisteredFleetMutableData.postValue(it)
@@ -238,7 +238,7 @@ class RegisteredFleetViewModel @Inject constructor(
             postRegisteredFleetPhotoUseCase(params = postFleetPhoto).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _postRegisteredFleetPhotoMutableData.postValue(it)
@@ -295,7 +295,7 @@ class RegisteredFleetViewModel @Inject constructor(
             setRegisteredFleetStatusUseCase(params = setRegisteredFleetStatus).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _setRegisteredFleetMutableData.postValue(it)
