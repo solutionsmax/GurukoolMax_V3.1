@@ -3,6 +3,7 @@ package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.solutionsmax.gurukoolmax_v3.core.common.WorkflowStatus
 import com.solutionsmax.gurukoolmax_v3.databinding.FuelLogsListItemBinding
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLogsRetrieveItems
 
@@ -29,10 +30,7 @@ class FleetFuelLogsAdapter(
         fun bind(items: FuelLogsRetrieveItems, clickListener: OnItemClick) {
             binding.fuelLogs = items
             binding.clickListener = clickListener
-            when (items.iWorkflowStatusID) {
-                // TODO - create a constant for status
-                1 -> binding.lblStatus.text = "Approved"
-            }
+            binding.lblStatus.text = WorkflowStatus.setStatus(items.iWorkflowStatusID)
         }
     }
 

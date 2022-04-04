@@ -64,4 +64,7 @@ object MethodConstants {
 
     // Error Logs
     const val POST_ERROR_LOGS = "/LogError/PostInfo"
+
+    // Management Login
+    const val MANAGEMENT_LOGIN = "/StaffRegistration/ValidateManagementLogin"
 }

@@ -124,7 +124,7 @@ class OnBoardAttendanceFragment : BaseFragment() {
                                     postFleetStudentAttendanceMutableData.observe(viewLifecycleOwner) { postItem ->
                                         if (postItem > 0) {
                                             codeScannerView.startPreview()
-                                            currentNavController.navigate(R.id.mainMenuFragment)
+                                            currentNavController.navigate(R.id.operationsSubMenuFragment)
                                         } else {
                                             showError(
                                                 title = getString(R.string.something_went_wrong),

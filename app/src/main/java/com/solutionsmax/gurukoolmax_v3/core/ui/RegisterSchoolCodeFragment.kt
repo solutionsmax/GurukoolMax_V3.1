@@ -68,14 +68,23 @@ class RegisterSchoolCodeFragment : BaseFragment() {
                     licenseViewModel.errorLiveData.observe(viewLifecycleOwner) { error ->
                         showError(error.peekContent())
                     }
-                    sBaseURL = it.first().rest_url
-                    if (sBaseURL.isEmpty()) {
+                    if (it.isNullOrEmpty()) {
                         showError(
                             title = getString(R.string.site_code_error),
                             message = getString(R.string.site_code_error_desc)
                         )
+                        binding.txtSchoolCode.setText("")
                     } else {
-                        currentNavController.navigate(R.id.mainMenuFragment)
+                        sBaseURL = it.first().rest_url
+                        if (sBaseURL.isEmpty()) {
+                            showError(
+                                title = getString(R.string.site_code_error),
+                                message = getString(R.string.site_code_error_desc)
+                            )
+                            binding.txtSchoolCode.setText("")
+                        } else {
+                            currentNavController.navigate(R.id.mainMenuFragment)
+                        }
                     }
                 }
             }

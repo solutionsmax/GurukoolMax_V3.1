@@ -127,6 +127,27 @@
                             <option name="y" value="210" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_onBoardAttendanceSelectRouteFragment_to_onBoardAttendanceFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="onBoardManualAttendanceFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1618" />
+                            <option name="y" value="640" />
+                          </Point>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -167,7 +188,7 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_operationsMenuFragment_to_onBoardAttendanceFragment">
+                            <entry key="action_operationsMenuFragment_to_onBoardAttendanceSelectRouteFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

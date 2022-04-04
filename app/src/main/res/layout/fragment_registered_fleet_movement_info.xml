@@ -23,17 +23,20 @@
                     android:layout_marginTop="16.7dp"
                     android:text="@string/vehicle_name" />
 
-                <LinearLayout style="@style/LinearLayoutForEditText"
+                <LinearLayout
+                    style="@style/LinearLayoutForEditText"
                     android:padding="5dp">
 
-                    <Spinner
+                    <TextView
                         android:id="@+id/cboVehicleName"
+                        style="@style/spinner"
+                        android:text="@string/choose_an_option"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                   <!-- <TextView
-                        android:id="@+id/lblVehicle"
-                        style="@style/TextViewSpinner"
-                        android:text="@string/choose_an_option" />-->
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:spinnerMode="dropdown"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -60,23 +63,28 @@
                         android:id="@+id/txtOpeningRecord"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/opening_reading"
-                        android:inputType="number"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="number" />
 
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/lblClosingReading"
                     style="@style/TextViewLabelForEditText"
-                    android:text="@string/closing_reading" />
+                    android:text="@string/closing_reading"
+                    android:visibility="gone" />
 
-                <LinearLayout style="@style/LinearLayoutForEditText">
+                <LinearLayout
+                    android:id="@+id/layoutClosingReading"
+                    style="@style/LinearLayoutForEditText"
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/txtClosingReading"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/closing_reading"
-                        android:inputType="number"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="number" />
 
                 </LinearLayout>
 
@@ -90,8 +98,8 @@
                         android:id="@+id/txtTripReading"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/trip_reading"
-                        android:inputType="number"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="number" />
 
                 </LinearLayout>
 
@@ -133,8 +141,8 @@
                         android:id="@+id/txtFuelLiters"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/fuel_liters"
-                        android:inputType="numberDecimal"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="numberDecimal" />
 
                 </LinearLayout>
 
@@ -148,8 +156,8 @@
                         android:id="@+id/txtAmount"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/amount"
-                        android:inputType="numberDecimal"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="numberDecimal" />
 
                 </LinearLayout>
 

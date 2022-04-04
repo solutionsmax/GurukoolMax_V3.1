@@ -6,6 +6,10 @@
         <variable
             name="fleetBusStop"
             type="com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusPickupPointsList" />
+
+        <variable
+            name="clickListener"
+            type="com.solutionsmax.gurukoolmax_v3.operations.ui.information.adapter.FleetBusStopListAdapter.OnItemClick" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -87,6 +91,27 @@
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblStopName" />
+
+        <TextView
+            android:id="@+id/lblStartTracking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/rectangle_silver_cure"
+            android:gravity="center"
+            android:letterSpacing="0.0325"
+            android:paddingLeft="14dp"
+            android:paddingTop="2dp"
+            android:paddingRight="14dp"
+            android:onClick="@{()->clickListener.onEditClick(fleetBusStop)}"
+            android:paddingBottom="2dp"
+            android:text="@string/start_tracking"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:drawableStartCompat="@drawable/ic_baseline_location_on_24"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblStopName" />
 
         <View

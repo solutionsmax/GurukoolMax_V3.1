@@ -94,8 +94,8 @@ class RegisteredFleetListFragment : BaseFragment() {
                         layoutManager = LinearLayoutManager(requireContext())
                         adapter = RegisteredFleetAdapter(
                             fleetRegister,
-                            RegisteredFleetAdapter.OnItemClick {
-                                val bundle = bundleOf("id" to fleetRegister)
+                            RegisteredFleetAdapter.OnItemClick { id->
+                                val bundle = bundleOf("id" to id)
                                 currentNavController.navigate(
                                     R.id.registeredFleetInfoFragment,
                                     bundle

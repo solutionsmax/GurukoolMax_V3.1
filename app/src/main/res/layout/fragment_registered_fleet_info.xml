@@ -109,10 +109,16 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <Spinner
+                    <TextView
                         android:id="@+id/cboManufactureYear"
+                        style="@style/spinner"
+                        android:text="@string/choose_an_option"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:spinnerMode="dropdown"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -122,10 +128,16 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <Spinner
+                    <TextView
                         android:id="@+id/cboFuelType"
+                        style="@style/spinner"
+                        android:text="@string/choose_an_option"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:spinnerMode="dropdown"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -167,7 +179,8 @@
                         android:id="@+id/txtSeatingCapacity"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/seating_capacity"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="number"/>
 
                 </LinearLayout>
 

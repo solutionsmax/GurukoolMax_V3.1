@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
@@ -15,6 +16,7 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_FLEE
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetRoutesListBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.adapter.FleetRoutesListAdapter
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
 import javax.inject.Inject
@@ -47,7 +49,15 @@ class FleetRoutesListFragment : BaseFragment() {
             title = getString(R.string.bus_routes)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            setNavigationOnClickListener { currentNavController.navigate(R.id.operationsSubMenuFragment) }
+            setNavigationOnClickListener {
+                val bundle = bundleOf("menu" to OperationMenuConstants.FLEET_INFORMATION)
+                setNavigationOnClickListener {
+                    currentNavController.navigate(
+                        R.id.operationsSubMenuFragment,
+                        bundle
+                    )
+                }
+            }
         }
 
         binding.progressBar.visibility = View.VISIBLE

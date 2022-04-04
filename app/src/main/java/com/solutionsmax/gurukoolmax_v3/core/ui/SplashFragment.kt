@@ -89,11 +89,7 @@ class SplashFragment : BaseFragment() {
         })
         binding.lblSkip.setOnClickListener {
             if (checkPermission()){
-                if (!siteCodeExist) {
-                    currentNavController.navigate(R.id.registerSchoolCodeFragment)
-                } else {
-                    currentNavController.navigate(R.id.mainMenuFragment)
-                }
+                currentNavController.navigate(R.id.mainMenuFragment)
             }
         }
 
@@ -102,11 +98,7 @@ class SplashFragment : BaseFragment() {
             if (position < fragmentList.lastIndex) {
                 binding.splashViewPager.currentItem = position + 1
             } else {
-                if (!siteCodeExist) {
-                    currentNavController.navigate(R.id.registerSchoolCodeFragment)
-                } else {
-                    currentNavController.navigate(R.id.mainMenuFragment)
-                }
+                currentNavController.navigate(R.id.mainMenuFragment)
             }
         }
     }

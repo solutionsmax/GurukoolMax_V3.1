@@ -3,6 +3,7 @@ package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.solutionsmax.gurukoolmax_v3.core.common.WorkflowStatus
 import com.solutionsmax.gurukoolmax_v3.databinding.RegisteredFleetItemBinding
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterRetrieveListItem
 
@@ -29,10 +30,7 @@ class RegisteredFleetAdapter(
         fun bind(items: FleetRegisterRetrieveListItem, clickListener: OnItemClick) {
             binding.fleetItems = items
             binding.clickListener = clickListener
-            when (items.iWorkflowStatusID) {
-                // TODO - create a constant for status
-                1 -> binding.lblStatus.text = "Approved"
-            }
+            binding.lblStatus.text = WorkflowStatus.setStatus(items.iWorkflowStatusID)
         }
     }
 

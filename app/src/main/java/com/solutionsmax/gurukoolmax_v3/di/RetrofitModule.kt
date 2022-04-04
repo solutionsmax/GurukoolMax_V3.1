@@ -1,10 +1,7 @@
 package com.solutionsmax.gurukoolmax_v3.di
 
 import com.solutionsmax.gurukoolmax_v3.core.common.BaseURL
-import com.solutionsmax.gurukoolmax_v3.remote.ErrorLogsApi
-import com.solutionsmax.gurukoolmax_v3.remote.FleetApi
-import com.solutionsmax.gurukoolmax_v3.remote.MasterApi
-import com.solutionsmax.gurukoolmax_v3.remote.TokenApi
+import com.solutionsmax.gurukoolmax_v3.remote.*
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -57,4 +54,9 @@ class RetrofitModule {
     @Provides
     fun provideErrorLogsApi(retrofit: Retrofit): ErrorLogsApi =
         retrofit.create(ErrorLogsApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideManagementsApi(retrofit: Retrofit): ManagementApi =
+        retrofit.create(ManagementApi::class.java)
 }

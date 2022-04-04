@@ -1,6 +1,7 @@
 package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -10,10 +11,13 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.view.Window
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.model.Image
 import com.solutionsmax.gurukoolmax_v3.R
@@ -44,6 +48,8 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.F
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.FleetRegisterPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_register.FleetRegisterPostParams
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_register.PostFleetPhoto
+import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.spinner_adapter.RFFuelTypeSpinnerAdapter
+import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.spinner_adapter.RFManufactureYearSpinnerAdapter
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import java.io.File
 import java.text.SimpleDateFormat
@@ -54,6 +60,17 @@ import javax.inject.Inject
 class RegisteredFleetInfoFragment : BaseFragment() {
 
     private lateinit var binding: FragmentRegisteredFleetInfoBinding
+
+    companion object {
+        var lblManufacturingYear: TextView? = null
+        var lblFuelType: TextView? = null
+        var iManufactureYearID: Int = -1
+        var dialog: Dialog? = null
+        var iFuelTypeID: Int = -1
+    }
+
+    private lateinit var manufacturingYearListItems: List<PopulateMasterListItem>
+    private lateinit var fuelType: List<PopulateMasterListItem>
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -68,8 +85,6 @@ class RegisteredFleetInfoFragment : BaseFragment() {
     private lateinit var compressedImage: String
 
     private var date: String = ""
-    private var iManufactureYearID: Int = -1
-    private var iFuelTypeID: Int = -1
 
     private var cal: Calendar = Calendar.getInstance()
 
@@ -85,6 +100,9 @@ class RegisteredFleetInfoFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lblManufacturingYear = view.findViewById(R.id.cboManufactureYear)
+        lblFuelType = view.findViewById(R.id.cboFuelType)
 
         date = SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(Date())
 
@@ -106,6 +124,14 @@ class RegisteredFleetInfoFragment : BaseFragment() {
         registeredFleetViewModel.retrieveTokenLicenseInfo()
 
         setupViewModelObservers()
+
+        lblManufacturingYear!!.setOnClickListener {
+            showManufactureYearDialog()
+        }
+
+        lblFuelType!!.setOnClickListener {
+            showFuelTypeDialog()
+        }
 
         binding.lblBusPhoto.setOnClickListener { getImagePicker().start() }
 
@@ -265,36 +291,33 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             showError(it.peekContent())
         }
         mastersViewModel.populateManufactureYearMutableData.observe(viewLifecycleOwner) {
-            binding.cboManufactureYear.apply {
-                it.add(
-                    0,
-                    PopulateMasterListItem(
-                        -1,
-                        getString(R.string.choose_an_option), "", -1, -1, -1, -1
-                    )
-                )
-                adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
-                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?,
-                        p1: View?,
-                        p2: Int,
-                        p3: Long
-                    ) {
-                        if (p2 > 0) {
-                            val manufactureYear =
-                                binding.cboManufactureYear.selectedItem as PopulateMasterListItem
-                            iManufactureYearID = manufactureYear.id
-                        }
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        TODO("Not yet implemented")
-                    }
-
-                }
-            }
+            manufacturingYearListItems = it
         }
+    }
+
+    private fun showManufactureYearDialog() {
+        dialog = Dialog(requireContext())
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.setCancelable(true)
+        dialog!!.setContentView(R.layout.spinner_dialog)
+
+        val dialogHeader: TextView = dialog!!.findViewById(R.id.lblDialogHeading)
+        dialogHeader.text = getString(R.string.manufacture_year)
+
+        val dialogRecyclerView: RecyclerView = dialog!!.findViewById(R.id.spinnerItemsRecyclerView)
+        dialogRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = RFManufactureYearSpinnerAdapter(
+                manufacturingYearListItems,
+                RFManufactureYearSpinnerAdapter.OnItemClick {
+                    lblManufacturingYear!!.text = it.sName
+                    iManufactureYearID = it.id
+                })
+        }
+        dialog!!.show()
+
+        val dialogClose: ImageView = dialog!!.findViewById(R.id.imgClose)
+        dialogClose.setOnClickListener { dialog!!.cancel() }
     }
 
     /**
@@ -310,36 +333,33 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             showError(it.peekContent())
         }
         mastersViewModel.populateFuelTypeMutableData.observe(viewLifecycleOwner) {
-            binding.cboFuelType.apply {
-                it.add(
-                    0,
-                    PopulateMasterListItem(
-                        -1,
-                        getString(R.string.choose_an_option), "", -1, -1, -1, -1
-                    )
-                )
-                adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
-                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?,
-                        p1: View?,
-                        p2: Int,
-                        p3: Long
-                    ) {
-                        if (p2 > 0) {
-                            val fuelType =
-                                binding.cboFuelType.selectedItem as PopulateMasterListItem
-                            iFuelTypeID = fuelType.id
-                        }
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        TODO("Not yet implemented")
-                    }
-
-                }
-            }
+            fuelType = it
         }
+    }
+
+    private fun showFuelTypeDialog() {
+        dialog = Dialog(requireContext())
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.setCancelable(true)
+        dialog!!.setContentView(R.layout.spinner_dialog)
+
+        val dialogHeader: TextView = dialog!!.findViewById(R.id.lblDialogHeading)
+        dialogHeader.text = getString(R.string.fuel_type)
+
+        val dialogRecyclerView: RecyclerView = dialog!!.findViewById(R.id.spinnerItemsRecyclerView)
+        dialogRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = RFFuelTypeSpinnerAdapter(
+                fuelType,
+                RFFuelTypeSpinnerAdapter.OnItemClick {
+                    lblFuelType!!.text = it.sName
+                    iFuelTypeID = it.id
+                })
+        }
+        dialog!!.show()
+
+        val dialogClose: ImageView = dialog!!.findViewById(R.id.imgClose)
+        dialogClose.setOnClickListener { dialog!!.cancel() }
     }
 
     private fun getImagePicker(): ImagePicker {
@@ -400,6 +420,10 @@ class RegisteredFleetInfoFragment : BaseFragment() {
                     binding.txtCubicCapacity.setText(it.first().sCubicCapacity)
                     binding.txtSeatingCapacity.setText(it.first().iSeatingCapacity.toString())
                     binding.txtRegistrationAuthority.setText(it.first().sRegistrationAuthority)
+                    binding.cboManufactureYear.text = it.first().sManufactureYear
+                    iManufactureYearID = it.first().iManufactureYearID
+                    binding.cboFuelType.text = it.first().sFuelType
+                    iFuelTypeID = it.first().iFuelTypeID
                 } else {
                     showError(
                         getString(R.string.something_went_wrong),
@@ -432,7 +456,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             sPhotoRef = "-1",
             sPhotoURL = "-1",
             iUserID = -1,
-            iWorkflowStatusID = -1,
+            iWorkflowStatusID = 1,
             sCreateDate = "-1",
             sUpdateDate = "-1"
         )

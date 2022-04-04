@@ -1,15 +1,21 @@
 package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log
 
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
@@ -31,6 +37,10 @@ import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetFuelLogInfoBindi
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLogsPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fuel_logs.FuelLogsPostParams
+import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.spinner_adapter.FFLFuelTypeSpinnerAdapter
+import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.spinner_adapter.FFLVehicleNameSpinnerAdapter
+import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.RegisteredFleetMovementInfoFragment
+import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.spinner_adapter.FMVehicleSpinnerAdapter
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
@@ -41,6 +51,17 @@ class FleetFuelLogInfoFragment : BaseFragment() {
 
     private lateinit var binding: FragmentFleetFuelLogInfoBinding
 
+    companion object {
+        var lblVehicleName: TextView? = null
+        var lblFuelType: TextView? = null
+        var iVehicleID: Int = -1
+        var iFuelTypeID: Int = -1
+        var dialog: Dialog? = null
+    }
+
+    private lateinit var populateRegisteredFleetList: List<PopulateRegisteredFleetList>
+    private lateinit var populateMasterListItem: List<PopulateMasterListItem>
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var fleetRegisterViewModel: RegisteredFleetViewModel
@@ -49,8 +70,6 @@ class FleetFuelLogInfoFragment : BaseFragment() {
     private lateinit var mastersViewModel: MastersViewModel
     private lateinit var errorLogsViewModel: ErrorLogsViewModel
 
-    private var iVehicleID: Int = -1
-    private var iFuelTypeID: Int = -1
     private var iEditID: Int = -1
 
     override fun onCreateView(
@@ -72,6 +91,9 @@ class FleetFuelLogInfoFragment : BaseFragment() {
             setNavigationOnClickListener { currentNavController.navigate(R.id.fleetFuelLogListFragment) }
         }
 
+        lblVehicleName = view.findViewById(R.id.cboVehicleName)
+        lblFuelType = view.findViewById(R.id.cboFuelType)
+
         iEditID = requireArguments().getInt("id", -1)
         binding.lblPurchaseDate.text =
             DateUtils.todayDateTime().getMediumDateFormat(requireContext())
@@ -88,6 +110,9 @@ class FleetFuelLogInfoFragment : BaseFragment() {
 
         tokenLicenseViewModel.retrieveTokenLicenseInfo()
         setupObservers()
+
+        lblVehicleName!!.setOnClickListener { showVehicleDialog() }
+        lblFuelType!!.setOnClickListener { showFuelTypeDialog() }
 
         binding.btnSubmit.setOnClickListener {
             if (iVehicleID == -1 || TextUtils.isEmpty(binding.txtOdometer.text) ||
@@ -136,35 +161,7 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                 }
             }
             populateRegisteredFleetMutableData.observe(viewLifecycleOwner) {
-                binding.cboVehicleName.apply {
-                    it.add(
-                        0,
-                        PopulateRegisteredFleetList(
-                            -1,
-                            getString(R.string.choose_an_option)
-                        )
-                    )
-                    adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
-                    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            p0: AdapterView<*>?,
-                            p1: View?,
-                            p2: Int,
-                            p3: Long
-                        ) {
-                            if (p2 > 0) {
-                                val vehicleItem =
-                                    binding.cboVehicleName.selectedItem as PopulateRegisteredFleetList
-                                iVehicleID = vehicleItem.id
-                            }
-                        }
-
-                        override fun onNothingSelected(p0: AdapterView<*>?) {
-                            TODO("Not yet implemented")
-                        }
-
-                    }
-                }
+                populateRegisteredFleetList = it
             }
         }
 
@@ -235,9 +232,38 @@ class FleetFuelLogInfoFragment : BaseFragment() {
                     binding.txtTotalCost.setText(items.iTotalCost.toString())
                     binding.txtProviderName.setText(items.sProviderName)
                     binding.txtRemarks.setText(items.sNotes)
+                    binding.cboVehicleName.text = items.sVehicleName
+                    iVehicleID = items.iFleetID
+                    binding.cboFuelType.text = items.sFuelType
+                    iFuelTypeID = items.iFuelTypeID
                 }
             }
         }
+    }
+
+    private fun showVehicleDialog() {
+        dialog = Dialog(requireContext())
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.setCancelable(true)
+        dialog!!.setContentView(R.layout.spinner_dialog)
+
+        val dialogHeader: TextView = dialog!!.findViewById(R.id.lblDialogHeading)
+        dialogHeader.text = getString(R.string.vehicle_name)
+
+        val dialogRecyclerView: RecyclerView = dialog!!.findViewById(R.id.spinnerItemsRecyclerView)
+        dialogRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = FFLVehicleNameSpinnerAdapter(
+                populateRegisteredFleetList,
+                FFLVehicleNameSpinnerAdapter.OnItemClick {
+                    lblVehicleName!!.text = it.sVehicleName
+                    iVehicleID = it.id
+                })
+        }
+        dialog!!.show()
+
+        val dialogClose: ImageView = dialog!!.findViewById(R.id.imgClose)
+        dialogClose.setOnClickListener { dialog!!.cancel() }
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -276,42 +302,39 @@ class FleetFuelLogInfoFragment : BaseFragment() {
             showError(it.peekContent())
         }
         mastersViewModel.populateFuelTypeMutableData.observe(viewLifecycleOwner) {
-            binding.cboFuelType.apply {
-                it.add(
-                    0,
-                    PopulateMasterListItem(
-                        -1,
-                        getString(R.string.choose_an_option), "", -1, -1, -1, -1
-                    )
-                )
-                adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
-                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?,
-                        p1: View?,
-                        p2: Int,
-                        p3: Long
-                    ) {
-                        if (p2 > 0) {
-                            val fuelType =
-                                binding.cboFuelType.selectedItem as PopulateMasterListItem
-                            iFuelTypeID = fuelType.id
-                        }
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        TODO("Not yet implemented")
-                    }
-
-                }
-            }
+            populateMasterListItem = it
         }
+    }
+
+    private fun showFuelTypeDialog() {
+        dialog = Dialog(requireContext())
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.setCancelable(true)
+        dialog!!.setContentView(R.layout.spinner_dialog)
+
+        val dialogHeader: TextView = dialog!!.findViewById(R.id.lblDialogHeading)
+        dialogHeader.text = getString(R.string.vehicle_name)
+
+        val dialogRecyclerView: RecyclerView = dialog!!.findViewById(R.id.spinnerItemsRecyclerView)
+        dialogRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = FFLFuelTypeSpinnerAdapter(
+                populateMasterListItem,
+                FFLFuelTypeSpinnerAdapter.OnItemClick {
+                    lblFuelType!!.text = it.sName
+                    iFuelTypeID = it.id
+                })
+        }
+        dialog!!.show()
+
+        val dialogClose: ImageView = dialog!!.findViewById(R.id.imgClose)
+        dialogClose.setOnClickListener { dialog!!.cancel() }
     }
 
     private fun populateRegisteredFleet(sBaseURL: String, sToken: String) {
         fleetRegisterViewModel.populateRegisteredFleetList(
             sBaseURL + FLEET_REGISTRATION_POPULATE_LIST,
-            sToken, 1
+            sToken, -1
         )
     }
 

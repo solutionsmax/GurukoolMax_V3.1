@@ -44,8 +44,8 @@ class LicenseViewModel @Inject constructor(
     val retrieveLicenseInfoUseCase: LiveData<List<LicenseItem>>
         get() = _retrieveLicenseInfoUseCase
 
-    private val _deleteAllLicenseMutableData:MutableLiveData<Unit> = MutableLiveData()
-    val deleteAllLicenseMutableData:LiveData<Unit>
+    private val _deleteAllLicenseMutableData: MutableLiveData<Unit> = MutableLiveData()
+    val deleteAllLicenseMutableData: LiveData<Unit>
         get() = _deleteAllLicenseMutableData
 
     private val _testUseCaseLiveData: MutableLiveData<List<LicenseEntity>> = MutableLiveData()
@@ -87,13 +87,15 @@ class LicenseViewModel @Inject constructor(
             ) {
                 _deleteAllLicenseMutableData.postValue(it)
             }
-            insertLicenseUseCase(it.first().toItem()).fold(
-                {
-                    Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+            if (!it.isNullOrEmpty()) {
+                insertLicenseUseCase(it.first().toItem()).fold(
+                    {
+                        Log.d("TAG", "getRemoteToken: " + it.message)
+                        ::postError
+                    }
+                ) {
+                    _insertLicenseUseCaseLiveData.postValue(it)
                 }
-            ) {
-                _insertLicenseUseCaseLiveData.postValue(it)
             }
         }
     }

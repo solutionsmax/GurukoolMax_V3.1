@@ -18,7 +18,7 @@ import javax.inject.Inject
 class FleetRoutesViewModel @Inject constructor(
     private val getFleetBusRoutesUseCase: GetFleetBusRoutesUseCase,
     private val getFleetBusStopsUseCase: GetFleetBusStopsUseCase,
-    private val getFleetPickupScheduleUseCase: GetFleetPickupScheduleUseCase
+    private val getFleetPickupScheduleUseCase: GetFleetPickupScheduleUseCase,
 ) : BaseViewModel() {
 
     private val _fleetRoutesMutableData: MutableLiveData<List<FleetBusRouteList>> =
@@ -35,6 +35,7 @@ class FleetRoutesViewModel @Inject constructor(
         MutableLiveData()
     val fleetPickupScheduleMutableData: LiveData<List<FleetPickupScheduleList>>
         get() = _fleetPickupScheduleMutableData
+
 
     fun retrieveFleetBusRoutes(url: String, sAuthorizationKey: String, iStatusID: Int) {
         launchIOCoroutine {

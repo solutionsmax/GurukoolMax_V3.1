@@ -49,7 +49,7 @@ class TokenViewModel @Inject constructor(
             getTokenUseCase(Unit).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) { tokenEntity ->
                 saveToken(tokenEntity)

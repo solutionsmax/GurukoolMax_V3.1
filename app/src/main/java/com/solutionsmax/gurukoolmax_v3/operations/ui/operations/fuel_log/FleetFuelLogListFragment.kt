@@ -93,8 +93,8 @@ class FleetFuelLogListFragment : BaseFragment() {
                     with(binding.registeredFleetList) {
                         layoutManager = LinearLayoutManager(requireContext())
                         adapter =
-                            FleetFuelLogsAdapter(fuelLogsList, FleetFuelLogsAdapter.OnItemClick {
-                                val bundle = bundleOf("id" to fuelLogsList)
+                            FleetFuelLogsAdapter(fuelLogsList, FleetFuelLogsAdapter.OnItemClick { id->
+                                val bundle = bundleOf("id" to id)
                                 currentNavController.navigate(
                                     R.id.fleetFuelLogInfoFragment,
                                     bundle

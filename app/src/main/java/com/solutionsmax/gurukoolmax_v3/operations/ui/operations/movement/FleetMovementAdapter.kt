@@ -3,6 +3,8 @@ package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.solutionsmax.gurukoolmax_v3.R
+import com.solutionsmax.gurukoolmax_v3.core.common.WorkflowStatus
 import com.solutionsmax.gurukoolmax_v3.databinding.FleetMovementListItemBinding
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementRetrieveItem
 
@@ -28,11 +30,14 @@ class FleetMovementAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(items: FleetMovementRetrieveItem, clickListener: OnItemClick) {
             binding.fleetMovement = items
-            binding.clickListener = clickListener
-            when (items.iWorkflowStatusID) {
-                // TODO - create a constant for status
-                1 -> binding.lblStatus.text = "Approved"
+            if (items.iClosingReading == -1) {
+                binding.lblClosingReading.text =
+                    itemView.context.getString(R.string.not_application)
+            } else {
+                binding.lblClosingReading.text = items.iClosingReading.toString()
             }
+            binding.clickListener = clickListener
+            binding.lblStatus.text = WorkflowStatus.setStatus(items.iWorkflowStatusID)
         }
     }
 

@@ -22,6 +22,7 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOnBoardAttendanceSelectRouteBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.PopulateFleetBusRoutesItems
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
@@ -57,7 +58,13 @@ class OnBoardAttendanceSelectRouteFragment : BaseFragment() {
             title = getString(R.string.on_board_attendance_initiation)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            setNavigationOnClickListener { currentNavController.navigate(R.id.operationsMenuFragment) }
+            val bundle = bundleOf("menu" to OperationMenuConstants.ON_BOARD_ATTENDANCE)
+            setNavigationOnClickListener {
+                currentNavController.navigate(
+                    R.id.operationsSubMenuFragment,
+                    bundle
+                )
+            }
         }
 
         registeredFleetViewModel =

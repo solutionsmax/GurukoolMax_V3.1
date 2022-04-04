@@ -19,3 +19,8 @@ object OperationsSubMenuConstants {
     const val FLEET_MOVEMENT = "Fleet Movement"
     const val FLEET_FUEL_LOG = "Fleet Fuel Log"
 }
+
+object OnBoardAttendanceConstants{
+    const val MANUAL_ATTENDANCE = "Take attendance by Admission Number"
+    const val AUTO_ATTENDANCE = "Scan Admission Number"
+}

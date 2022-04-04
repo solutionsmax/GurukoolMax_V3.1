@@ -79,7 +79,7 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
                 -1
             )
             with(fleetMovementViewModel) {
-                errorLiveData.observe(viewLifecycleOwner) { error->
+                errorLiveData.observe(viewLifecycleOwner) { error ->
                     showError(error.peekContent())
                     with(errorLogsViewModel) {
                         postErrors(error)
@@ -88,17 +88,19 @@ class RegisteredFleetMovementListFragment : BaseFragment() {
                 }
                 retrieveFleetMovementListMutableLiveData.observe(
                     viewLifecycleOwner
-                ) { fleetMovement->
+                ) { fleetMovement ->
                     binding.progressBar.visibility = View.GONE
                     with(binding.registeredFleetList) {
                         layoutManager = LinearLayoutManager(requireContext())
-                        adapter = FleetMovementAdapter(fleetMovement, FleetMovementAdapter.OnItemClick {
-                            val bundle = bundleOf("id" to fleetMovement)
-                            currentNavController.navigate(
-                                R.id.registeredFleetMovementInfoFragment,
-                                bundle
-                            )
-                        })
+                        adapter = FleetMovementAdapter(
+                            fleetMovement,
+                            FleetMovementAdapter.OnItemClick { id ->
+                                val bundle = bundleOf("id" to id)
+                                currentNavController.navigate(
+                                    R.id.registeredFleetMovementInfoFragment,
+                                    bundle
+                                )
+                            })
                     }
                 }
             }

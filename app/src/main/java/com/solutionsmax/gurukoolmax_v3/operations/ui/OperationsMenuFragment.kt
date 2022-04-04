@@ -2,9 +2,8 @@ package com.solutionsmax.gurukoolmax_v3.operations.ui
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,6 +18,7 @@ import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FL
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.ON_BOARD_ATTENDANCE
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationsMenuItem
 import com.solutionsmax.gurukoolmax_v3.operations.ui.adapter.OperationsMenuAdapter
+
 
 class OperationsMenuFragment : BaseFragment() {
 
@@ -40,6 +40,13 @@ class OperationsMenuFragment : BaseFragment() {
         binding.operationsToolbar.apply {
             title = getString(R.string.home)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
+            inflateMenu(R.menu.main_toolbar_menu)
+            setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.logout -> currentNavController.navigate(R.id.operationsLoginFragment)
+                }
+                true
+            }
         }
 
         val menuItems = listOf(
@@ -59,11 +66,25 @@ class OperationsMenuFragment : BaseFragment() {
                         R.id.operationsSubMenuFragment,
                         bundleOf("menu" to it)
                     )
-                    ON_BOARD_ATTENDANCE -> currentNavController.navigate(R.id.onBoardAttendanceSelectRouteFragment,
-                        bundleOf("menu" to it))
+                    ON_BOARD_ATTENDANCE -> currentNavController.navigate(
+                        R.id.operationsSubMenuFragment,
+                        bundleOf("menu" to it)
+                    )
                     FLEET_OPERATIONS -> currentNavController.navigate(
                         R.id.operationsSubMenuFragment,
                         bundleOf("menu" to it)
+                    )
+                    FLEET_GPS_TRACKER -> showError(
+                        title = getString(R.string.under_process),
+                        message = getString(R.string.under_process_desc)
+                    )
+                    FLEET_FEE_DEFAULTERS -> showError(
+                        title = getString(R.string.under_process),
+                        message = getString(R.string.under_process_desc)
+                    )
+                    FLEET_REGISTRY -> showError(
+                        title = getString(R.string.under_process),
+                        message = getString(R.string.under_process_desc)
                     )
                 }
             })

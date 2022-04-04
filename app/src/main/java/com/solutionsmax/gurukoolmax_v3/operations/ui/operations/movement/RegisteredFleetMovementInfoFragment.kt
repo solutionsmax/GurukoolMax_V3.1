@@ -1,15 +1,19 @@
 package com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement
 
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.view.Window
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.FLEET_MOVEMENT_AMEND_INFO
@@ -29,6 +33,7 @@ import com.solutionsmax.gurukoolmax_v3.databinding.FragmentRegisteredFleetMoveme
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_register.PopulateRegisteredFleetList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fleet_movement.FleetMovementPostParams
+import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.spinner_adapter.FMVehicleSpinnerAdapter
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
 import javax.inject.Inject
 
@@ -36,12 +41,19 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
 
     private lateinit var binding: FragmentRegisteredFleetMovementInfoBinding
 
+    companion object {
+        var lblVehicleName: TextView? = null
+        var iVehicleID: Int = -1
+        var dialog: Dialog? = null
+    }
+
+    private lateinit var populateRegisteredFleetList: List<PopulateRegisteredFleetList>
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var fleetRegisterViewModel: RegisteredFleetViewModel
     private lateinit var fleetMovementViewModel: FleetMovementViewModel
     private lateinit var errorLogsViewModel: ErrorLogsViewModel
-    private var iVehicleID: Int = -1
     private var iEditID: Int = -1
 
     override fun onCreateView(
@@ -63,6 +75,8 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
             setNavigationOnClickListener { currentNavController.navigate(R.id.registeredFleetMovementListFragment) }
         }
 
+        lblVehicleName = view.findViewById(R.id.cboVehicleName)
+
         iEditID = requireArguments().getInt("id", -1)
         binding.lblDateOfRecord.text =
             DateUtils.todayDateTime().getMediumDateFormat(requireContext())
@@ -78,31 +92,45 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
 
         setupViewModelObservers()
 
+        lblVehicleName!!.setOnClickListener { showVehicleNameDialog() }
+
         binding.btnSubmit.setOnClickListener {
-            if (TextUtils.isEmpty(binding.txtOpeningRecord.text) || TextUtils.isEmpty(binding.txtClosingReading.text) ||
-                TextUtils.isEmpty(binding.txtTripReading.text) || TextUtils.isEmpty(binding.txtFleetNumber.text) ||
-                TextUtils.isEmpty(binding.txtFuelCoupon.text) || TextUtils.isEmpty(binding.txtFuelLiters.text) ||
-                TextUtils.isEmpty(binding.txtAmount.text) || TextUtils.isEmpty(binding.txtRemarks.text)
+
+            if (Integer.parseInt(binding.txtClosingReading.text.toString()) < Integer.parseInt(
+                    binding.txtOpeningRecord.text.toString()
+                )
             ) {
                 showError(
-                    getString(R.string.details_required),
-                    getString(R.string.details_required_desc)
+                    getString(R.string.range_is_not_valid),
+                    getString(R.string.range_is_not_valid_desc)
                 )
             } else {
-                /**
-                 * Duplicate Check
-                 */
-                binding.progressBar.visibility = View.VISIBLE
-                fleetMovementViewModel.checkDuplicateFleetMovement(
-                    url = sBaseURL + FLEET_MOVEMENT_CHECK_DUPLICATE_INFO,
-                    sAuthorization = sToken,
-                    iGroupID = iGroupID,
-                    iSchoolID = iBranchID,
-                    iVehicleID = iVehicleID,
-                    iOpeningReading = Integer.parseInt(binding.txtOpeningRecord.text.toString()),
-                    dMovementDate = binding.lblDateOfRecord.text.toString()
-                )
+                if (TextUtils.isEmpty(binding.txtOpeningRecord.text) ||
+                    TextUtils.isEmpty(binding.txtTripReading.text) || TextUtils.isEmpty(binding.txtFleetNumber.text) ||
+                    TextUtils.isEmpty(binding.txtFuelCoupon.text) || TextUtils.isEmpty(binding.txtFuelLiters.text) ||
+                    TextUtils.isEmpty(binding.txtAmount.text) || TextUtils.isEmpty(binding.txtRemarks.text)
+                ) {
+                    showError(
+                        getString(R.string.details_required),
+                        getString(R.string.details_required_desc)
+                    )
+                } else {
+                    /**
+                     * Duplicate Check
+                     */
+                    binding.progressBar.visibility = View.VISIBLE
+                    fleetMovementViewModel.checkDuplicateFleetMovement(
+                        url = sBaseURL + FLEET_MOVEMENT_CHECK_DUPLICATE_INFO,
+                        sAuthorization = sToken,
+                        iGroupID = iGroupID,
+                        iSchoolID = iBranchID,
+                        iVehicleID = iVehicleID,
+                        iOpeningReading = Integer.parseInt(binding.txtOpeningRecord.text.toString()),
+                        dMovementDate = binding.lblDateOfRecord.text.toString()
+                    )
+                }
             }
+
         }
 
     }
@@ -228,36 +256,33 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
             sToken, -1
         )
         fleetRegisterViewModel.populateRegisteredFleetMutableData.observe(viewLifecycleOwner) {
-            binding.cboVehicleName.apply {
-                it.add(
-                    0,
-                    PopulateRegisteredFleetList(
-                        -1,
-                        getString(R.string.choose_an_option)
-                    )
-                )
-                adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, it)
-                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?,
-                        p1: View?,
-                        p2: Int,
-                        p3: Long
-                    ) {
-                        if (p2 > 0) {
-                            val vehicleItem =
-                                binding.cboVehicleName.selectedItem as PopulateRegisteredFleetList
-                            iVehicleID = vehicleItem.id
-                        }
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        TODO("Not yet implemented")
-                    }
-
-                }
-            }
+            populateRegisteredFleetList = it
         }
+    }
+
+    private fun showVehicleNameDialog() {
+        dialog = Dialog(requireContext())
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.setCancelable(true)
+        dialog!!.setContentView(R.layout.spinner_dialog)
+
+        val dialogHeader: TextView = dialog!!.findViewById(R.id.lblDialogHeading)
+        dialogHeader.text = getString(R.string.vehicle_name)
+
+        val dialogRecyclerView: RecyclerView = dialog!!.findViewById(R.id.spinnerItemsRecyclerView)
+        dialogRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = FMVehicleSpinnerAdapter(
+                populateRegisteredFleetList,
+                FMVehicleSpinnerAdapter.OnItemClick {
+                    lblVehicleName!!.text = it.sVehicleName
+                    iVehicleID = it.id
+                })
+        }
+        dialog!!.show()
+
+        val dialogClose: ImageView = dialog!!.findViewById(R.id.imgClose)
+        dialogClose.setOnClickListener { dialog!!.cancel() }
     }
 
     /**
@@ -283,16 +308,25 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
             retrieveFleetMovementDetailsMutableLiveData.observe(
                 viewLifecycleOwner
             ) {
+                binding.lblClosingReading.visibility = View.VISIBLE
+                binding.layoutClosingReading.visibility = View.VISIBLE
                 for (items in it) {
                     binding.lblDateOfRecord.text = items.sDateOfRecord.substring(0, 10)
                     binding.txtOpeningRecord.setText(items.iOpeningReading.toString())
-                    binding.txtClosingReading.setText(items.iClosingReading.toString())
+                    if (items.iClosingReading == -1) {
+                        binding.txtClosingReading.setText("")
+                    } else {
+                        binding.txtClosingReading.setText(items.iClosingReading.toString())
+                    }
+
                     binding.txtTripReading.setText(items.iTripReading.toString())
                     binding.txtFleetNumber.setText(items.sFleetNumber)
                     binding.txtFuelCoupon.setText(items.sFleetCouponNumber)
-                    binding.txtFuelCoupon.setText(items.dFuelLiters.toString())
+                    binding.txtFuelLiters.setText(items.dFuelLiters.toString())
                     binding.txtAmount.setText(items.dAmount.toString())
                     binding.txtRemarks.setText(items.sRemarks)
+                    binding.cboVehicleName.text = items.sVehicleName
+                    iVehicleID = items.iVehicleID
                 }
             }
         }
@@ -308,7 +342,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
             iVehicleID = iVehicleID,
             sDateOfRecord = binding.lblDateOfRecord.text.toString(),
             iOpeningReading = Integer.parseInt(binding.txtOpeningRecord.text.toString()),
-            iClosingReading = Integer.parseInt(binding.txtClosingReading.text.toString()),
+            iClosingReading = -1,
             iTripReading = Integer.parseInt(binding.txtTripReading.text.toString()),
             sFleetNumber = binding.txtFleetNumber.text.toString(),
             sFuelCouponNumber = binding.txtFuelCoupon.text.toString(),
@@ -334,6 +368,7 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
      */
     private fun amendInfo() {
         val amendInfo = FleetMovementPostInfoItem(
+            id = iEditID,
             iGroupId = iGroupID,
             iBranchID = iBranchID,
             iVehicleID = iVehicleID,
