@@ -95,8 +95,16 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
         lblVehicleName!!.setOnClickListener { showVehicleNameDialog() }
 
         binding.btnSubmit.setOnClickListener {
-
-            if (Integer.parseInt(binding.txtClosingReading.text.toString()) < Integer.parseInt(
+            if (TextUtils.isEmpty(binding.txtOpeningRecord.text) ||
+                TextUtils.isEmpty(binding.txtTripReading.text) || TextUtils.isEmpty(binding.txtFleetNumber.text) ||
+                TextUtils.isEmpty(binding.txtFuelCoupon.text) || TextUtils.isEmpty(binding.txtFuelLiters.text) ||
+                TextUtils.isEmpty(binding.txtAmount.text) || TextUtils.isEmpty(binding.txtRemarks.text)
+            ) {
+                showError(
+                    getString(R.string.details_required),
+                    getString(R.string.details_required_desc)
+                )
+            } else if (Integer.parseInt(binding.txtClosingReading.text.toString()) < Integer.parseInt(
                     binding.txtOpeningRecord.text.toString()
                 )
             ) {
@@ -105,31 +113,21 @@ class RegisteredFleetMovementInfoFragment : BaseFragment() {
                     getString(R.string.range_is_not_valid_desc)
                 )
             } else {
-                if (TextUtils.isEmpty(binding.txtOpeningRecord.text) ||
-                    TextUtils.isEmpty(binding.txtTripReading.text) || TextUtils.isEmpty(binding.txtFleetNumber.text) ||
-                    TextUtils.isEmpty(binding.txtFuelCoupon.text) || TextUtils.isEmpty(binding.txtFuelLiters.text) ||
-                    TextUtils.isEmpty(binding.txtAmount.text) || TextUtils.isEmpty(binding.txtRemarks.text)
-                ) {
-                    showError(
-                        getString(R.string.details_required),
-                        getString(R.string.details_required_desc)
-                    )
-                } else {
-                    /**
-                     * Duplicate Check
-                     */
-                    binding.progressBar.visibility = View.VISIBLE
-                    fleetMovementViewModel.checkDuplicateFleetMovement(
-                        url = sBaseURL + FLEET_MOVEMENT_CHECK_DUPLICATE_INFO,
-                        sAuthorization = sToken,
-                        iGroupID = iGroupID,
-                        iSchoolID = iBranchID,
-                        iVehicleID = iVehicleID,
-                        iOpeningReading = Integer.parseInt(binding.txtOpeningRecord.text.toString()),
-                        dMovementDate = binding.lblDateOfRecord.text.toString()
-                    )
-                }
+                /**
+                 * Duplicate Check
+                 */
+                binding.progressBar.visibility = View.VISIBLE
+                fleetMovementViewModel.checkDuplicateFleetMovement(
+                    url = sBaseURL + FLEET_MOVEMENT_CHECK_DUPLICATE_INFO,
+                    sAuthorization = sToken,
+                    iGroupID = iGroupID,
+                    iSchoolID = iBranchID,
+                    iVehicleID = iVehicleID,
+                    iOpeningReading = Integer.parseInt(binding.txtOpeningRecord.text.toString()),
+                    dMovementDate = binding.lblDateOfRecord.text.toString()
+                )
             }
+
 
         }
 
