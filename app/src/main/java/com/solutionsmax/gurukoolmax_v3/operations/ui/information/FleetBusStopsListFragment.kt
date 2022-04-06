@@ -165,14 +165,16 @@ class FleetBusStopsListFragment : BaseFragment() {
             if (lastKnownLoc != null) {
                 latitude = lastKnownLoc.latitude
                 longitude = lastKnownLoc.longitude
-                Log.d("TAG", "onReceive: " + lastKnownLoc.latitude)
-                val locationAddress = LocationAddress()
-                locationAddress.getAddressFromLocation(
+                LocationAddress().getAddressFromLocation(
                     lastKnownLoc.latitude,
                     lastKnownLoc.longitude,
                     context,
                     GeocoderHandler(address, sAuthToken, iRouteID)
-                )
+                ).let {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        Log.d("TAG", "onReceive: Address $address")
+                    },3000)
+                }
             }
         }
     }
@@ -190,7 +192,7 @@ class FleetBusStopsListFragment : BaseFragment() {
                 else -> null
             }
             sTestAddress = locationAddress!!
-            Log.d("TAG", "onReceiveAddress: $locationAddress")
+
             checkDuplicateAddress(sTestToken, iTestRouteID)
         }
 

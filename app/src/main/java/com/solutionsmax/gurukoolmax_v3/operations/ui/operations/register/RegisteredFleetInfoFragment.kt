@@ -457,8 +457,10 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             sPhotoURL = "-1",
             iUserID = -1,
             iWorkflowStatusID = 1,
-            sCreateDate = "-1",
-            sUpdateDate = "-1"
+            sCreateDate = DateUtils.todayDateTime()
+                .getMediumDateFormat(requireContext()),
+            sUpdateDate = DateUtils.todayDateTime()
+                .getMediumDateFormat(requireContext())
         )
         val postParamsInfo = FleetRegisterPostParams(
             sBaseURL + FLEET_REGISTRATION_POST_INFO,
@@ -561,9 +563,11 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             sPhotoRef = "-1",
             sPhotoURL = "-1",
             iUserID = -1,
-            iWorkflowStatusID = -1,
-            sCreateDate = "-1",
-            sUpdateDate = "-1"
+            iWorkflowStatusID = 1,
+            sCreateDate = DateUtils.todayDateTime()
+                .getMediumDateFormat(requireContext()),
+            sUpdateDate = DateUtils.todayDateTime()
+                .getMediumDateFormat(requireContext())
         )
         val amendParamsInfo = FleetRegisterPostParams(
             sBaseURL + FLEET_REGISTRATION_AMEND_INFO,
