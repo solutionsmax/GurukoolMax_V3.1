@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetGPSViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetRoutesViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogsViewModel
@@ -73,4 +74,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(OperationsViewModel::class)
     abstract fun operationsViewModel(operationsViewModel: OperationsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FleetGPSViewModel::class)
+    abstract fun fleetGPSViewModel(fleetGPSViewModel: FleetGPSViewModel): ViewModel
 }

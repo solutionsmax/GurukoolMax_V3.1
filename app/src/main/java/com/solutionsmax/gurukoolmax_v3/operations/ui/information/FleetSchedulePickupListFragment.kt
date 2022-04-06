@@ -10,13 +10,20 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_FLEET_PICKUP_SCHEDULE
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetSchedulePickupListBinding
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.adapter.FleetSchedulePickupAdapter
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
 
@@ -26,9 +33,9 @@ class FleetSchedulePickupListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var licenseViewModel: LicenseViewModel
     private lateinit var fleetViewModel: FleetRoutesViewModel
+    private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,39 +54,71 @@ class FleetSchedulePickupListFragment : BaseFragment() {
             title = getString(R.string.pickup_schedule)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            setNavigationOnClickListener { val bundle = bundleOf("menu" to OperationMenuConstants.FLEET_INFORMATION)
-                setNavigationOnClickListener {
-                    currentNavController.navigate(
-                        R.id.operationsSubMenuFragment,
-                        bundle
-                    )
-                } }
+            setNavigationOnClickListener {
+                val bundle = bundleOf("menu" to OperationMenuConstants.FLEET_INFORMATION)
+                currentNavController.navigate(
+                    R.id.operationsSubMenuFragment,
+                    bundle
+                )
+            }
         }
 
         binding.progressBar.visibility = View.VISIBLE
-        tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        licenseViewModel = ViewModelProvider(this, viewModelFactory)[LicenseViewModel::class.java]
+        tokenLicenseViewModel =
+            ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
         fleetViewModel = ViewModelProvider(this, viewModelFactory)[FleetRoutesViewModel::class.java]
 
-        tokenViewModel.retrieveTokensFromLocal()
-        tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) {
-            sToken = it.first().access_token
-        }
+        tokenLicenseViewModel.retrieveTokenLicenseInfo()
+        setupObservers()
+    }
 
-        licenseViewModel.retrieveLicenseInfo()
-        licenseViewModel.retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) {
-            sBaseURL = it.first().rest_url
+    private fun setupObservers() {
+        tokenLicenseViewModel.tokenLicenseMutableData.observe(viewLifecycleOwner) {
             fleetViewModel.retrieveFleetPickupSchedule(
-                sBaseURL + RETRIEVE_FLEET_PICKUP_SCHEDULE, sToken, -1, -1
+                it.sBaseURL + RETRIEVE_FLEET_PICKUP_SCHEDULE, it.sToken, -1, -1
             )
-            fleetViewModel.fleetPickupScheduleMutableData.observe(viewLifecycleOwner) {
-                binding.progressBar.visibility = View.GONE
-                with(binding.fleetRouteList) {
-                    layoutManager = LinearLayoutManager(requireContext())
-                    adapter = FleetSchedulePickupAdapter(it)
+            with(fleetViewModel) {
+                errorLiveData.observe(viewLifecycleOwner) { error ->
+                    showError(error.peekContent())
+                    with(errorLogsViewModel) {
+                        postErrors(error)
+                        postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                    }
+                }
+                fleetPickupScheduleMutableData.observe(viewLifecycleOwner) {
+                    binding.progressBar.visibility = View.GONE
+                    with(binding.fleetRouteList) {
+                        layoutManager = LinearLayoutManager(requireContext())
+                        adapter = FleetSchedulePickupAdapter(it)
+                    }
                 }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + MethodConstants.POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = FleetSchedulePickupListFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
 }

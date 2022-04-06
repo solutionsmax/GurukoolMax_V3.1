@@ -4,6 +4,8 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusPickupPo
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusRouteList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupScheduleList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.PopulateFleetBusRoutesItems
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_gps.FleetGPSPostItem
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_gps.FleetGPSRetrieveItems
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPopulateList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPostInfoItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementRetrieveItem
@@ -314,7 +316,7 @@ interface FleetApi {
         @Query("sAdmissionNumber") sAdmissionNumber: String,
         @Query("iRouteID") iRouteID: Int,
         @Query("dDateOfTravel") dDateOfTravel: String
-    ):Int
+    ): Int
 
     @GET
     suspend fun postFleetStudentAttendance(
@@ -342,4 +344,70 @@ interface FleetApi {
         @Query("dDateOfTravel") dDateOfTravel: String,
         @Query("iAttendanceStatusID") niAttendanceStatusID: Int
     ): Int
+
+    /**
+     * Fleet GPS
+     */
+    @POST
+    suspend fun postFleetGPS(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body fleetGPSPostItem: FleetGPSPostItem
+    ): Int
+
+    @POST
+    suspend fun amendFleetGPS(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body fleetGPSPostItem: FleetGPSPostItem
+    ): Int
+
+    @GET
+    suspend fun checkDuplicateFleetGpsCoordinates(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("sAddress") sAddress: String,
+        @Query("sLongitude") sLongitude: String,
+        @Query("sLatitude") sLatitude: String,
+        @Query("sSyncDT") sSyncDT: String,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("iDriverID") iDriverID: Int
+    ): Int
+
+    @GET
+    suspend fun retrieveFleetGPSDetails(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int
+    ): List<FleetGPSRetrieveItems>
+
+    @GET
+    suspend fun retrieveFleetGPSList(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("iDriverID") iDriverID: Int
+    ): List<FleetGPSRetrieveItems>
+
+    @GET
+    suspend fun retrieveFleetGPSTopList(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("iDriverID") iDriverID: Int
+    ): List<FleetGPSRetrieveItems>
+
+    @GET
+    suspend fun retrieveFleetGPSByDateRangeList(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("iDriverID") iDriverID: Int,
+        @Query("dFromDate") dFromDate: String,
+        @Query("dToDate") dToDate: String
+    ): List<FleetGPSRetrieveItems>
 }

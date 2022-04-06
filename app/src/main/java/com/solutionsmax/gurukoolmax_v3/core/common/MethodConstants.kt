@@ -67,4 +67,13 @@ object MethodConstants {
 
     // Management Login
     const val MANAGEMENT_LOGIN = "/StaffRegistration/ValidateManagementLogin"
+
+    // GPS Tracker
+    const val POST_FLEET_GPS = "/FleetGPS/PostInfo"
+    const val AMEND_FLEET_GPS = "/FleetGPS/AmendInfo"
+    const val CHECK_DUPLICATE_FLEET_GPS = "/FleetGPS/CheckDuplicateGeoCoordinates"
+    const val RETRIEVE_FLEET_GPS_DETAILS = "/FleetGPS/RetrieveDetails"
+    const val RETRIEVE_FLEET_GPS_LIST = "/FleetGPS/RetrieveList"
+    const val RETRIEVE_FLEET_GPS_TOP_LIST = "/FleetGPS/RetrieveTopList"
+    const val RETRIEVE_FLEET_GPS_BY_DATE_RANGE = "/FleetGPS/RetrieveListByDateRange"
 }

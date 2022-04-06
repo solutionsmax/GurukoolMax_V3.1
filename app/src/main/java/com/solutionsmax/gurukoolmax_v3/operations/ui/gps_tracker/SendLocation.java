@@ -35,8 +35,6 @@ public class SendLocation extends Service {
         intent = new Intent(BROADCAST_ACTION);
         prefsPrivate = getApplication().getSharedPreferences("token", MODE_PRIVATE);
         sToken = prefsPrivate.getString("sToken", "-1");
-
-        Log.d("TAG", "onCreate: " + sToken);
     }
 
     @SuppressLint("MissingPermission")
@@ -151,7 +149,6 @@ public class SendLocation extends Service {
                 intent.putExtra("Latitude", loc.getLatitude());
                 intent.putExtra("Longitude", loc.getLongitude());
                 intent.putExtra("Provider", loc.getProvider());
-                //Log.d("TAG", "Latitude: "+loc.getLatitude() +" Longitude: "+loc.getLongitude());
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent1);
                 //sendBroadcast(intent);
 

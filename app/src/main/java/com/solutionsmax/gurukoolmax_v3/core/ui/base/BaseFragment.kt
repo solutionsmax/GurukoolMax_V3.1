@@ -91,7 +91,9 @@ open class BaseFragment : DaggerFragment() {
 
     fun checkPermission(): Boolean {
         Dexter.withContext(context).withPermissions(
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
         ).withListener(object : MultiplePermissionsListener {
             override fun onPermissionsChecked(p0: MultiplePermissionsReport?) {
                 p0?.let {

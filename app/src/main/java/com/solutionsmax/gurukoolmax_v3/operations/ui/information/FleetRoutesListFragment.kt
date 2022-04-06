@@ -2,8 +2,6 @@ package com.solutionsmax.gurukoolmax_v3.operations.ui.information
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +10,20 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_FLEET_BUS_ROUTES
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetRoutesListBinding
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.adapter.FleetRoutesListAdapter
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
 
@@ -28,9 +33,9 @@ class FleetRoutesListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var licenseViewModel: LicenseViewModel
     private lateinit var fleetViewModel: FleetRoutesViewModel
+    private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,39 +56,73 @@ class FleetRoutesListFragment : BaseFragment() {
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
             setNavigationOnClickListener {
                 val bundle = bundleOf("menu" to OperationMenuConstants.FLEET_INFORMATION)
-                setNavigationOnClickListener {
-                    currentNavController.navigate(
-                        R.id.operationsSubMenuFragment,
-                        bundle
-                    )
-                }
+                currentNavController.navigate(
+                    R.id.operationsSubMenuFragment,
+                    bundle
+                )
             }
         }
 
         binding.progressBar.visibility = View.VISIBLE
-        tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        licenseViewModel = ViewModelProvider(this, viewModelFactory)[LicenseViewModel::class.java]
+
+        tokenLicenseViewModel =
+            ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
+
         fleetViewModel = ViewModelProvider(this, viewModelFactory)[FleetRoutesViewModel::class.java]
 
-        tokenViewModel.retrieveTokensFromLocal()
-        tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) {
-            sToken = it.first().access_token
-        }
 
-        licenseViewModel.retrieveLicenseInfo()
-        licenseViewModel.retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) {
-            sBaseURL = it.first().rest_url
+        tokenLicenseViewModel.retrieveTokenLicenseInfo()
+        setupObservers()
+
+    }
+
+    private fun setupObservers() {
+        tokenLicenseViewModel.tokenLicenseMutableData.observe(viewLifecycleOwner) {
             fleetViewModel.retrieveFleetBusRoutes(
-                sBaseURL + RETRIEVE_FLEET_BUS_ROUTES, sToken, -1
+                it.sBaseURL + RETRIEVE_FLEET_BUS_ROUTES, it.sToken, -1
             )
-            fleetViewModel.fleetRoutesMutableData.observe(viewLifecycleOwner) {
-                binding.progressBar.visibility = View.GONE
-                with(binding.fleetRouteList) {
-                    layoutManager = LinearLayoutManager(requireContext())
-                    adapter = FleetRoutesListAdapter(it)
+            with(fleetViewModel) {
+                errorLiveData.observe(viewLifecycleOwner) { error ->
+                    showError(error.peekContent())
+                    with(errorLogsViewModel) {
+                        postErrors(error)
+                        postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                    }
+                }
+                fleetRoutesMutableData.observe(viewLifecycleOwner) {
+                    binding.progressBar.visibility = View.GONE
+                    with(binding.fleetRouteList) {
+                        layoutManager = LinearLayoutManager(requireContext())
+                        adapter = FleetRoutesListAdapter(it)
+                    }
                 }
             }
         }
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + MethodConstants.POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = FleetRoutesListFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
     }
 
 }

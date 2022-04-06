@@ -16,15 +16,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
-import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_FLEET_BUS_STOPS
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
+import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
+import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
-import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.core.utils.LocationAddress
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentFleetBusStopsListBinding
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.SendLocation
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.adapter.FleetBusStopListAdapter
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
 
@@ -38,10 +44,12 @@ class FleetBusStopsListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var licenseViewModel: LicenseViewModel
     private lateinit var fleetViewModel: FleetRoutesViewModel
+    lateinit var fleetGPSViewModel: FleetGPSViewModel
+    private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
+    private lateinit var errorLogsViewModel: ErrorLogsViewModel
 
+    private var iRouteID: Int = -1
 
 
     override fun onCreateView(
@@ -71,35 +79,83 @@ class FleetBusStopsListFragment : BaseFragment() {
         }
 
         binding.progressBar.visibility = View.VISIBLE
-        tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        licenseViewModel = ViewModelProvider(this, viewModelFactory)[LicenseViewModel::class.java]
+
+        tokenLicenseViewModel =
+            ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
+
         fleetViewModel = ViewModelProvider(this, viewModelFactory)[FleetRoutesViewModel::class.java]
+        fleetGPSViewModel = ViewModelProvider(this, viewModelFactory)[FleetGPSViewModel::class.java]
+        errorLogsViewModel =
+            ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
 
-        tokenViewModel.retrieveTokensFromLocal()
-        tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) {
-            sToken = it.first().access_token
-            sAuthToken = it.first().access_token
-        }
+        tokenLicenseViewModel.retrieveTokenLicenseInfo()
+        setUpObservers()
 
-        licenseViewModel.retrieveLicenseInfo()
-        licenseViewModel.retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) {
-            sBaseURL = it.first().rest_url
+    }
+
+    private fun setUpObservers() {
+        tokenLicenseViewModel.tokenLicenseMutableData.observe(viewLifecycleOwner) {
+            sAuthToken = it.sToken
             fleetViewModel.retrieveFleetBusStop(
-                sBaseURL + RETRIEVE_FLEET_BUS_STOPS, sToken, -1
+                it.sBaseURL + MethodConstants.RETRIEVE_FLEET_BUS_STOPS, it.sToken, -1
             )
-            fleetViewModel.fleetBusStopMutableData.observe(viewLifecycleOwner) {
-                binding.progressBar.visibility = View.GONE
-                with(binding.fleetBusStops) {
-                    layoutManager = LinearLayoutManager(requireContext())
-                    adapter = FleetBusStopListAdapter(it, FleetBusStopListAdapter.OnItemClick {
-                        context.startService(Intent(context, SendLocation::class.java))
-                        LocalBroadcastManager.getInstance(context)
-                            .registerReceiver(mMessageReceiver, IntentFilter("GPSLocationUpdates"))
-                    })
+            with(fleetViewModel) {
+                errorLiveData.observe(viewLifecycleOwner) { error ->
+                    showError(error.peekContent())
+                    with(errorLogsViewModel) {
+                        postErrors(error)
+                        postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                    }
                 }
+            }
+            with(fleetViewModel) {
+                fleetBusStopMutableData.observe(viewLifecycleOwner) {
+                    binding.progressBar.visibility = View.GONE
+                    with(binding.fleetBusStops) {
+                        layoutManager = LinearLayoutManager(requireContext())
+                        adapter =
+                            FleetBusStopListAdapter(
+                                it,
+                                FleetBusStopListAdapter.OnItemClick { item ->
+                                    iRouteID = item
+                                    context.startService(Intent(context, SendLocation::class.java))
+                                    LocalBroadcastManager.getInstance(context)
+                                        .registerReceiver(
+                                            mMessageReceiver,
+                                            IntentFilter("GPSLocationUpdates")
+                                        )
+                                }
+                            )
+                    }
+                }
+
             }
         }
     }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    private fun postErrors(event: Event<Failure>) {
+        errorLogsViewModel.postErrorLogs(
+            url = sBaseURL + MethodConstants.POST_ERROR_LOGS,
+            sAuthorization = sToken,
+            postErrorLogsItems = PostErrorLogsItems(
+                iGroupID = iGroupID,
+                iPlantID = iBranchID,
+                iUserRegistrationID = 1,
+                iPortalID = PortalIdConstants.MANAGEMENT_PORTAL,
+                sErrorException = event.peekContent().stackTraceToString(),
+                sErrorMessage = event.peekContent().localizedMessage,
+                sErrorTrace = event.peekContent().message.toString(),
+                iReviewStatusID = -1,
+                sErrorSource = FleetBusStopsListFragment::class.simpleName.toString(),
+                sCreateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext()),
+                sUpdateDate = DateUtils.todayDateTime()
+                    .getMediumDateFormat(requireContext())
+            )
+        )
+    }
+
     private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             // Get extra data included in the Intent
@@ -115,17 +171,16 @@ class FleetBusStopsListFragment : BaseFragment() {
                     lastKnownLoc.latitude,
                     lastKnownLoc.longitude,
                     context,
-                    GeocoderHandler()
+                    GeocoderHandler(address, sAuthToken, iRouteID)
                 )
             }
         }
     }
 
-    class GeocoderHandler : Handler() {
-
-    }
-
-    /*private class GeocoderHandler : Handler() {
+    private class GeocoderHandler(address: String, sAuthToken: String, iRouteID: Int) : Handler() {
+        var sTestAddress = address
+        var sTestToken = sAuthToken
+        var iTestRouteID = iRouteID
         override fun handleMessage(message: Message) {
             val locationAddress: String? = when (message.what) {
                 1 -> {
@@ -134,9 +189,13 @@ class FleetBusStopsListFragment : BaseFragment() {
                 }
                 else -> null
             }
-            address = locationAddress
+            sTestAddress = locationAddress!!
             Log.d("TAG", "onReceiveAddress: $locationAddress")
-            checkDuplicateAddress(sAuthToken, iRouteID)
+            checkDuplicateAddress(sTestToken, iTestRouteID)
         }
-    }*/
+
+        private fun checkDuplicateAddress(sTestToken: String, iTestRouteID: Int) {
+
+        }
+    }
 }

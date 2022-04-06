@@ -67,7 +67,7 @@ class FleetRoutesViewModel @Inject constructor(
             ).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _fleetBusStopMutableData.postValue(it)
