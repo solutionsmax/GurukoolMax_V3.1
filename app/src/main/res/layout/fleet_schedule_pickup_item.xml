@@ -6,6 +6,10 @@
         <variable
             name="pickupScheduleItem"
             type="com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupScheduleList" />
+
+        <variable
+            name="clickListener"
+            type="com.solutionsmax.gurukoolmax_v3.operations.ui.information.adapter.FleetSchedulePickupAdapter.OnItemClick" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -150,6 +154,15 @@
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblEffectiveDate" />
+
+        <TextView
+            android:id="@+id/lblEdit"
+            style="@style/AdapterEditTextView"
+            android:onClick="@{()->clickListener.onEditClick(pickupScheduleItem)}"
+            android:text="@string/edit"
+            app:drawableStartCompat="@drawable/ic_baseline_edit_24"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblEffectiveDate" />
 
         <View

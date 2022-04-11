@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="fleetBusStop"
-            type="com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusPickupPointsList" />
+            type="com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_stops.FleetBusPickupPointsList" />
 
         <variable
             name="clickListener"
@@ -94,6 +96,25 @@
             app:layout_constraintTop_toBottomOf="@+id/lblStopName" />
 
         <TextView
+            android:id="@+id/lblEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/rectangle_silver_cure"
+            android:gravity="center"
+            android:letterSpacing="0.0325"
+            android:text="@string/edit"
+            android:paddingLeft="14dp"
+            android:paddingTop="2dp"
+            android:paddingRight="14dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/white"
+            app:drawableStartCompat="@drawable/ic_baseline_edit_24"
+            app:layout_constraintEnd_toStartOf="@+id/lblStartTracking"
+            app:layout_constraintTop_toBottomOf="@+id/lblStopName" />
+
+        <TextView
             android:id="@+id/lblStartTracking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -105,7 +126,6 @@
             android:paddingLeft="14dp"
             android:paddingTop="2dp"
             android:paddingRight="14dp"
-            android:onClick="@{()->clickListener.onEditClick(fleetBusStop)}"
             android:paddingBottom="2dp"
             android:text="@string/start_tracking"
             android:textColor="@color/white"

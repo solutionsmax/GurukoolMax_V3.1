@@ -5,3 +5,8 @@ data class PopulateMastersParams(
     val sAuthorization: String,
     val sTableName: String
 )
+
+data class PopulateMasterParams(
+    val url: String,
+    val sAuthorization: String
+)

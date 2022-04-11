@@ -8,6 +8,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="fleetBusStopInfoFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1623" />
+                            <option name="y" value="-563" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="fleetBusStopsListFragment">
                     <value>
                       <LayoutPositions>
@@ -16,6 +28,15 @@
                             <option name="x" value="1431" />
                             <option name="y" value="-507" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_fleetBusStopsListFragment_to_fleetBusStopInfoFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -44,6 +65,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="fleetRoutesInfoFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1787" />
+                            <option name="y" value="31" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="fleetRoutesListFragment">
                     <value>
                       <LayoutPositions>
@@ -51,6 +84,27 @@
                           <Point>
                             <option name="x" value="1440" />
                             <option name="y" value="46" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_fleetRoutesListFragment_to_fleetRoutesInfoFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="fleetScheduleInfoFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1856" />
+                            <option name="y" value="-293" />
                           </Point>
                         </option>
                       </LayoutPositions>

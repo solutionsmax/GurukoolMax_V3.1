@@ -72,6 +72,14 @@ class FleetSchedulePickupListFragment : BaseFragment() {
 
         tokenLicenseViewModel.retrieveTokenLicenseInfo()
         setupObservers()
+
+        binding.fabCreateNew.setOnClickListener {
+            val bundle = bundleOf("id" to -1)
+            currentNavController.navigate(
+                R.id.fleetScheduleInfoFragment,
+                bundle
+            )
+        }
     }
 
     private fun setupObservers() {
@@ -91,7 +99,16 @@ class FleetSchedulePickupListFragment : BaseFragment() {
                     binding.progressBar.visibility = View.GONE
                     with(binding.fleetRouteList) {
                         layoutManager = LinearLayoutManager(requireContext())
-                        adapter = FleetSchedulePickupAdapter(it)
+                        adapter =
+                            FleetSchedulePickupAdapter(
+                                it,
+                                FleetSchedulePickupAdapter.OnItemClick { item ->
+                                    val bundle = bundleOf("id" to item)
+                                    currentNavController.navigate(
+                                        R.id.fleetScheduleInfoFragment,
+                                        bundle
+                                    )
+                                })
                     }
                 }
             }

@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.databinding.FleetSchedulePickupItemBinding
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupScheduleList
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_route.FleetBusRouteList
 
 class FleetSchedulePickupAdapter(
-    private val listItems: List<FleetPickupScheduleList>
+    private val listItems: List<FleetPickupScheduleList>,
+    private val clickListener: OnItemClick
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = FleetSchedulePickupItemBinding.inflate(
@@ -25,7 +27,7 @@ class FleetSchedulePickupAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val fleetPickupViewHolder: FleetSchedulePickupViewHolder =
             holder as FleetSchedulePickupViewHolder
-        fleetPickupViewHolder.bind(listItems[position])
+        fleetPickupViewHolder.bind(listItems[position], clickListener)
     }
 
     override fun getItemCount(): Int = listItems.size
@@ -34,8 +36,9 @@ class FleetSchedulePickupAdapter(
         private val binding: FleetSchedulePickupItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         @RequiresApi(Build.VERSION_CODES.M)
-        fun bind(items: FleetPickupScheduleList) {
+        fun bind(items: FleetPickupScheduleList, clickListener: OnItemClick) {
             binding.pickupScheduleItem = items
+            binding.clickListener = clickListener
             binding.lblStatus.setBackgroundColor(getStatusColors(items.iWorkflowStatusID))
         }
 
@@ -49,5 +52,9 @@ class FleetSchedulePickupAdapter(
                 }
             }
         }
+    }
+
+    class OnItemClick(val clickListener: (id: Int) -> Unit) {
+        fun onEditClick(items: FleetPickupScheduleList) = clickListener(items.id)
     }
 }

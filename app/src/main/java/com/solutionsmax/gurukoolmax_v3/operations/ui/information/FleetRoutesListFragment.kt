@@ -76,6 +76,11 @@ class FleetRoutesListFragment : BaseFragment() {
         tokenLicenseViewModel.retrieveTokenLicenseInfo()
         setupObservers()
 
+        binding.fabCreateNew.setOnClickListener {
+            val bundle = bundleOf("id" to -1)
+            currentNavController.navigate(R.id.fleetRoutesInfoFragment, bundle)
+        }
+
     }
 
     private fun setupObservers() {
@@ -95,7 +100,11 @@ class FleetRoutesListFragment : BaseFragment() {
                     binding.progressBar.visibility = View.GONE
                     with(binding.fleetRouteList) {
                         layoutManager = LinearLayoutManager(requireContext())
-                        adapter = FleetRoutesListAdapter(it)
+                        adapter =
+                            FleetRoutesListAdapter(it, FleetRoutesListAdapter.OnItemClick { item ->
+                                val bundle = bundleOf("id" to item)
+                                currentNavController.navigate(R.id.fleetRoutesInfoFragment, bundle)
+                            })
                     }
                 }
             }

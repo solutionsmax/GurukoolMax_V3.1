@@ -1,9 +1,15 @@
 package com.solutionsmax.gurukoolmax_v3.remote
 
-import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusPickupPointsList
-import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusRouteList
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_stops.FleetBusPickupPointsList
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_route.FleetBusRouteList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupScheduleList
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.PopulateFleetBusRoutesItems
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_route.PopulateBusRoutesItems
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_route.PostBusRouteItem
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_route.RetrieveStudentReservationBusRoutesItems
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_schedule.PostBusScheduleItem
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_stops.PopulateFleetBusStopItems
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_stops.PostFleetBusStopItems
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_gps.FleetGPSPostItem
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_gps.FleetGPSRetrieveItems
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_movement.FleetMovementPopulateList
@@ -23,6 +29,71 @@ import retrofit2.http.*
 
 interface FleetApi {
 
+    @POST
+    suspend fun postBusRouteInfo(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postBusRouteItem: PostBusRouteItem
+    ): Int
+
+    @POST
+    suspend fun amendBusRouteInfo(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postBusRouteItem: PostBusRouteItem
+    ): Int
+
+    @GET
+    suspend fun setBusRouteStatus(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iStatusID") iStatusID: Int,
+        @Query("id") id: Int
+    ): Int
+
+    @GET
+    suspend fun fetchBusRouteName(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int
+    ): Int
+
+    @GET
+    suspend fun checkDuplicateBusRouteName(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("sRouteName") sRouteName: String
+    ): Int
+
+    @GET
+    suspend fun populateBusRouteName(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<PopulateBusRoutesItems>
+
+    @GET
+    suspend fun retrieveBusRouteDetails(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int
+    ): List<FleetBusRouteList>
+
+    @GET
+    suspend fun retrieveStudentReservationList(
+        @Url string: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iPickupRouteID") iPickupRouteID: Int,
+        @Query("iDropRouteID") iDropRouteID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<RetrieveStudentReservationBusRoutesItems>
+
     @GET
     suspend fun retrieveBusRouteList(
         @Url string: String,
@@ -32,6 +103,60 @@ interface FleetApi {
         @Query("iStatusID") iStatusID: Int
     ): List<FleetBusRouteList>
 
+    /**
+     * Bus Stop
+     */
+
+    @POST
+    suspend fun postFleetBusStops(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postFleetBusStopItems: PostFleetBusStopItems
+    ): Int
+
+    @POST
+    suspend fun amendFleetBusStops(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postFleetBusStopItems: PostFleetBusStopItems
+    ): Int
+
+    @GET
+    suspend fun setFleetBusStopStatus(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iStatusID") iStatusID: Int,
+        @Query("id") id: Int
+    ): Int
+
+    @GET
+    suspend fun checkDuplicateFleetBusStop(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("sStopName") sStopName: String
+    ): Int
+
+    @GET
+    suspend fun populateFleetBusStopList(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("iEditMode") iEditMode: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<PopulateFleetBusStopItems>
+
+    @GET
+    suspend fun retrieveBusStopDetails(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int
+    ): List<FleetBusPickupPointsList>
+
     @GET
     suspend fun retrieveBusStopList(
         @Url url: String,
@@ -40,6 +165,41 @@ interface FleetApi {
         @Query("iSchoolID") iSchoolID: Int,
         @Query("iStatusID") iStatusID: Int
     ): List<FleetBusPickupPointsList>
+
+    /**
+     * Bus Schedule
+     */
+    @POST
+    suspend fun postBusSchedule(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postBusScheduleItem: PostBusScheduleItem
+    ): Int
+
+    @POST
+    suspend fun amendBusSchedule(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postBusScheduleItem: PostBusScheduleItem
+    ): Int
+
+
+    @GET
+    suspend fun checkDuplicateBusSchedule(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("iStopID") iStopID: Int
+    ): Int
+
+    @GET
+    suspend fun retrieveBusPickupScheduleDetails(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int
+    ): List<FleetPickupScheduleList>
 
     @GET
     suspend fun retrieveBusPickupSchedule(

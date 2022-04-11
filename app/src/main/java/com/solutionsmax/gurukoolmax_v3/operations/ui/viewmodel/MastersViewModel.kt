@@ -6,17 +6,17 @@ import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
 import com.solutionsmax.gurukoolmax_v3.core.data.master.params.PopulateMastersParams
 import com.solutionsmax.gurukoolmax_v3.core.functional.SingleLiveEvent
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseViewModel
-import com.solutionsmax.gurukoolmax_v3.remote.interactor.PopulateFuelTypeUseCase
-import com.solutionsmax.gurukoolmax_v3.remote.interactor.PopulateMakeUseCase
-import com.solutionsmax.gurukoolmax_v3.remote.interactor.PopulateManufactureYearUseCase
-import com.solutionsmax.gurukoolmax_v3.remote.interactor.PopulateMastersUseCase
+import com.solutionsmax.gurukoolmax_v3.remote.interactor.*
 import javax.inject.Inject
 
 class MastersViewModel @Inject constructor(
     private val populateMastersUseCase: PopulateMastersUseCase,
     private val populateMakeUseCase: PopulateMakeUseCase,
     private val populateManufactureYearUseCase: PopulateManufactureYearUseCase,
-    private val populateFuelTypeUseCase: PopulateFuelTypeUseCase
+    private val populateFuelTypeUseCase: PopulateFuelTypeUseCase,
+    private val populateHourUseCase: PopulateHourUseCase,
+    private val populateMinutesUseCase: PopulateMinutesUseCase,
+    private val populateTimeCycleUseCase: PopulateTimeCycleUseCase
 ) : BaseViewModel() {
 
     private val _populateMakeMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
@@ -38,6 +38,74 @@ class MastersViewModel @Inject constructor(
         SingleLiveEvent()
     val populateFuelTypeMutableData: LiveData<MutableList<PopulateMasterListItem>>
         get() = _populateFuelTypeMutableData
+
+    private val _populateHoursMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateHoursMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateHoursMutableData
+
+    private val _populateMinutesMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateMinutesMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateMinutesMutableData
+
+    private val _populateTimeCycleMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateTimeCycleMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateTimeCycleMutableData
+
+    fun populateHours(url: String, sAuthorization: String, sTableName: String) = launchIOCoroutine {
+        populateHourUseCase(
+            PopulateMastersParams(
+                url = url,
+                sAuthorization = sAuthorization,
+                sTableName = sTableName
+            )
+        ).fold(
+            {
+                postError(it)
+            },
+            {
+                _populateHoursMutableData.postValue(it)
+            }
+        )
+    }
+
+    fun populateMinutes(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateMinutesUseCase(
+                PopulateMastersParams(
+                    url = url,
+                    sAuthorization = sAuthorization,
+                    sTableName = sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateMinutesMutableData.postValue(it)
+                }
+            )
+        }
+
+    fun populateTimeCycle(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateTimeCycleUseCase(
+                PopulateMastersParams(
+                    url = url,
+                    sAuthorization = sAuthorization,
+                    sTableName = sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateTimeCycleMutableData.postValue(it)
+                }
+            )
+        }
 
     fun populateMake(url: String, sAuthorization: String, sTableName: String) =
         launchIOCoroutine {

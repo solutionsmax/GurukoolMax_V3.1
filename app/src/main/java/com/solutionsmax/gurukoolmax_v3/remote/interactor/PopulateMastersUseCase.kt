@@ -1,6 +1,7 @@
 package com.solutionsmax.gurukoolmax_v3.remote.interactor
 
 import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
+import com.solutionsmax.gurukoolmax_v3.core.data.master.params.PopulateMasterParams
 import com.solutionsmax.gurukoolmax_v3.core.data.master.params.PopulateMastersParams
 import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.functional.Either
@@ -51,6 +52,42 @@ class PopulateFuelTypeUseCase @Inject constructor(
 ) : UseCase<MutableList<PopulateMasterListItem>, PopulateMastersParams>() {
     override suspend fun run(params: PopulateMastersParams): Either<Failure, MutableList<PopulateMasterListItem>> {
         return mastersRepository.populateFuelType(
+            url = params.url,
+            sAuthorization = params.sAuthorization,
+            sTableName = params.sTableName
+        )
+    }
+}
+
+class PopulateHourUseCase @Inject constructor(
+    private val mastersRepository: MastersRepository
+) : UseCase<MutableList<PopulateMasterListItem>, PopulateMastersParams>() {
+    override suspend fun run(params: PopulateMastersParams): Either<Failure, MutableList<PopulateMasterListItem>> {
+        return mastersRepository.populateHH(
+            url = params.url,
+            sAuthorization = params.sAuthorization,
+            sTableName = params.sTableName
+        )
+    }
+}
+
+class PopulateMinutesUseCase @Inject constructor(
+    private val mastersRepository: MastersRepository
+) : UseCase<MutableList<PopulateMasterListItem>, PopulateMastersParams>() {
+    override suspend fun run(params: PopulateMastersParams): Either<Failure, MutableList<PopulateMasterListItem>> {
+        return mastersRepository.populateMM(
+            url = params.url,
+            sAuthorization = params.sAuthorization,
+            sTableName = params.sTableName
+        )
+    }
+}
+
+class PopulateTimeCycleUseCase @Inject constructor(
+    private val mastersRepository: MastersRepository
+) : UseCase<MutableList<PopulateMasterListItem>, PopulateMastersParams>() {
+    override suspend fun run(params: PopulateMastersParams): Either<Failure, MutableList<PopulateMasterListItem>> {
+        return mastersRepository.populateTimeCycle(
             url = params.url,
             sAuthorization = params.sAuthorization,
             sTableName = params.sTableName

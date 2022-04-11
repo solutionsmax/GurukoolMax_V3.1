@@ -10,7 +10,7 @@ interface MasterApi {
 
     @GET
     suspend fun populateMasters(
-        @Url string: String,
+        @Url url: String,
         @Header("Authorization") sAuthorization: String,
         @Query("sTableName") sTableName: String
     ): MutableList<PopulateMasterListItem>

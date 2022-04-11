@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetBusStopsViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetGPSViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetRoutesViewModel
+import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetScheduleViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.FleetFuelLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.FleetMovementViewModel
@@ -79,4 +81,14 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FleetGPSViewModel::class)
     abstract fun fleetGPSViewModel(fleetGPSViewModel: FleetGPSViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FleetBusStopsViewModel::class)
+    abstract fun fleetBusStopViewModel(fleetBusStopViewModel: FleetBusStopsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FleetScheduleViewModel::class)
+    abstract fun fleetScheduleViewModel(fleetBusStopViewModel: FleetScheduleViewModel): ViewModel
 }

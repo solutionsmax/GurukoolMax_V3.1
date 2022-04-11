@@ -3,9 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="routeItem"
-            type="com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetBusRouteList" />
+            type="com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_route.FleetBusRouteList" />
+
+        <variable
+            name="clickListener"
+            type="com.solutionsmax.gurukoolmax_v3.operations.ui.information.adapter.FleetRoutesListAdapter.OnItemClick" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,6 +61,15 @@
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblRouteName" />
+
+        <TextView
+            android:id="@+id/lblEdit"
+            style="@style/AdapterEditTextView"
+            android:onClick="@{()->clickListener.onEditClick(routeItem)}"
+            android:text="@string/edit"
+            app:drawableStartCompat="@drawable/ic_baseline_edit_24"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblRouteName" />
 
         <View

@@ -1,18 +1,14 @@
-package com.solutionsmax.gurukoolmax_v3.operations.domain.entity
+package com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_route
 
 import com.google.gson.annotations.SerializedName
 
-data class FleetBusPickupPointsList(
+data class FleetBusRouteList(
     @SerializedName("ID")
     val id: Int,
     @SerializedName("GROUP_ID")
     val iGroupID: Int,
     @SerializedName("SCHOOL_ID")
     val iSchoolID: Int,
-    @SerializedName("BUS_STOP_NAME")
-    val sBusStopName: String,
-    @SerializedName("BUS_ROUTE_ID")
-    val iBusRouteID: Int,
     @SerializedName("ROUTE_NAME")
     val sRouteName: String,
     @SerializedName("WORKFLOW_STATUS_ID")

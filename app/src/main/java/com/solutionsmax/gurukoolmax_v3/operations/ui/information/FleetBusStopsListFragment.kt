@@ -78,6 +78,14 @@ class FleetBusStopsListFragment : BaseFragment() {
             }
         }
 
+        binding.fabCreateNew.setOnClickListener {
+            val bundle = bundleOf("id" to -1)
+            currentNavController.navigate(
+                R.id.fleetBusStopInfoFragment,
+                bundle
+            )
+        }
+
         binding.progressBar.visibility = View.VISIBLE
 
         tokenLicenseViewModel =
@@ -117,13 +125,26 @@ class FleetBusStopsListFragment : BaseFragment() {
                             FleetBusStopListAdapter(
                                 it,
                                 FleetBusStopListAdapter.OnItemClick { item ->
-                                    iRouteID = item
-                                    context.startService(Intent(context, SendLocation::class.java))
-                                    LocalBroadcastManager.getInstance(context)
-                                        .registerReceiver(
-                                            mMessageReceiver,
-                                            IntentFilter("GPSLocationUpdates")
+                                    if (requireView().id == R.id.lblStartTracking) {
+                                        iRouteID = item
+                                        context.startService(
+                                            Intent(
+                                                context,
+                                                SendLocation::class.java
+                                            )
                                         )
+                                        LocalBroadcastManager.getInstance(context)
+                                            .registerReceiver(
+                                                mMessageReceiver,
+                                                IntentFilter("GPSLocationUpdates")
+                                            )
+                                    } else {
+                                        val bundle = bundleOf("id" to item)
+                                        currentNavController.navigate(
+                                            R.id.fleetBusStopInfoFragment,
+                                            bundle
+                                        )
+                                    }
                                 }
                             )
                     }
@@ -173,7 +194,7 @@ class FleetBusStopsListFragment : BaseFragment() {
                 ).let {
                     Handler(Looper.getMainLooper()).postDelayed({
                         Log.d("TAG", "onReceive: Address $address")
-                    },3000)
+                    }, 3000)
                 }
             }
         }

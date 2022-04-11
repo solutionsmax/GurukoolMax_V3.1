@@ -1,9 +1,41 @@
 package com.solutionsmax.gurukoolmax_v3.core.common
 
 object MethodConstants {
+    // Fleet Bus Route
+    const val POST_FLEET_BUS_ROUTE = "/FleetBusRoute/PostInfo"
+    const val AMEND_FLEET_BUS_ROUTE = "/FleetBusRoute/AmendInfo"
+    const val SET_FLEET_BUS_ROUTE_STATUS = "/FleetBusRoute/SetStatusInfo"
+    const val FETCH_FLEET_BUS_ROUTE_NAME = "/FleetBusRoute/FetchRouteName"
+    const val CHECK_DUPLICATE_FLEET_BUS_ROUTE = "/FleetBusRoute/CheckDuplicateRoute"
+    const val POPULATE_FLEET_BUS_ROUTE_NAME = "/FleetBusRoute/PopulateList"
+    const val RETRIEVE_FLEET_ROUTE_DETAILS = "/FleetBusRoute/RetrieveDetails"
     const val RETRIEVE_FLEET_BUS_ROUTES = "/FleetBusRoute/RetrieveList"
+    const val RETRIEVE_FLEET_RETRIEVE_STUDENT_RESERVATION_LIST =
+        "/FleetBusRoute/RetrieveStudentReservationList"
+
+    // Fleet Bus Stop
+    const val POST_FLEET_BUS_STOP = "/FleetBusStop/PostInfo"
+    const val AMEND_FLEET_BUS_STOP = "/FleetBusStop/AmendInfo"
+    const val SET_FLEET_BUS_STOP_STOP = "/FleetBusStop/SetStatusInfo"
+    const val CHECK_DUPLICATE_FLEET_BUS_STOP = "/FleetBusStop/CheckDuplicateStop"
+    const val POPULATE_FLEET_BUS_STOP = "/FleetBusStop/PopulateList"
+    const val RETRIEVE_FLEET_BUS_STOPS_DETAILS = "/FleetBusStop/RetrieveDetails"
     const val RETRIEVE_FLEET_BUS_STOPS = "/FleetBusStop/RetrieveList"
+
+    // Fleet Bus Schedule
+    const val POST_FLEET_BUS_SCHEDULE = "/FleetBusSchedule/PostInfo"
+    const val AMEND_FLEET_BUS_SCHEDULE = "/FleetBusSchedule/AmendInfo"
+    const val SET_STATUS_FLEET_BUS_SCHEDULE = "/FleetBusSchedule/SetStatusInfo"
+    const val CHECK_DUPLICATE_FLEET_BUS_SCHEDULE = "/FleetBusSchedule/CheckDuplicate"
+    const val RETRIEVE_DETAILS_FLEET_BUS_SCHEDULE = "/FleetBusSchedule/RetrieveDetails"
+    const val RETRIEVE_BUS_SCHEDULE_BY_ROUTE_FLEET_BUS_SCHEDULE =
+        "/FleetBusSchedule/RetrieveBusScheduleByRoute"
+    const val RETRIEVE_BUS_STOP_BY_ROUTE_FLEET_BUS_SCHEDULE =
+        "/FleetBusSchedule/RetrieveBusStopByRoute"
+    const val RETRIEVE_STUDENT_BUS_ROUTE_FLEET_BUS_SCHEDULE =
+        "/FleetBusSchedule/RetrieveStudentBusRoute"
     const val RETRIEVE_FLEET_PICKUP_SCHEDULE = "/FleetBusSchedule/RetrieveList"
+
     const val UPLOAD_PHOTO = "/Upload/PostInfo"
 
     // Fleet Registration
