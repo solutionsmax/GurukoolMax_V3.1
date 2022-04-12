@@ -187,5 +187,10 @@
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetScheduleInfoFragment"
         android:label="fragment_fleet_schedule_info"
         tools:layout="@layout/fragment_fleet_schedule_info" />
+    <fragment
+        android:id="@+id/initiateGpsTrackerFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.InitiateGpsTrackerFragment"
+        android:label="fragment_initiate_gps_tracker"
+        tools:layout="@layout/fragment_initiate_gps_tracker" />
 
 </navigation>

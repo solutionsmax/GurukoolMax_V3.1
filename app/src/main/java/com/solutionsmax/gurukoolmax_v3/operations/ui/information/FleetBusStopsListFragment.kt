@@ -125,26 +125,11 @@ class FleetBusStopsListFragment : BaseFragment() {
                             FleetBusStopListAdapter(
                                 it,
                                 FleetBusStopListAdapter.OnItemClick { item ->
-                                    if (requireView().id == R.id.lblStartTracking) {
-                                        iRouteID = item
-                                        context.startService(
-                                            Intent(
-                                                context,
-                                                SendLocation::class.java
-                                            )
-                                        )
-                                        LocalBroadcastManager.getInstance(context)
-                                            .registerReceiver(
-                                                mMessageReceiver,
-                                                IntentFilter("GPSLocationUpdates")
-                                            )
-                                    } else {
-                                        val bundle = bundleOf("id" to item)
-                                        currentNavController.navigate(
-                                            R.id.fleetBusStopInfoFragment,
-                                            bundle
-                                        )
-                                    }
+                                    val bundle = bundleOf("id" to item)
+                                    currentNavController.navigate(
+                                        R.id.fleetBusStopInfoFragment,
+                                        bundle
+                                    )
                                 }
                             )
                     }

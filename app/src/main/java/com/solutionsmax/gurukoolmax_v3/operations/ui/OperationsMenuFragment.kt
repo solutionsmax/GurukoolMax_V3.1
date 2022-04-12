@@ -74,10 +74,8 @@ class OperationsMenuFragment : BaseFragment() {
                         R.id.operationsSubMenuFragment,
                         bundleOf("menu" to it)
                     )
-                    FLEET_GPS_TRACKER -> showError(
-                        title = getString(R.string.under_process),
-                        message = getString(R.string.under_process_desc)
-                    )
+                    FLEET_GPS_TRACKER -> currentNavController.navigate(R.id.initiateGpsTrackerFragment)
+
                     FLEET_FEE_DEFAULTERS -> showError(
                         title = getString(R.string.under_process),
                         message = getString(R.string.under_process_desc)
