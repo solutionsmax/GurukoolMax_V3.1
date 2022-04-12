@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -39,8 +37,6 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fuel_log.FuelLog
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.fuel_logs.FuelLogsPostParams
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.spinner_adapter.FFLFuelTypeSpinnerAdapter
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.fuel_log.spinner_adapter.FFLVehicleNameSpinnerAdapter
-import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.RegisteredFleetMovementInfoFragment
-import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.spinner_adapter.FMVehicleSpinnerAdapter
 import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
@@ -144,7 +140,6 @@ class FleetFuelLogInfoFragment : BaseFragment() {
             sBaseURL = it.sBaseURL
 
             if (iEditID > 0) {
-                binding.btnSubmit.text = getString(R.string.edit)
                 retrieveDetails(iEditID)
             }
 

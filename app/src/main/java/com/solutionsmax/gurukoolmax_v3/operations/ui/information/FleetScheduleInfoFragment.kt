@@ -234,7 +234,6 @@ class FleetScheduleInfoFragment : BaseFragment() {
             populateAMPM(sBaseURL, sToken)
 
             if (iEditID > 0) {
-                binding.btnSubmit.text = getString(R.string.edit)
                 retrieveDetails(iEditID)
             }
         }

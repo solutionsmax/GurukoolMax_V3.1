@@ -91,11 +91,24 @@ class LicenseViewModel @Inject constructor(
                 insertLicenseUseCase(it.first().toItem()).fold(
                     {
                         Log.d("TAG", "getRemoteToken: " + it.message)
-                        ::postError
+                        postError(it)
                     }
                 ) {
                     _insertLicenseUseCaseLiveData.postValue(it)
                 }
+            }
+        }
+    }
+
+    fun deleteLicense() {
+        launchIOCoroutine {
+            deleteAllLicenseUseCase(Unit).fold(
+                {
+                    Log.d("TAG", "getRemoteToken: " + it.message)
+                    postError(it)
+                }
+            ) {
+                _deleteAllLicenseMutableData.postValue(it)
             }
         }
     }

@@ -129,7 +129,6 @@ class FleetBusStopInfoFragment : BaseFragment() {
             sBaseURL = it.sBaseURL
 
             if (iEditID > 0) {
-                binding.btnSubmit.text = getString(R.string.edit)
                 retrieveDetails(iEditID)
             }
 

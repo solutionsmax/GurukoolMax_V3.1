@@ -33,12 +33,7 @@ class FleetBusStopListAdapter(
         @RequiresApi(Build.VERSION_CODES.M)
         fun bind(items: FleetBusPickupPointsList, clickListener: OnItemClick) {
             binding.fleetBusStop = items
-            binding.lblStartTracking.setOnClickListener {
-                clickListener.onEditClick(items)
-            }
-            binding.lblEdit.setOnClickListener {
-                clickListener.onEditClick(items)
-            }
+            binding.clickListener = clickListener
             binding.lblStatus.setBackgroundColor(getStatusColors(items.iWorkflowStatusID))
         }
 

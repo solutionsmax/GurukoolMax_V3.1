@@ -2,6 +2,8 @@ package com.solutionsmax.gurukoolmax_v3.operations.ui
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.MANAGEMENT_LOGIN
 import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
 import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
+import com.solutionsmax.gurukoolmax_v3.core.data.mapper.toItemList
 import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.functional.Event
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
@@ -20,7 +23,7 @@ import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOperationsLoginBinding
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.LicenseViewModel
-import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
+import com.solutionsmax.gurukoolmax_v3.room.entity.LicenseItem
 import javax.inject.Inject
 
 class OperationsLoginFragment : BaseFragment() {
@@ -30,7 +33,6 @@ class OperationsLoginFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var tokenViewModel: TokenViewModel
-    private lateinit var tokenLicenseViewModel: TokenLicenseViewModel
     private lateinit var errorLogsViewModel: ErrorLogsViewModel
     private lateinit var operationsViewModel: OperationsViewModel
     private lateinit var licenseViewModel: LicenseViewModel
@@ -48,8 +50,6 @@ class OperationsLoginFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tokenViewModel = ViewModelProvider(this, viewModelFactory)[TokenViewModel::class.java]
-        tokenLicenseViewModel =
-            ViewModelProvider(this, viewModelFactory)[TokenLicenseViewModel::class.java]
         errorLogsViewModel =
             ViewModelProvider(this, viewModelFactory)[ErrorLogsViewModel::class.java]
         operationsViewModel =
@@ -72,6 +72,29 @@ class OperationsLoginFragment : BaseFragment() {
                 getLicenseInfo()
             }
         }
+
+        binding.lblResetSchoolCode.setOnClickListener {
+            binding.txtSchoolCode.setText("")
+            licenseViewModel.deleteLicense()
+        }
+
+        binding.passwordHide.setOnClickListener {
+            if (!TextUtils.isEmpty(binding.txtPassword.text)) {
+                binding.passwordShow.visibility = View.VISIBLE
+                binding.passwordHide.visibility = View.GONE
+                binding.txtPassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+            }
+        }
+
+        binding.passwordShow.setOnClickListener {
+            if (!TextUtils.isEmpty(binding.txtPassword.text)) {
+                binding.passwordShow.visibility = View.GONE
+                binding.passwordHide.visibility = View.VISIBLE
+                binding.txtPassword.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
+            }
+        }
     }
 
     private fun getLicenseInfo() {
@@ -80,53 +103,67 @@ class OperationsLoginFragment : BaseFragment() {
             1,
             binding.txtSchoolCode.text.toString()
         )
+        validateLogin()
     }
 
     private fun setUpObservers() {
         tokenViewModel.retrieveTokenLiveData.observe(viewLifecycleOwner) {
             sToken = it.first().access_token
         }
+        licenseViewModel.retrieveLicenseInfo()
         with(licenseViewModel) {
-            retrieveInfoBySideCodeLiveData.observe(viewLifecycleOwner) {
-                errorLiveData.observe(viewLifecycleOwner) { error ->
-                    showError(error.peekContent())
-                }
-                if (it.isNullOrEmpty()) {
-                    showError(
-                        title = getString(R.string.site_code_error),
-                        message = getString(R.string.site_code_error_desc)
-                    )
-                    binding.txtSchoolCode.setText("")
+            retrieveLicenseInfoUseCase.observe(viewLifecycleOwner) { license ->
+                if (license.isNotEmpty()) {
+                    binding.txtSchoolCode.setText(license.first().site_code)
+                    binding.lblResetSchoolCode.visibility = View.VISIBLE
+                    validate(license)
                 } else {
-                    sBaseURL = it.first().rest_url
-                    if (sBaseURL.isEmpty()) {
-                        showError(
-                            title = getString(R.string.site_code_error),
-                            message = getString(R.string.site_code_error_desc)
-                        )
-                        binding.txtSchoolCode.setText("")
-                    } else {
-                        validateLogin()
-                        with(operationsViewModel) {
-                            errorLiveData.observe(viewLifecycleOwner) { error ->
-                                showError(error.peekContent())
-                                with(errorLogsViewModel) {
-                                    postErrors(error)
-                                    postErrorLogsMutableData.observe(viewLifecycleOwner) {}
-                                }
-                            }
-                            validateOperationsLoginMutableData.observe(viewLifecycleOwner) { validateLogin ->
-                                if (validateLogin > 0) {
-                                    binding.progressBar.visibility = View.INVISIBLE
-                                    currentNavController.navigate(R.id.operationsMenuFragment)
-                                } else {
-                                    binding.progressBar.visibility = View.INVISIBLE
-                                    showError(
-                                        getString(R.string.invlaid_credentials),
-                                        getString(R.string.invlaid_credentials_desc)
-                                    )
-                                }
-                            }
+                    binding.lblResetSchoolCode.visibility = View.GONE
+                    retrieveInfoBySideCodeLiveData.observe(viewLifecycleOwner) {
+                        errorLiveData.observe(viewLifecycleOwner) { error ->
+                            showError(error.peekContent())
+                        }
+                        validate(it.first().toItemList())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun validate(license: List<LicenseItem>) {
+        if (license.isNullOrEmpty()) {
+            showError(
+                title = getString(R.string.site_code_error),
+                message = getString(R.string.site_code_error_desc)
+            )
+            binding.txtSchoolCode.setText("")
+        } else {
+            sBaseURL = license.first().rest_url
+            if (sBaseURL.isEmpty()) {
+                showError(
+                    title = getString(R.string.site_code_error),
+                    message = getString(R.string.site_code_error_desc)
+                )
+                binding.txtSchoolCode.setText("")
+            } else {
+                with(operationsViewModel) {
+                    errorLiveData.observe(viewLifecycleOwner) { error ->
+                        showError(error.peekContent())
+                        with(errorLogsViewModel) {
+                            postErrors(error)
+                            postErrorLogsMutableData.observe(viewLifecycleOwner) {}
+                        }
+                    }
+                    validateOperationsLoginMutableData.observe(viewLifecycleOwner) { validateLogin ->
+                        if (validateLogin > 0) {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            currentNavController.navigate(R.id.operationsMenuFragment)
+                        } else {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            showError(
+                                getString(R.string.invlaid_credentials),
+                                getString(R.string.invlaid_credentials_desc)
+                            )
                         }
                     }
                 }
