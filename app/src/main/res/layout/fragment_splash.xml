@@ -20,6 +20,7 @@
         <com.solutionsmax.gurukoolmax_v3.core.ui.base.IndicatorLayout
             android:id="@+id/indicatorLayout"
             android:layout_width="0dp"
+            android:gravity="center"
             android:layout_height="25dp"
             android:layout_marginBottom="16dp"
             android:orientation="horizontal"

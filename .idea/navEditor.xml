@@ -418,6 +418,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="viewGpsMapFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="516" />
+                            <option name="y" value="-667" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                 </map>
               </option>
             </LayoutPositions>

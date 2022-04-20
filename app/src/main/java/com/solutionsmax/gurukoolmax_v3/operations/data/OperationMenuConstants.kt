@@ -24,3 +24,8 @@ object OnBoardAttendanceConstants{
     const val MANUAL_ATTENDANCE = "Take attendance by Admission Number"
     const val AUTO_ATTENDANCE = "Scan Admission Number"
 }
+
+object GpsTrackerConstants{
+    const val INITIATE_TRACKER = "Initiate GPS Tracker"
+    const val VIEW_TRACKER_IN_MAPS = "View Tracker in Maps"
+}

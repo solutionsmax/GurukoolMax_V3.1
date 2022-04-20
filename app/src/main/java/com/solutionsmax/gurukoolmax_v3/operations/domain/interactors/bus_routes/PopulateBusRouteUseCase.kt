@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 class PopulateBusRouteUseCase @Inject constructor(
     private val fleetBusRoutesRepository: FleetBusRoutesRepository
-) : UseCase<List<PopulateBusRoutesItems>, PopulateBusRoutesParams>() {
-    override suspend fun run(params: PopulateBusRoutesParams): Either<Failure, List<PopulateBusRoutesItems>> {
+) : UseCase<MutableList<PopulateBusRoutesItems>, PopulateBusRoutesParams>() {
+    override suspend fun run(params: PopulateBusRoutesParams): Either<Failure, MutableList<PopulateBusRoutesItems>> {
         return fleetBusRoutesRepository.populateBusRouteName(
             url = params.url,
             sAuthorization = params.sAuthorization,

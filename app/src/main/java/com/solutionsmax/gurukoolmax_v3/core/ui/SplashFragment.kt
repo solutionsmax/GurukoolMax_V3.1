@@ -78,6 +78,7 @@ class SplashFragment : BaseFragment() {
         binding.splashViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                binding.indicatorLayout.selectCurrentPosition(position)
                 if (position < fragmentList.lastIndex) {
                     binding.lblSkip.visibility = View.VISIBLE
                     //tvNext.text = "Next"
@@ -88,7 +89,7 @@ class SplashFragment : BaseFragment() {
             }
         })
         binding.lblSkip.setOnClickListener {
-            if (checkPermission()){
+            if (checkPermission()) {
                 currentNavController.navigate(R.id.mainMenuFragment)
             }
         }

@@ -105,7 +105,7 @@ class FleetBusRoutesRepository @Inject constructor(
         iGroupID: Int,
         iSchoolID: Int,
         iStatusID: Int
-    ): Either<Failure, List<PopulateBusRoutesItems>> =
+    ): Either<Failure, MutableList<PopulateBusRoutesItems>> =
         Either.Right(
             fleetApi.populateBusRouteName(
                 url + POPULATE_FLEET_BUS_ROUTE_NAME,

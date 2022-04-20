@@ -13,6 +13,7 @@ import com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsLoginFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsMenuFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsSubMenuFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.InitiateGpsTrackerFragment
+import com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.ViewGpsMapFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.*
 import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceSelectRouteFragment
@@ -111,4 +112,7 @@ abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun provideInitiateGpsTrackerFragment(): InitiateGpsTrackerFragment
+
+    @ContributesAndroidInjector
+    abstract fun provideViewGpsMapFragment(): ViewGpsMapFragment
 }

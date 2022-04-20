@@ -36,3 +36,13 @@ data class RetrieveDetailsFleetBusScheduleParams(
     val sAuthorization: String,
     val id: Int
 )
+
+data class RetrieveStudentBusScheduleParams(
+    val url: String,
+    val sAuthorization: String,
+    val iGroupID: Int,
+    val iSchoolID: Int,
+    val iRouteID: Int,
+    val iSortID: Int,
+    val iStatusID: Int
+)

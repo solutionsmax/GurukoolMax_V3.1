@@ -74,7 +74,7 @@ interface FleetApi {
         @Query("iGroupID") iGroupID: Int,
         @Query("iSchoolID") iSchoolID: Int,
         @Query("iStatusID") iStatusID: Int
-    ): List<PopulateBusRoutesItems>
+    ): MutableList<PopulateBusRoutesItems>
 
     @GET
     suspend fun retrieveBusRouteDetails(
@@ -208,6 +208,17 @@ interface FleetApi {
         @Query("iGroupID") iGroupID: Int,
         @Query("iSchoolID") iSchoolID: Int,
         @Query("iRouteID") iRouteID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<FleetPickupScheduleList>
+
+    @GET
+    suspend fun retrieveStudentBusRoute(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iRouteID") iRouteID: Int,
+        @Query("iSortID") iSortID: Int,
         @Query("iStatusID") iStatusID: Int
     ): List<FleetPickupScheduleList>
 

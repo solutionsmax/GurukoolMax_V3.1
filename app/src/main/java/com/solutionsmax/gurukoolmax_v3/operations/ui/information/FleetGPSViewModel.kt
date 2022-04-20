@@ -174,12 +174,12 @@ class FleetGPSViewModel @Inject constructor(
     ) = launchIOCoroutine {
         retrieveFleetGPSListUseCase(
             FleetGPSRetrieveListParams(
-                url = "",
-                sAuthorization = "",
-                iGroupID = 1,
-                iSchoolID = 1,
-                iRouteID = 1,
-                iDriverID = 1
+                url = url,
+                sAuthorization = sAuthorization,
+                iGroupID = iGroupID,
+                iSchoolID = iSchoolID,
+                iRouteID = iRouteID,
+                iDriverID = iDriverID
             )
         ).fold(
             {

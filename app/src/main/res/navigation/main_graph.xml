@@ -192,5 +192,10 @@
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.InitiateGpsTrackerFragment"
         android:label="fragment_initiate_gps_tracker"
         tools:layout="@layout/fragment_initiate_gps_tracker" />
+    <fragment
+        android:id="@+id/viewGpsMapFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.ViewGpsMapFragment"
+        android:label="fragment_view_gps_map"
+        tools:layout="@layout/fragment_view_gps_map" />
 
 </navigation>

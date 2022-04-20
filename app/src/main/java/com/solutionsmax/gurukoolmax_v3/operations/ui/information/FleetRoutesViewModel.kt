@@ -44,9 +44,9 @@ class FleetRoutesViewModel @Inject constructor(
     val fetchBusRouteNameMutableData: LiveData<Int>
         get() = _fetchBusRouteNameMutableData
 
-    private val _populateBusRoutesMutableData: MutableLiveData<List<PopulateBusRoutesItems>> =
+    private val _populateBusRoutesMutableData: MutableLiveData<MutableList<PopulateBusRoutesItems>> =
         MutableLiveData()
-    val populateBusRoutesMutableData: LiveData<List<PopulateBusRoutesItems>>
+    val populateBusRoutesMutableData: LiveData<MutableList<PopulateBusRoutesItems>>
         get() = _populateBusRoutesMutableData
 
     private val _retrieveBusRoutesDetailsMutableData: MutableLiveData<List<FleetBusRouteList>> =

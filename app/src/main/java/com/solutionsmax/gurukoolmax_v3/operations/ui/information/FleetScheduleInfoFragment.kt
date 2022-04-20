@@ -37,7 +37,6 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_schedule.Pos
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.bus_stops.PopulateFleetBusStopItems
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.PostFleetBusScheduleParams
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.spinner_adapter.schedule.*
-import com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetInfoFragment
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import java.text.SimpleDateFormat

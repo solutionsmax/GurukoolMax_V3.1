@@ -10,8 +10,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOperationsSubMenuBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.GpsTrackerConstants.INITIATE_TRACKER
+import com.solutionsmax.gurukoolmax_v3.operations.data.GpsTrackerConstants.VIEW_TRACKER_IN_MAPS
 import com.solutionsmax.gurukoolmax_v3.operations.data.OnBoardAttendanceConstants.AUTO_ATTENDANCE
 import com.solutionsmax.gurukoolmax_v3.operations.data.OnBoardAttendanceConstants.MANUAL_ATTENDANCE
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_GPS_TRACKER
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_INFORMATION
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_OPERATIONS
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.ON_BOARD_ATTENDANCE
@@ -79,6 +82,12 @@ class OperationsSubMenuFragment : BaseFragment() {
                     OperationsMenuItem(AUTO_ATTENDANCE, R.drawable.fleet_info),
                 )
             }
+            FLEET_GPS_TRACKER -> {
+                menuItems = listOf(
+                    OperationsMenuItem(INITIATE_TRACKER, R.drawable.fleet_info),
+                    OperationsMenuItem(VIEW_TRACKER_IN_MAPS, R.drawable.fleet_info),
+                )
+            }
         }
 
         with(binding.operationsSubMenu) {
@@ -95,6 +104,9 @@ class OperationsSubMenuFragment : BaseFragment() {
 
                     AUTO_ATTENDANCE -> currentNavController.navigate(R.id.onBoardAttendanceSelectRouteFragment)
                     MANUAL_ATTENDANCE -> currentNavController.navigate(R.id.onBoardManualAttendanceFragment)
+
+                    INITIATE_TRACKER -> currentNavController.navigate(R.id.initiateGpsTrackerFragment)
+                    VIEW_TRACKER_IN_MAPS -> currentNavController.navigate(R.id.viewGpsMapFragment)
                 }
             })
         }

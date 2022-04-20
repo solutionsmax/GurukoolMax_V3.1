@@ -174,4 +174,5 @@
     <string name="effective_start_date">Effective Start Date</string>
     <string name="effective_end_date">Effective End Date</string>
     <string name="gps_tracker">GPS Tracker</string>
+    <string name="view_gps_map">View GPS Tracker in Map</string>
 </resources>

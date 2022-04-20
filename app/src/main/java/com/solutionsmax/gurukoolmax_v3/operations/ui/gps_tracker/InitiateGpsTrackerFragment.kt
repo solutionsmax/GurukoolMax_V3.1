@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,7 @@ import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.core.utils.LocationAddress
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentInitiateGpsTrackerBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.fleet_gps.FleetGPSPostItem
 import com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.adapter.InitiateGpsTrackerAdapter
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetGPSViewModel
@@ -68,8 +70,9 @@ class InitiateGpsTrackerFragment : BaseFragment() {
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
             setNavigationOnClickListener {
+                val bundle = bundleOf("menu" to OperationMenuConstants.FLEET_GPS_TRACKER)
                 currentNavController.navigate(
-                    R.id.operationsMenuFragment
+                    R.id.operationsSubMenuFragment, bundle
                 )
             }
         }
@@ -149,7 +152,7 @@ class InitiateGpsTrackerFragment : BaseFragment() {
 
                 postFleetGPSMutableData.observe(viewLifecycleOwner) {}
 
-                amendFleetGPSMutableData.observe(viewLifecycleOwner){}
+                amendFleetGPSMutableData.observe(viewLifecycleOwner) {}
             }
         }
     }

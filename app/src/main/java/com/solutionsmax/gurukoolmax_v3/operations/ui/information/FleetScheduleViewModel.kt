@@ -7,17 +7,16 @@ import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.FleetPickupSched
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.CheckDuplicateFleetBusScheduleParams
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.PostFleetBusScheduleParams
 import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.RetrieveDetailsFleetBusScheduleParams
-import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.bus_schedule.AmendBusScheduleUseCase
-import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.bus_schedule.CheckDuplicateBusScheduleUseCase
-import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.bus_schedule.PostBusScheduleUseCase
-import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.bus_schedule.RetrieveBusPickupScheduleDetailsUseCase
+import com.solutionsmax.gurukoolmax_v3.operations.domain.entity.params.RetrieveStudentBusScheduleParams
+import com.solutionsmax.gurukoolmax_v3.operations.domain.interactors.bus_schedule.*
 import javax.inject.Inject
 
 class FleetScheduleViewModel @Inject constructor(
     private val postBusScheduleUseCase: PostBusScheduleUseCase,
     private val amendBusStopsUseCase: AmendBusScheduleUseCase,
     private val checkDuplicateBusScheduleUseCase: CheckDuplicateBusScheduleUseCase,
-    private val retrieveBusPickupScheduleDetailsUseCase: RetrieveBusPickupScheduleDetailsUseCase
+    private val retrieveBusPickupScheduleDetailsUseCase: RetrieveBusPickupScheduleDetailsUseCase,
+    private val retrieveStudentBusRouteUseCase: RetrieveStudentBusRouteUseCase
 ) : BaseViewModel() {
 
     private val _postBusScheduleMutableData: MutableLiveData<Int> = MutableLiveData()
@@ -40,6 +39,11 @@ class FleetScheduleViewModel @Inject constructor(
     private val _setStatusBusScheduleMutableData: MutableLiveData<Int> = MutableLiveData()
     val setStatusBusScheduleMutableData: LiveData<Int>
         get() = _setStatusBusScheduleMutableData
+
+    private val _retrieveStudentBusRouteMutableData: MutableLiveData<List<FleetPickupScheduleList>> =
+        MutableLiveData()
+    val retrieveStudentBusRouteMutableData: LiveData<List<FleetPickupScheduleList>>
+        get() = _retrieveStudentBusRouteMutableData
 
     fun postBusScheduleInfo(postInfo: PostFleetBusScheduleParams) = launchIOCoroutine {
         postBusScheduleUseCase(postInfo).fold(
@@ -107,6 +111,35 @@ class FleetScheduleViewModel @Inject constructor(
             },
             {
                 _retrieveBusScheduleDetailsMutableData.postValue(it)
+            }
+        )
+    }
+
+    fun retrieveStudentBusRoute(
+        url: String,
+        sAuthorization: String,
+        iGroupID: Int,
+        iSchoolID: Int,
+        iRouteID: Int,
+        iSortID: Int,
+        iStatusID: Int
+    ) = launchIOCoroutine {
+        retrieveStudentBusRouteUseCase(
+            RetrieveStudentBusScheduleParams(
+                url = url,
+                sAuthorization = sAuthorization,
+                iGroupID = iGroupID,
+                iSchoolID = iSchoolID,
+                iRouteID = iRouteID,
+                iSortID = iSortID,
+                iStatusID = iStatusID
+            )
+        ).fold(
+            {
+                postError(it)
+            },
+            {
+                _retrieveStudentBusRouteMutableData.postValue(it)
             }
         )
     }
