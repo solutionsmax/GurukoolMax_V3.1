@@ -69,8 +69,13 @@ class OperationsLoginFragment : BaseFragment() {
                     getString(R.string.enter_credentials_desc)
                 )
             } else {
+                // Get Base URL based on the SITE code provided
                 getLicenseInfo()
             }
+        }
+
+        binding.imgBack.setOnClickListener {
+            currentNavController.navigate(R.id.mainMenuFragment)
         }
 
         binding.lblResetSchoolCode.setOnClickListener {

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOperationsMenuBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.ACADEMICS
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_FEE_DEFAULTERS
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_GPS_TRACKER
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_INFORMATION
@@ -42,7 +43,7 @@ class OperationsMenuFragment : BaseFragment() {
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             inflateMenu(R.menu.main_toolbar_menu)
             setOnMenuItemClickListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.logout -> currentNavController.navigate(R.id.operationsLoginFragment)
                 }
                 true

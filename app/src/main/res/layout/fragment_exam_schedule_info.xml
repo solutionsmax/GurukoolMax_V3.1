@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".academics.ui.examination.ExamScheduleInfoFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar" />
+
+            <LinearLayout style="@style/ParentLinearLayoutForInputForm">
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:layout_marginTop="16.7dp"
+                    android:text="@string/academics_board" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/cboBoard"
+                        style="@style/TextViewSpinner" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/academic_year" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/cboAcademicYear"
+                        style="@style/TextViewSpinner" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/examination_name" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtExaminationName"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/examination_name"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/remarks" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtRemarks"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/remarks"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/InputFormButton" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

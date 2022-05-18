@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".academics.ui.curriculum_management.schedule_online_lesson_plan_sessions.OnlineSessionLessonsPlanInfoFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar" />
+
+            <LinearLayout style="@style/ParentLinearLayoutForInputForm">
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:layout_marginTop="16.7dp"
+                    android:text="@string/academics_board" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtClassStandard"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/academics_board"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/class_or_grade" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtMinScoreRange"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/class_or_grade"
+                        android:importantForAutofill="no"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/subject" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtMAxScoreRange"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/subject"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/session_name" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtSessionName"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/session_name"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/curriculum_section" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtCurriculumSection"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/curriculum_section"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/lesson_plan_reference" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtLessonPlanReference"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/lesson_plan_reference"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/session_start_date" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtSessionStartDate"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/session_start_date"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/session_end_date" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtSessionEndDate"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/session_end_date"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/session_link" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtSessionLink"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/session_link"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/description" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtDescription"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/description"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/faculty" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtFaculty"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/faculty"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/scrolling_alert_required" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtScrollingAlertRequired"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/scrolling_alert_required"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/InputFormButton" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

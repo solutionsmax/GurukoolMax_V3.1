@@ -1,7 +1,17 @@
 package com.solutionsmax.gurukoolmax_v3.di
 
 import androidx.lifecycle.ViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.AcademicsViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.academic_project.AcademicProjectViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.CceScholasticViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.recording.CceRecordingViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.SubjectManagementViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.CurriculumInfoViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationScheduleViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationSetupViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.km.KmViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
+import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.SettingsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.OperationsViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetBusStopsViewModel
@@ -91,4 +101,54 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FleetScheduleViewModel::class)
     abstract fun fleetScheduleViewModel(fleetBusStopViewModel: FleetScheduleViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CceScholasticViewModel::class)
+    abstract fun cceSchoolasticViewModel(cceScholasticViewModel: CceScholasticViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AcademicProjectViewModel::class)
+    abstract fun academicProjectViewModel(academicProjectViewModel: AcademicProjectViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(KmViewModel::class)
+    abstract fun kmViewModel(kmViewModel: KmViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AcademicsViewModel::class)
+    abstract fun academicsViewModel(academicsViewModel: AcademicsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsViewModel::class)
+    abstract fun settingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SubjectManagementViewModel::class)
+    abstract fun subjectManagementViewModel(subjectManagementViewModel: SubjectManagementViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CurriculumInfoViewModel::class)
+    abstract fun curriculumInfoViewModel(curriculumInfoViewModel: CurriculumInfoViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ExaminationScheduleViewModel::class)
+    abstract fun examinationScheduleViewModel(examinationScheduleViewModel: ExaminationScheduleViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ExaminationSetupViewModel::class)
+    abstract fun examinationSetupViewModel(examinationSetupViewModel: ExaminationSetupViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CceRecordingViewModel::class)
+    abstract fun cceRecordingViewModel(cceRecordingViewModel: CceRecordingViewModel): ViewModel
 }

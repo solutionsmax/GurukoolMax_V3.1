@@ -10,10 +10,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOperationsSubMenuBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.Academics.ACADEMIC_PROJECT
+import com.solutionsmax.gurukoolmax_v3.operations.data.Academics.CCE_SCHOLASTIC
+import com.solutionsmax.gurukoolmax_v3.operations.data.Academics.CURRICULUM_MANAGEMENT
+import com.solutionsmax.gurukoolmax_v3.operations.data.Academics.EXAMINATION_MANAGEMENT
+import com.solutionsmax.gurukoolmax_v3.operations.data.Academics.KNOWLEDGE_MANAGEMENT
 import com.solutionsmax.gurukoolmax_v3.operations.data.GpsTrackerConstants.INITIATE_TRACKER
 import com.solutionsmax.gurukoolmax_v3.operations.data.GpsTrackerConstants.VIEW_TRACKER_IN_MAPS
 import com.solutionsmax.gurukoolmax_v3.operations.data.OnBoardAttendanceConstants.AUTO_ATTENDANCE
 import com.solutionsmax.gurukoolmax_v3.operations.data.OnBoardAttendanceConstants.MANUAL_ATTENDANCE
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.ACADEMICS
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_GPS_TRACKER
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_INFORMATION
 import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants.FLEET_OPERATIONS
@@ -51,10 +57,13 @@ class OperationsSubMenuFragment : BaseFragment() {
 
 
         binding.toolbar.apply {
-            title = if (menuType == ON_BOARD_ATTENDANCE) {
-                getString(R.string.on_board_attendance)
-            } else {
-                getString(R.string.fleet_options)
+            title = when (menuType) {
+                ON_BOARD_ATTENDANCE -> getString(R.string.on_board_attendance)
+                FLEET_OPERATIONS -> getString(R.string.fleet_operations)
+                FLEET_GPS_TRACKER -> getString(R.string.fleet_gps)
+                FLEET_INFORMATION -> getString(R.string.fleet_information)
+                ACADEMICS -> getString(R.string.academics)
+                else -> getString(R.string.fleet_options)
             }
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
@@ -64,28 +73,37 @@ class OperationsSubMenuFragment : BaseFragment() {
         when (menuType) {
             FLEET_INFORMATION -> {
                 menuItems = listOf(
-                    OperationsMenuItem(ROUTE_MASTERS, R.drawable.fleet_info),
-                    OperationsMenuItem(BUS_STOPS, R.drawable.fleet_info),
-                    OperationsMenuItem(PICKUP_TIMING, R.drawable.fleet_info),
+                    OperationsMenuItem(ROUTE_MASTERS, R.drawable.route_masters),
+                    OperationsMenuItem(BUS_STOPS, R.drawable.bus_stop),
+                    OperationsMenuItem(PICKUP_TIMING, R.drawable.pickup_timing),
                 )
             }
             FLEET_OPERATIONS -> {
                 menuItems = listOf(
-                    OperationsMenuItem(FLEET_REGISTER, R.drawable.fleet_info),
-                    OperationsMenuItem(FLEET_MOVEMENT, R.drawable.fleet_info),
-                    OperationsMenuItem(FLEET_FUEL_LOG, R.drawable.fleet_info),
+                    OperationsMenuItem(FLEET_REGISTER, R.drawable.register_fleet),
+                    OperationsMenuItem(FLEET_MOVEMENT, R.drawable.fleet_movement),
+                    OperationsMenuItem(FLEET_FUEL_LOG, R.drawable.fleet_fuel_log),
                 )
             }
             ON_BOARD_ATTENDANCE -> {
                 menuItems = listOf(
-                    OperationsMenuItem(MANUAL_ATTENDANCE, R.drawable.fleet_info),
-                    OperationsMenuItem(AUTO_ATTENDANCE, R.drawable.fleet_info),
+                    OperationsMenuItem(MANUAL_ATTENDANCE, R.drawable.take_attendance_by_admission),
+                    OperationsMenuItem(AUTO_ATTENDANCE, R.drawable.scan_admission_number),
                 )
             }
             FLEET_GPS_TRACKER -> {
                 menuItems = listOf(
-                    OperationsMenuItem(INITIATE_TRACKER, R.drawable.fleet_info),
-                    OperationsMenuItem(VIEW_TRACKER_IN_MAPS, R.drawable.fleet_info),
+                    OperationsMenuItem(INITIATE_TRACKER, R.drawable.initiate_gps_tracker),
+                    OperationsMenuItem(VIEW_TRACKER_IN_MAPS, R.drawable.view_tracker_in_maps),
+                )
+            }
+            ACADEMICS -> {
+                menuItems = listOf(
+                    OperationsMenuItem(CURRICULUM_MANAGEMENT, R.drawable.curriculum_management),
+                    OperationsMenuItem(CCE_SCHOLASTIC, R.drawable.cce_scholastic),
+                    OperationsMenuItem(ACADEMIC_PROJECT, R.drawable.academic_project),
+                    OperationsMenuItem(KNOWLEDGE_MANAGEMENT, R.drawable.knowledge_management),
+                    OperationsMenuItem(EXAMINATION_MANAGEMENT, R.drawable.examination_management)
                 )
             }
         }
@@ -107,6 +125,8 @@ class OperationsSubMenuFragment : BaseFragment() {
 
                     INITIATE_TRACKER -> currentNavController.navigate(R.id.initiateGpsTrackerFragment)
                     VIEW_TRACKER_IN_MAPS -> currentNavController.navigate(R.id.viewGpsMapFragment)
+
+
                 }
             })
         }

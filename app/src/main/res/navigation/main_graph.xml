@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_operationsLoginFragment"
             app:destination="@id/operationsLoginFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_administratorLoginFragment"
+            app:destination="@id/administratorLoginFragment" />
     </fragment>
     <fragment
         android:id="@+id/managementLoginFragment"
@@ -79,7 +82,7 @@
         android:id="@+id/fleetRoutesListFragment"
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetRoutesListFragment"
         android:label="fragment_fleet_routes_list"
-        tools:layout="@layout/fragment_fleet_routes_list" >
+        tools:layout="@layout/fragment_fleet_routes_list">
         <action
             android:id="@+id/action_fleetRoutesListFragment_to_fleetRoutesInfoFragment"
             app:destination="@id/fleetRoutesInfoFragment" />
@@ -103,7 +106,7 @@
         android:id="@+id/fleetBusStopsListFragment"
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.information.FleetBusStopsListFragment"
         android:label="fragment_fleet_bus_stops_list"
-        tools:layout="@layout/fragment_fleet_bus_stops_list" >
+        tools:layout="@layout/fragment_fleet_bus_stops_list">
         <action
             android:id="@+id/action_fleetBusStopsListFragment_to_fleetBusStopInfoFragment"
             app:destination="@id/fleetBusStopInfoFragment" />
@@ -132,8 +135,7 @@
         android:id="@+id/registeredFleetInfoFragment"
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.register.RegisteredFleetInfoFragment"
         android:label="fragment_registered_fleet_info"
-        tools:layout="@layout/fragment_registered_fleet_info">
-    </fragment>
+        tools:layout="@layout/fragment_registered_fleet_info"></fragment>
     <fragment
         android:id="@+id/registeredFleetMovementListFragment"
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.operations.movement.RegisteredFleetMovementListFragment"
@@ -162,7 +164,7 @@
         android:id="@+id/onBoardAttendanceSelectRouteFragment"
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.on_board_attendance.OnBoardAttendanceSelectRouteFragment"
         android:label="fragment_on_board_attendance_select_route"
-        tools:layout="@layout/fragment_on_board_attendance_select_route" >
+        tools:layout="@layout/fragment_on_board_attendance_select_route">
         <action
             android:id="@+id/action_onBoardAttendanceSelectRouteFragment_to_onBoardAttendanceFragment"
             app:destination="@id/onBoardAttendanceFragment" />
@@ -197,5 +199,232 @@
         android:name="com.solutionsmax.gurukoolmax_v3.operations.ui.gps_tracker.ViewGpsMapFragment"
         android:label="fragment_view_gps_map"
         tools:layout="@layout/fragment_view_gps_map" />
+    <fragment
+        android:id="@+id/scholasticGradeSystemListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.grade_system.ScholasticGradeSystemListFragment"
+        android:label="fragment_scholastic_grade_system_list"
+        tools:layout="@layout/fragment_scholastic_grade_system_list">
+        <action
+            android:id="@+id/action_scholasticGradeSystemListFragment_to_scholasticGradeSystemInfoFragment"
+            app:destination="@id/scholasticGradeSystemInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scholasticGradeSystemInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.grade_system.ScholasticGradeSystemInfoFragment"
+        android:label="fragment_scholastic_grade_system_info"
+        tools:layout="@layout/fragment_scholastic_grade_system_info" />
+    <dialog
+        android:id="@+id/academicsCommonBottomDialogSheetFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.AcademicsCommonBottomDialogSheetFragment"
+        android:label="AcademicsCommonBottomDialogSheetFragment">
+        <action
+            android:id="@+id/action_academicsCommonBottomDialogSheetFragment_to_scholasticGradeSystemListFragment"
+            app:destination="@id/scholasticGradeSystemListFragment" />
+        <action
+            android:id="@+id/action_academicsCommonBottomDialogSheetFragment_to_cceScholasticListFragment"
+            app:destination="@id/cceScholasticListFragment" />
+        <action
+            android:id="@+id/action_academicsCommonBottomDialogSheetFragment_to_cceScholasticActivityListFragment"
+            app:destination="@id/cceScholasticActivityListFragment" />
+        <action
+            android:id="@+id/action_academicsCommonBottomDialogSheetFragment_to_academicsPerformanceSearchFragment"
+            app:destination="@id/academicsPerformanceSearchFragment" />
+        <action
+            android:id="@+id/action_academicsCommonBottomDialogSheetFragment_to_subjectManagementListFragment"
+            app:destination="@id/subjectManagementListFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/cceScholasticListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.recording.CceScholasticListFragment"
+        android:label="fragment_cce_scholastic_list"
+        tools:layout="@layout/fragment_cce_scholastic_list">
+        <action
+            android:id="@+id/action_cceScholasticListFragment_to_cceScholasticInfoFragment"
+            app:destination="@id/cceScholasticInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cceScholasticInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.recording.CceScholasticInfoFragment"
+        android:label="fragment_cce_scholastic_info"
+        tools:layout="@layout/fragment_cce_scholastic_info" />
+    <fragment
+        android:id="@+id/cceScholasticActivityListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.activities.CceScholasticActivityListFragment"
+        android:label="fragment_cce_scholastic_activity_list"
+        tools:layout="@layout/fragment_cce_scholastic_activity_list">
+        <action
+            android:id="@+id/action_cceScholasticActivityListFragment_to_cceScholasticActivityInfoFragment"
+            app:destination="@id/cceScholasticActivityInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cceScholasticActivityInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.activities.CceScholasticActivityInfoFragment"
+        android:label="fragment_cce_scholastic_activity_info"
+        tools:layout="@layout/fragment_cce_scholastic_activity_info" />
+    <fragment
+        android:id="@+id/academicsPerformanceSearchFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.performance.AcademicsPerformanceSearchFragment"
+        android:label="fragment_academics_performance_search"
+        tools:layout="@layout/fragment_academics_performance_search" />
+    <fragment
+        android:id="@+id/subjectManagementListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.subject_management.SubjectManagementListFragment"
+        android:label="fragment_subject_management_list"
+        tools:layout="@layout/fragment_subject_management_list">
+        <action
+            android:id="@+id/action_subjectManagementListFragment_to_subjectManagementInfoFragment"
+            app:destination="@id/subjectManagementInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subjectManagementInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.subject_management.SubjectManagementInfoFragment"
+        android:label="fragment_subject_management_info"
+        tools:layout="@layout/fragment_subject_management_info" />
+    <fragment
+        android:id="@+id/curriculumSetupListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.CurriculumSetupListFragment"
+        android:label="fragment_curriculum_setup_list"
+        tools:layout="@layout/fragment_curriculum_setup_list" />
+    <fragment
+        android:id="@+id/curriculumSetupInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.CurriculumSetupInfoFragment"
+        android:label="fragment_curriculum_setup_info"
+        tools:layout="@layout/fragment_curriculum_setup_info" />
+    <fragment
+        android:id="@+id/administratorLoginFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.AdministratorLoginFragment"
+        android:label="fragment_administrator_login"
+        tools:layout="@layout/fragment_administrator_login">
+        <action
+            android:id="@+id/action_administratorLoginFragment_to_administratorMenuFragment"
+            app:destination="@id/administratorMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/administratorMenuFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.AdministratorMenuFragment"
+        android:label="fragment_administrator_menu"
+        tools:layout="@layout/fragment_administrator_menu">
+        <action
+            android:id="@+id/action_administratorMenuFragment_to_administratorSubMenuFragment"
+            app:destination="@id/administratorSubMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/administratorSubMenuFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.AdministratorSubMenuFragment"
+        android:label="fragment_administrator_sub_menu"
+        tools:layout="@layout/fragment_administrator_sub_menu">
+        <action
+            android:id="@+id/action_administratorSubMenuFragment_to_setupLearningSessionListFragment"
+            app:destination="@id/setupLearningSessionListFragment" />
+        <action
+            android:id="@+id/action_administratorSubMenuFragment_to_onlineSessionLessonsPlanListFragment"
+            app:destination="@id/onlineSessionLessonsPlanListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupLearningSessionListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.learning_sessions.SetupLearningSessionListFragment"
+        android:label="fragment_setup_learning_session_list"
+        tools:layout="@layout/fragment_setup_learning_session_list">
+        <action
+            android:id="@+id/action_setupLearningSessionListFragment_to_setupLearningSessionInfoFragment"
+            app:destination="@id/setupLearningSessionInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupLearningSessionInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.learning_sessions.SetupLearningSessionInfoFragment"
+        android:label="fragment_setup_learning_session_info"
+        tools:layout="@layout/fragment_setup_learning_session_info" />
+    <fragment
+        android:id="@+id/onlineSessionLessonsPlanListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.schedule_online_lesson_plan_sessions.OnlineSessionLessonsPlanListFragment"
+        android:label="fragment_online_session_lessons_plan_list"
+        tools:layout="@layout/fragment_online_session_lessons_plan_list" >
+        <action
+            android:id="@+id/action_onlineSessionLessonsPlanListFragment_to_onlineSessionLessonsPlanInfoFragment"
+            app:destination="@id/onlineSessionLessonsPlanInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onlineSessionLessonsPlanInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.schedule_online_lesson_plan_sessions.OnlineSessionLessonsPlanInfoFragment"
+        android:label="fragment_online_session_lessons_plan_info"
+        tools:layout="@layout/fragment_online_session_lessons_plan_info" />
+    <fragment
+        android:id="@+id/projectsRepositoryListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.academic_project.ProjectsRepositoryListFragment"
+        android:label="fragment_projects_repository_list"
+        tools:layout="@layout/fragment_projects_repository_list" />
+    <fragment
+        android:id="@+id/projectSubmissionInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.academic_project.ProjectSubmissionInfoFragment"
+        android:label="fragment_project_submission_info"
+        tools:layout="@layout/fragment_project_submission_info" />
+    <fragment
+        android:id="@+id/projectsRepositorySearchFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.academic_project.ProjectsRepositorySearchFragment"
+        android:label="fragment_projects_repository_search"
+        tools:layout="@layout/fragment_projects_repository_search" />
+    <fragment
+        android:id="@+id/KMRepositoryListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.km.KMRepositoryListFragment"
+        android:label="fragment_k_m_repository_list"
+        tools:layout="@layout/fragment_k_m_repository_list" />
+    <fragment
+        android:id="@+id/KMPostRepositoryInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.km.KMPostRepositoryInfoFragment"
+        android:label="fragment_k_m_post_repository_info"
+        tools:layout="@layout/fragment_k_m_post_repository_info" />
+    <fragment
+        android:id="@+id/KMSearchRepositoryFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.km.KMSearchRepositoryFragment"
+        android:label="fragment_k_m_search_repository"
+        tools:layout="@layout/fragment_k_m_search_repository" />
+    <fragment
+        android:id="@+id/examScheduleListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExamScheduleListFragment"
+        android:label="fragment_exam_schedule_list"
+        tools:layout="@layout/fragment_exam_schedule_list" />
+    <fragment
+        android:id="@+id/examScheduleInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExamScheduleInfoFragment"
+        android:label="fragment_exam_schedule_info"
+        tools:layout="@layout/fragment_exam_schedule_info" />
+    <fragment
+        android:id="@+id/examinationSetupListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationSetupListFragment"
+        android:label="fragment_examination_setup_list"
+        tools:layout="@layout/fragment_examination_setup_list" />
+    <fragment
+        android:id="@+id/examinationSetupInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationSetupInfoFragment"
+        android:label="fragment_examination_setup_info"
+        tools:layout="@layout/fragment_examination_setup_info" />
+    <fragment
+        android:id="@+id/examinationResultsListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationResultsListFragment"
+        android:label="fragment_examination_results_list"
+        tools:layout="@layout/fragment_examination_results_list" />
+    <fragment
+        android:id="@+id/examinationResultsInfoFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationResultsInfoFragment"
+        android:label="fragment_examination_results_info"
+        tools:layout="@layout/fragment_examination_results_info" />
+    <fragment
+        android:id="@+id/projectRepositorySearchResultFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.academic_project.ProjectRepositorySearchResultFragment"
+        android:label="fragment_project_repository_search_result"
+        tools:layout="@layout/fragment_project_repository_search_result" >
+        <argument
+            android:name="projectRepoSearch"
+            app:argType="com.solutionsmax.gurukoolmax_v3.academics.ui.academic_project.ProjectRepoSearchBundle" />
+    </fragment>
+    <fragment
+        android:id="@+id/kmSearchResultListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.km.KmSearchResultListFragment"
+        android:label="fragment_km_search_result_list"
+        tools:layout="@layout/fragment_km_search_result_list" >
+        <argument
+            android:name="kmSearchBundle"
+            app:argType="com.solutionsmax.gurukoolmax_v3.academics.ui.km.KMSearchBundle" />
+    </fragment>
 
 </navigation>

@@ -59,4 +59,14 @@ class RetrofitModule {
     @Provides
     fun provideManagementsApi(retrofit: Retrofit): ManagementApi =
         retrofit.create(ManagementApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideAcademicApi(retrofit: Retrofit): AcademicsApi =
+        retrofit.create(AcademicsApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideSettingsApi(retrofit: Retrofit): SettingsApi =
+        retrofit.create(SettingsApi::class.java)
 }

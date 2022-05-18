@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.solutionsmax.gurukoolmax_v3.room.AppDatabase
 import com.solutionsmax.gurukoolmax_v3.room.dao.LicenseDAO
+import com.solutionsmax.gurukoolmax_v3.room.dao.SettingsDAO
 import com.solutionsmax.gurukoolmax_v3.room.dao.TokenDAO
 import dagger.Module
 import dagger.Provides
@@ -21,7 +22,7 @@ class RoomModule {
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
         )
-            .fallbackToDestructiveMigrationFrom()
+            .fallbackToDestructiveMigration()
             .build()
 
     @Singleton
@@ -33,5 +34,10 @@ class RoomModule {
     @Provides
     fun provideLicenseDao(db: AppDatabase): LicenseDAO =
         db.licenseDao()
+
+    @Singleton
+    @Provides
+    fun provideSettingsDao(db:AppDatabase):SettingsDAO =
+        db.settingsDao()
 
 }

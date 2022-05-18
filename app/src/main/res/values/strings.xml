@@ -25,6 +25,7 @@
 
     <string name="gurukool_max_management">GurukoolMax - Management</string>
     <string name="gurukool_max_operations">GurukoolMax - Operations</string>
+    <string name="gurukool_max_administrator">GurukoolMax - Administrator</string>
     <string name="login_to_your_account">LOGIN TO YOUR ACCOUNT</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -57,6 +58,9 @@
     <string name="effective_date">EFFECTIVE DATES:</string>
     <string name="status">STATUS</string>
     <string name="fleet_options">Fleet Options</string>
+    <string name="fleet_gps">Fleet GPS</string>
+    <string name="fleet_information">Fleet Information</string>
+    <string name="fleet_operations">Fleet Operations</string>
     <string name="bus_routes">Bus Routes</string>
     <string name="bus_stops">Bus Stops</string>
     <string name="pickup_schedule">Pickup Schedule</string>
@@ -175,4 +179,109 @@
     <string name="effective_end_date">Effective End Date</string>
     <string name="gps_tracker">GPS Tracker</string>
     <string name="view_gps_map">View GPS Tracker in Map</string>
+    <string name="academics">Academics</string>
+
+    <string name="cce_scholastic_grade_system_list">Grade System List</string>
+    <string name="cce_scholastic_grade_system_info">Grade System</string>
+
+    <string name="academic_board">Academics Board</string>
+    <string name="class_standard">Class Standard</string>
+    <string name="minimum">Minimum</string>
+    <string name="maximum">Maximum</string>
+    <string name="grade">Grade</string>
+    <string name="grade_point">Grade Point</string>
+    <string name="min_score_range">Minimum Score Range</string>
+    <string name="max_score_range">Maximum Score Range</string>
+    <string name="range_point">Range Point</string>
+
+    <string name="scholastic_management">Scholastic Management</string>
+    <string name="student">Student</string>
+    <string name="subject">Subject</string>
+    <string name="schlastic_category">Scholastic Category</string>
+    <string name="marks_secured">Marks Secured</string>
+
+    <string name="scholactic_activity">Scholastic Activity</string>
+    <string name="activity_name">Activity Name</string>
+
+    <string name="cce_scholastic_performance">Scholastic Performance</string>
+
+    <string name="link_class_sections_with_subject">Link Class Sections with Subject</string>
+
+    <string name="academic_year">Academic Year</string>
+    <string name="academics_board">Academic Board</string>
+    <string name="class_or_grade">Class/Grade</string>
+
+    <string name="course_curricilum_setup_list">Course Curriculum Setup</string>
+    <string name="section_title">Section Title</string>
+    <string name="focus">Focus:(Specify in percentage/Marks)</string>
+    <string name="duration_allocated">Duration Allocated</string>
+    <string name="syllabus_details">Syllabus Details</string>
+
+    <string name="faculty">Faculty</string>
+    <string name="curriculum_section">Curriculum Section</string>
+    <string name="start_date_of_session">Start date of the session</string>
+    <string name="topic">Topic/Unit Title</string>
+    <string name="session_topic_to_be_covered">Session Topic to be covered</string>
+    <string name="lesson_planner_management">Lesson Planner Management</string>
+    <string name="online_management_configuration">Online Management Configuration</string>
+
+    <string name="session_name">Session Name</string>
+    <string name="lesson_plan_reference">Lesson Plans Reference</string>
+    <string name="session_start_date">Session Start Date</string>
+    <string name="session_end_date">Session End Date</string>
+    <string name="session_link">Session Link</string>
+    <string name="description">Description</string>
+    <string name="scrolling_alert_required">Scrolling Alert Required?</string>
+
+    <string name="project_repository">Project Repository</string>
+    <string name="class_of_study">Class of Study</string>
+    <string name="project_name">Project Name</string>
+    <string name="technology_involved">Technology Involved</string>
+    <string name="who_suggested_project">Who suggested the Project</string>
+    <string name="suggested_by">Suggested by</string>
+    <string name="agency_name">Agency Name</string>
+    <string name="proposal_agency">Proposal Agency</string>
+    <string name="abstract_project">Abstract of the Project (would be displayed in the search results)</string>
+    <string name="abstract_project_condensed">Abstract of the Project</string>
+    <string name="description_project">Description of the Project</string>
+    <string name="search_keyword">Search Keyword</string>
+    <string name="current_approval_status">Current Approval Status</string>
+    <string name="search_project_repo">Search Project Repository</string>
+
+    <string name="knowledge_management">Knowledge Management</string>
+    <string name="recommended_title">Recommended Title</string>
+    <string name="content_type">Content Type</string>
+    <string name="abstract_of_submission">Abstract of the Submission</string>
+    <string name="submission_category">Submission Category</string>
+    <string name="submission_format">Submission Format</string>
+    <string name="tagged_keywords">Tagged Keywords</string>
+    <string name="comments">Comments</string>
+    <string name="comments_desc">Post Your Comments (Will not be published)</string>
+    <string name="attach_the_learning_materials">Attach the learning materials(if any)</string>
+
+    <string name="examination_schedule">Examination Schedules</string>
+    <string name="examination_name">Examination Name</string>
+    <string name="examination_registration">Examination Registration</string>
+    <string name="exam_date">Exam Date</string>
+    <string name="focus_assignment_category">Focus/Assignment Category</string>
+    <string name="marks_allocated">Marks/Credits Allocated</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="exam_details">Exam Details</string>
+
+    <string name="examination_score_card">Examination Scorecard</string>
+
+    <string name="calendar_year">Calendar Year</string>
+    <string name="student_name">Student Name</string>
+    <string name="marks_focus">Marks Focus</string>
+    <string name="scheduled_duration">Scheduled Duration</string>
+    <string name="no_files_chosen">No files chosen</string>
+
+    <string name="title">Title</string>
+    <string name="source_category">Source Category</string>
+    <string name="examination_category">Examination Category</string>
+    <string name="examination_date">Examination Date</string>
+
+    <string name="scholastic">Scholastic</string>
+
 </resources>

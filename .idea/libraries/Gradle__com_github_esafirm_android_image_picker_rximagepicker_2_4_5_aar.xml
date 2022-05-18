@@ -1,10 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.esafirm.android-image-picker:rximagepicker:2.4.5@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/f80fb34229ca2f32a29fdeeb5594c170/transformed/jetified-rximagepicker-2.4.5/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5884ac287dfe3ad6c936a7b53ef85ee7/transformed/jetified-rximagepicker-2.4.5/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5884ac287dfe3ad6c936a7b53ef85ee7/transformed/jetified-rximagepicker-2.4.5/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/5884ac287dfe3ad6c936a7b53ef85ee7/transformed/jetified-rximagepicker-2.4.5/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e59c930a2bff1575fc3613445da83331/transformed/jetified-rximagepicker-2.4.5/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e59c930a2bff1575fc3613445da83331/transformed/jetified-rximagepicker-2.4.5/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e59c930a2bff1575fc3613445da83331/transformed/jetified-rximagepicker-2.4.5/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

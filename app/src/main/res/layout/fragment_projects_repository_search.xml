@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".academics.ui.academic_project.ProjectsRepositorySearchFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar" />
+
+            <LinearLayout style="@style/ParentLinearLayoutForInputForm">
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:layout_marginTop="16.7dp"
+                    android:text="@string/academics_board" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/cboBoard"
+                        style="@style/TextViewSpinner"
+                        android:text="@string/choose_an_option" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/class_of_study" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/cboClass"
+                        style="@style/TextViewSpinner"
+                        android:text="@string/choose_an_option" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/project_name" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtProjectName"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/project_name"
+                        android:importantForAutofill="no"
+                        android:maxLength="2" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/technology_involved" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtTechInvolved"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/technology_involved"
+                        android:importantForAutofill="no"
+                        android:maxLength="2" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/who_suggested_project" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtWhoSuggestedProject"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/who_suggested_project"
+                        android:importantForAutofill="no"
+                        android:maxLength="2" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/agency_name" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtAgencyName"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/agency_name"
+                        android:importantForAutofill="no"
+                        android:maxLength="2" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/search_keyword" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtSearchKeyword"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/search_keyword"
+                        android:importantForAutofill="no"
+                        android:maxLength="2" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/current_approval_status" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <TextView
+                        android:id="@+id/cboApprovalStatus"
+                        style="@style/TextViewSpinner"
+                        android:text="@string/choose_an_option" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/InputFormButton" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

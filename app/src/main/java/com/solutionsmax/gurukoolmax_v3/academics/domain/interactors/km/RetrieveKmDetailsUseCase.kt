@@ -1,0 +1,21 @@
+package com.solutionsmax.gurukoolmax_v3.academics.domain.interactors.km
+
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.km.RetrieveKMInfo
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.KmRetrieveDetailsParams
+import com.solutionsmax.gurukoolmax_v3.academics.domain.repository.KmRepository
+import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
+import com.solutionsmax.gurukoolmax_v3.core.functional.Either
+import com.solutionsmax.gurukoolmax_v3.core.interactor.UseCase
+import javax.inject.Inject
+
+class RetrieveKmDetailsUseCase @Inject constructor(
+    private val kmRepository: KmRepository
+) : UseCase<List<RetrieveKMInfo>, KmRetrieveDetailsParams>() {
+    override suspend fun run(params: KmRetrieveDetailsParams): Either<Failure, List<RetrieveKMInfo>> {
+        return kmRepository.retrieveKMDetails(
+            url = params.url,
+            sAuthorization = params.sAuthorization,
+            id = params.id
+        )
+    }
+}

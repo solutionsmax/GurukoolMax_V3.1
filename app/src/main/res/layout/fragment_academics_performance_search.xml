@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".academics.ui.cce_scholastic.performance.AcademicsPerformanceSearchFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar" />
+
+            <LinearLayout style="@style/ParentLinearLayoutForInputForm">
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:layout_marginTop="16.7dp"
+                    android:text="@string/academic_board" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtAcademicBoard"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/academic_board"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/class_standard" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtClassStandard"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/class_standard"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextViewLabelForEditText"
+                    android:text="@string/student" />
+
+                <LinearLayout style="@style/LinearLayoutForEditText">
+
+                    <EditText
+                        android:id="@+id/txtMinScoreRange"
+                        style="@style/EditTextInputFormInputTypeText"
+                        android:hint="@string/student"
+                        android:importantForAutofill="no" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/InputFormButton" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

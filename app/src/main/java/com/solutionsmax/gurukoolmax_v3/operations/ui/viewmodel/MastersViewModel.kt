@@ -16,7 +16,14 @@ class MastersViewModel @Inject constructor(
     private val populateFuelTypeUseCase: PopulateFuelTypeUseCase,
     private val populateHourUseCase: PopulateHourUseCase,
     private val populateMinutesUseCase: PopulateMinutesUseCase,
-    private val populateTimeCycleUseCase: PopulateTimeCycleUseCase
+    private val populateTimeCycleUseCase: PopulateTimeCycleUseCase,
+    private val populateBoardUseCase: PopulateBoardUseCase,
+    private val populateKmContentType: PopulateKmContentType,
+    private val populateKmSubmissionCategory: PopulateKmSubmissionCategory,
+    private val populateKmFormatTypes: PopulateKmFormatTypes,
+    private val populateAcademicYear: PopulateAcademicYear,
+    private val populateFocusAssignment: PopulateFocusAssignment,
+    private val populateApprovalStatusUseCase: PopulateApprovalStatusUseCase
 ) : BaseViewModel() {
 
     private val _populateMakeMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
@@ -53,6 +60,41 @@ class MastersViewModel @Inject constructor(
         SingleLiveEvent()
     val populateTimeCycleMutableData: LiveData<MutableList<PopulateMasterListItem>>
         get() = _populateTimeCycleMutableData
+
+    private val _populateBoardMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateBoardMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateBoardMutableData
+
+    private val _populateKmContentTypeMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateKmContentTypeMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateKmContentTypeMutableData
+
+    private val _populateKmSubmissionCategoryMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateKmSubmissionCategoryMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateKmSubmissionCategoryMutableData
+
+    private val _populateKmFormatTypesMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateKmFormatTypesMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateKmFormatTypesMutableData
+
+    private val _populateAcademicYearMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateAcademicYearMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateAcademicYearMutableData
+
+    private val _populateFocusAssignmentMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateFocusAssignmentMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateFocusAssignmentMutableData
+
+    private val _populateApprovalStatusMutableData: SingleLiveEvent<MutableList<PopulateMasterListItem>> =
+        SingleLiveEvent()
+    val populateApprovalStatusMutableData: LiveData<MutableList<PopulateMasterListItem>>
+        get() = _populateApprovalStatusMutableData
 
     fun populateHours(url: String, sAuthorization: String, sTableName: String) = launchIOCoroutine {
         populateHourUseCase(
@@ -177,5 +219,119 @@ class MastersViewModel @Inject constructor(
             ) {
                 _populateFuelTypeMutableData.postValue(it)
             }
+        }
+
+    fun populateBoard(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateBoardUseCase(
+                PopulateMastersParams(
+                    url = url,
+                    sAuthorization = sAuthorization,
+                    sTableName = sTableName
+                )
+            ).fold(
+                {
+                    Log.d("TAG", "master: " + it.message)
+                    postError(it)
+                }
+            ) {
+                _populateBoardMutableData.postValue(it)
+            }
+        }
+
+    fun populateKMContentType(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateKmContentType(
+                PopulateMastersParams(
+                    url, sAuthorization, sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateKmContentTypeMutableData.postValue(it)
+                }
+            )
+        }
+
+    fun populateKMSubmissionCategory(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateKmSubmissionCategory(
+                PopulateMastersParams(
+                    url, sAuthorization, sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateKmSubmissionCategoryMutableData.postValue(it)
+                }
+            )
+        }
+
+    fun populateKmFormatTypes(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateKmFormatTypes(
+                PopulateMastersParams(
+                    url, sAuthorization, sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateKmSubmissionCategoryMutableData.postValue(it)
+                }
+            )
+        }
+
+    fun populateAcademicYear(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateAcademicYear(
+                PopulateMastersParams(
+                    url, sAuthorization, sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateAcademicYearMutableData.postValue(it)
+                }
+            )
+        }
+
+    fun populateFocusAssignment(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateFocusAssignment(
+                PopulateMastersParams(
+                    url, sAuthorization, sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateFocusAssignmentMutableData.postValue(it)
+                }
+            )
+        }
+
+    fun populateApprovalStatus(url: String, sAuthorization: String, sTableName: String) =
+        launchIOCoroutine {
+            populateApprovalStatusUseCase(
+                PopulateMastersParams(
+                    url, sAuthorization, sTableName
+                )
+            ).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _populateApprovalStatusMutableData.postValue(it)
+                }
+            )
         }
 }

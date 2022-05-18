@@ -82,7 +82,7 @@ class LicenseViewModel @Inject constructor(
             deleteAllLicenseUseCase(Unit).fold(
                 {
                     Log.d("TAG", "getRemoteToken: " + it.message)
-                    ::postError
+                    postError(it)
                 }
             ) {
                 _deleteAllLicenseMutableData.postValue(it)

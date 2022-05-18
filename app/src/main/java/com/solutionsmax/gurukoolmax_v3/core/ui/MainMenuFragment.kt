@@ -35,7 +35,6 @@ class MainMenuFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val menuListItems = listOf(
             MainMenuItem(ADMINISTRATORS, R.drawable.administrator_1),
             MainMenuItem(MANAGEMENT, R.drawable.management_main),
@@ -52,6 +51,7 @@ class MainMenuFragment : BaseFragment() {
                 when (it) {
                     MANAGEMENT -> currentNavController.navigate(R.id.managementLoginFragment)
                     OPERATIONS -> currentNavController.navigate(R.id.operationsLoginFragment)
+                    ADMINISTRATORS -> currentNavController.navigate(R.id.administratorLoginFragment)
                 }
             })
         }

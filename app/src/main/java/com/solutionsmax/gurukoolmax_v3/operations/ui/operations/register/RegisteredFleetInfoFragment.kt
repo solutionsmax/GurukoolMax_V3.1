@@ -379,6 +379,7 @@ class RegisteredFleetInfoFragment : BaseFragment() {
             .imageFullDirectory(Environment.getExternalStorageDirectory().path) // can be full path
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             images = ImagePicker.getImages(data) as ArrayList<Image>
