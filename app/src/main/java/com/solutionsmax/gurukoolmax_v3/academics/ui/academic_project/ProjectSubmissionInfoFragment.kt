@@ -36,6 +36,7 @@ import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentProjectSubmissionInfoBinding
 import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
@@ -85,7 +86,7 @@ class ProjectSubmissionInfoFragment : BaseFragment() {
             title = getString(R.string.project_repository)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            val bundle = bundleOf("menu" to Academics.CURRICULUM_MANAGEMENT)
+            val bundle = bundleOf("menu" to OperationMenuConstants.ACADEMICS)
             setNavigationOnClickListener {
                 currentNavController.navigate(
                     R.id.administratorSubMenuFragment,
@@ -378,7 +379,7 @@ class ProjectSubmissionInfoFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {

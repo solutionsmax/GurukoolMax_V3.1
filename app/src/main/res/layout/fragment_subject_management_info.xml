@@ -102,11 +102,10 @@
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
                     <EditText
-                        android:id="@+id/txtGrade"
+                        android:id="@+id/txtRemarks"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/remarks"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 

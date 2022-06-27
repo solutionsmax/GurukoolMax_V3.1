@@ -12,6 +12,7 @@ import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentOnlineSessionLessonsPlanListBinding
 import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 
 
 class OnlineSessionLessonsPlanListFragment : BaseFragment() {
@@ -33,7 +34,7 @@ class OnlineSessionLessonsPlanListFragment : BaseFragment() {
             title = getString(R.string.online_management_configuration)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            val bundle = bundleOf("menu" to Academics.CURRICULUM_MANAGEMENT)
+            val bundle = bundleOf("menu" to OperationMenuConstants.ACADEMICS)
             setNavigationOnClickListener {
                 currentNavController.navigate(
                     R.id.administratorSubMenuFragment,

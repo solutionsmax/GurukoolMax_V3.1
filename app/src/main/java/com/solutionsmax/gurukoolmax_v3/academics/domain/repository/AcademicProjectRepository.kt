@@ -59,7 +59,7 @@ class AcademicProjectRepository @Inject constructor(
     suspend fun setAcademicProjectStatus(
         url: String,
         sAuthorization: String,
-        iStatusID: String,
+        iStatusID: Int,
         id: Int
     ): Either<Failure, Int> =
         Either.Right(

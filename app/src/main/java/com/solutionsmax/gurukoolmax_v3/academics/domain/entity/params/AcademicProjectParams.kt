@@ -21,7 +21,7 @@ data class AcademicProjectGuideParams(
 data class AcademicProjectSetStatusParams(
     val url: String,
     val sAuthorization: String,
-    val iStatusID: String,
+    val iStatusID: Int,
     val id: Int
 )
 

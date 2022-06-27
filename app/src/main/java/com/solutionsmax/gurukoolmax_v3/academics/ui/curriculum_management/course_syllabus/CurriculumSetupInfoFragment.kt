@@ -155,7 +155,7 @@ class CurriculumSetupInfoFragment : BaseFragment() {
         }
 
         cboClass!!.setOnClickListener {
-            if (SubjectManagementInfoFragment.iAcademicBoard > 0) {
+            if (iAcademicBoardID > 0) {
                 if (iSettingsID == 1) {
                     populateClass(iAcademicBoardID)
                 } else {
@@ -168,9 +168,6 @@ class CurriculumSetupInfoFragment : BaseFragment() {
         }
 
         cboSubject!!.setOnClickListener {
-            if (iAcademicBoardID > 0) {
-                populateSubject()
-            }
             if (::populateSubjectList.isInitialized) {
                 showSubjectDialog()
             }
@@ -392,6 +389,13 @@ class CurriculumSetupInfoFragment : BaseFragment() {
                 CS_AcademicBoard.OnItemClick {
                     cboAcademicBoard!!.text = it.sName
                     iAcademicBoardID = it.id
+                    if (iAcademicBoardID > 0) {
+                        if (iSettingsID == 1) {
+                            populateClass(iAcademicBoardID)
+                        } else {
+                            populateSemesterClass(iAcademicBoardID)
+                        }
+                    }
                 })
         }
         dialog!!.show()
@@ -411,7 +415,7 @@ class CurriculumSetupInfoFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {
@@ -456,6 +460,9 @@ class CurriculumSetupInfoFragment : BaseFragment() {
                     CS_Class.OnItemClick {
                         cboClass!!.text = it.sClassStandard
                         iClassID = it.iClassStandardID
+                        if (iAcademicBoardID > 0) {
+                            populateSubject()
+                        }
                     })
             }
             dialog!!.show()

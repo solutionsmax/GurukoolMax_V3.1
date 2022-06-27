@@ -120,5 +120,17 @@ class RetrieveCurriculumListUseCase @Inject constructor(
             )
         )
     }
+}
 
+class SetCurriculumStatusUseCase @Inject constructor(
+    private val curriculumRepository: CurriculumRepository
+) : UseCase<Int, SetCurriculumStatusParams>() {
+    override suspend fun run(params: SetCurriculumStatusParams): Either<Failure, Int> {
+        return curriculumRepository.setCurriculumStatus(
+            url = params.url,
+            sAuthorization = params.sAuthorization,
+            id = params.id,
+            iStatusID = params.iStatusId
+        )
+    }
 }

@@ -70,6 +70,7 @@ class AdministratorSubMenuFragment : BaseFragment() {
                 )
             }
         }
+
         with(binding.operationsSubMenu) {
             layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = OperationsMenuAdapter(

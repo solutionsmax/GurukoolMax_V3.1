@@ -25,11 +25,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtAcademicBoard"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/academic_year"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboAcademicYear"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -39,11 +37,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtClassStandard"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/academics_board"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboAcademicBoard"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -53,12 +49,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtMinScoreRange"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/class_or_grade"
-                        android:importantForAutofill="no"
-                        android:inputType="number" />
+                    <TextView
+                        android:id="@+id/cboClass"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -68,11 +61,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtMAxScoreRange"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/subject"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboSubject"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -82,11 +73,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtFaculty"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/faculty"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboFaculty"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -96,11 +85,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtCurriculumSection"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/curriculum_section"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboCurriculumSection"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -110,11 +97,10 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtStartDateSession"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/start_date_of_session"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/lblStartDate"
+                        style="@style/TextViewDateSelect"
+                        android:hint="@string/start_date_of_session" />
 
                 </LinearLayout>
 
@@ -124,11 +110,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtTopic"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/topic"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboTopic"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 

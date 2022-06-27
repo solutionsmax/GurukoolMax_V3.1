@@ -1,8 +1,8 @@
 package com.solutionsmax.gurukoolmax_v3
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
@@ -28,5 +28,16 @@ class MainActivity : DaggerAppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val fragmentManager: FragmentManager = supportFragmentManager
+        if (fragmentManager.backStackEntryCount > 1) {
+            fragmentManager.popBackStack()
+        } else {
+            finish()
+            moveTaskToBack(true)
+        }
     }
 }

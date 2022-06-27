@@ -44,3 +44,10 @@ data class RetrieveExamSetupListParams(
     val iStatusID: Int,
     val iStudentID: Int
 )
+
+data class SetExamSetupStatusParams(
+    val url: String,
+    val sAuthorization: String,
+    val iStatusID: Int,
+    val id: Int
+)

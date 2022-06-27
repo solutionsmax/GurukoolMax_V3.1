@@ -2,7 +2,6 @@ package com.solutionsmax.gurukoolmax_v3.academics.ui.km
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +20,8 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseFragment
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
-import com.solutionsmax.gurukoolmax_v3.databinding.FragmentKMRepositoryListBinding
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentKmSearchResultListBinding
-import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
@@ -56,8 +54,9 @@ class KmSearchResultListFragment : BaseFragment() {
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
             setNavigationOnClickListener {
+                val bundle = bundleOf("menu" to OperationMenuConstants.ACADEMICS)
                 currentNavController.navigate(
-                    R.id.KMSearchRepositoryFragment
+                    R.id.KMSearchRepositoryFragment,bundle
                 )
             }
         }

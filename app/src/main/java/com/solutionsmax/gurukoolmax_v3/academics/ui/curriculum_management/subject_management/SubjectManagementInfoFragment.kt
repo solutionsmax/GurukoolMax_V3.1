@@ -26,6 +26,7 @@ import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.subjec
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.subject_management.spinner_adapter.SM_Subject
 import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POPULATE_MASTER_LIST
 import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
 import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
 import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
@@ -67,10 +68,10 @@ class SubjectManagementInfoFragment : BaseFragment() {
         var dialog: Dialog? = null
     }
 
-    private lateinit var boardItems: List<PopulateMasterListItem>
-    private lateinit var classItems: List<PopulateClassItems>
-    private lateinit var academicYearList: List<PopulateMasterListItem>
-    private lateinit var populateSubjectList: List<PopulateSubjectProgramList>
+    private var boardItems: List<PopulateMasterListItem> = emptyList()
+    private var classItems: List<PopulateClassItems> = emptyList()
+    private var academicYearList: List<PopulateMasterListItem> = emptyList()
+    private var populateSubjectList: List<PopulateSubjectProgramList> = emptyList()
 
     private var iEditID = -1
     private var sClassMethod = ""
@@ -132,25 +133,11 @@ class SubjectManagementInfoFragment : BaseFragment() {
         }
 
         cboClass!!.setOnClickListener {
-            if (iAcademicBoard > 0) {
-                if (iSettingsID == 1) {
-                    populateClass(iAcademicBoard)
-                } else {
-                    populateSemesterClass(iAcademicBoard)
-                }
-                if (::classItems.isInitialized) {
-                    showClassDialog()
-                }
-            }
+            showClassDialog()
         }
 
         cboSubject!!.setOnClickListener {
-            if (iAcademicBoard > 0) {
-                populateSubject()
-            }
-            if (::populateSubjectList.isInitialized) {
-                showSubjectDialog()
-            }
+            showSubjectDialog()
         }
 
         binding.btnSubmit.setOnClickListener {
@@ -277,6 +264,9 @@ class SubjectManagementInfoFragment : BaseFragment() {
                         iAcademicYearID = items.iCalendarYearID
                         cboSubject!!.text = items.sSubjectName
                         iSubjectID = items.iSubjectID
+                        binding.txtRemarks.setText(items.sRemarks)
+                        populateAcademicYear(sBaseURL, sToken)
+                        populateAcademicBoard(sBaseURL, sToken)
                     }
                 }
             }
@@ -311,7 +301,7 @@ class SubjectManagementInfoFragment : BaseFragment() {
                     iAcademicBoardID = iAcademicBoard,
                     iClassStandardID = iClassID,
                     iCalendarYearID = iAcademicYearID,
-                    sRemarks = binding.txtGrade.text.toString(),
+                    sRemarks = binding.txtRemarks.text.toString(),
                     iUserID = 1,
                     iWorkflowStatusID = 1,
                     sCreateDate = DateUtils.todayDateTime().getMediumDateFormat(requireContext()),
@@ -337,7 +327,7 @@ class SubjectManagementInfoFragment : BaseFragment() {
                     iAcademicBoardID = iAcademicBoard,
                     iClassStandardID = iClassID,
                     iCalendarYearID = iAcademicYearID,
-                    sRemarks = binding.txtGrade.text.toString(),
+                    sRemarks = binding.txtRemarks.text.toString(),
                     iUserID = 1,
                     iWorkflowStatusID = 1,
                     sCreateDate = DateUtils.todayDateTime().getMediumDateFormat(requireContext()),
@@ -352,8 +342,8 @@ class SubjectManagementInfoFragment : BaseFragment() {
      */
     private fun populateAcademicYear(sBaseURL: String, sToken: String) {
         mastersViewModel.populateManufactureYear(
-            sBaseURL, sToken,
-            MasterTableNames.MASTERS_CONFIGURATION_CALENDAR_YEAR
+            sBaseURL + POPULATE_MASTER_LIST, sToken,
+            MasterTableNames.MASTERS_ENQUIRY_CALENDAR_YEAR
         )
         mastersViewModel.populateManufactureYearMutableData.observe(viewLifecycleOwner) {
             academicYearList = it
@@ -416,6 +406,13 @@ class SubjectManagementInfoFragment : BaseFragment() {
                 SM_AcademicBoard.OnItemClick {
                     cboAcademicBoard!!.text = it.sName
                     iAcademicBoard = it.id
+                    if (iAcademicBoard > 0) {
+                        if (iSettingsID == 1) {
+                            populateClass(iAcademicBoard)
+                        } else {
+                            populateSemesterClass(iAcademicBoard)
+                        }
+                    }
                 })
         }
         dialog!!.show()
@@ -435,7 +432,7 @@ class SubjectManagementInfoFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {
@@ -480,6 +477,9 @@ class SubjectManagementInfoFragment : BaseFragment() {
                     SM_Class.OnItemClick {
                         cboClass!!.text = it.sClassStandard
                         iClassID = it.iClassStandardID
+                        if (iAcademicBoard > 0) {
+                            populateSubject()
+                        }
                     })
             }
             dialog!!.show()

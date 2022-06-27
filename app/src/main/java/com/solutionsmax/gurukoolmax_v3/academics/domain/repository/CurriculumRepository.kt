@@ -10,6 +10,7 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POPULATE_SESS
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POST_CURRICULUM_SETUP_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_DETAILS_CURRICULUM_SETUP_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_LIST_CURRICULUM_SETUP_INFO
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.SET_STATUS_CURRICULUM_SETUP_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.TokenConstants
 import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.functional.Either
@@ -45,6 +46,21 @@ class CurriculumRepository @Inject constructor(
                 postCurriculumInfoItem = postCurriculumInfoItem
             )
         )
+
+    suspend fun setCurriculumStatus(
+        url: String,
+        sAuthorization: String,
+        id: Int,
+        iStatusID: Int
+    ): Either<Failure, Int> =
+        Either.Right(
+            academicsApi.setCurriculumStatus(
+                url = url + SET_STATUS_CURRICULUM_SETUP_INFO,
+                sAuthorization = "${TokenConstants.BEARER} $sAuthorization",
+                id, iStatusID
+            )
+        )
+
 
     suspend fun checkDuplicateCurriculumInfo(
         url: String,

@@ -1,10 +1,7 @@
 package com.solutionsmax.gurukoolmax_v3.academics.domain.interactors.examination
 
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_setup.RetrieveExamSetupDetails
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.CheckDuplicateExamParams
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.PostExamSetupParams
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.RetrieveExamSetupDetailsParams
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.RetrieveExamSetupListParams
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.*
 import com.solutionsmax.gurukoolmax_v3.academics.domain.repository.ExaminationConfigRepository
 import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.functional.Either
@@ -93,4 +90,18 @@ class RetrieveExamSetupListUseCase @Inject constructor(
             )
         )
     }
+}
+
+class SetExamSetupStatusUseCase @Inject constructor(
+    private val examinationConfigRepository: ExaminationConfigRepository
+) : UseCase<Int, SetExamSetupStatusParams>() {
+    override suspend fun run(params: SetExamSetupStatusParams): Either<Failure, Int> {
+        return examinationConfigRepository.setExaminationConfigStatus(
+            url = params.url,
+            sAuthorization = params.sAuthorization,
+            iStatusID = params.iStatusID,
+            id = params.id
+        )
+    }
+
 }

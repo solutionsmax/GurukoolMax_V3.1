@@ -28,6 +28,7 @@ import javax.inject.Inject
 
 class AdministratorLoginFragment : BaseFragment() {
     private lateinit var binding: FragmentAdministratorLoginBinding
+    val doubleBackPress = false
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory

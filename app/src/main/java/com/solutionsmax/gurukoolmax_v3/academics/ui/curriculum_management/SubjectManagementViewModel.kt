@@ -18,7 +18,8 @@ class SubjectManagementViewModel @Inject constructor(
     private val populateSubjectListUseCase: PopulateSubjectListUseCase,
     private val retrieveSubjectListUseCase: RetrieveSubjectListUseCase,
     private val retrieveSubjectDetailsUseCase: RetrieveSubjectDetailsUseCase,
-    private val populateSubjectProgramsListUseCase: PopulateSubjectProgramsListUseCase
+    private val populateSubjectProgramsListUseCase: PopulateSubjectProgramsListUseCase,
+    private val setSubjectProgramStatusUseCase: SetSubjectProgramStatusUseCase
 ) : BaseViewModel() {
 
     private val _postMutableSubjectInfo: MutableLiveData<Int> = MutableLiveData()
@@ -52,6 +53,10 @@ class SubjectManagementViewModel @Inject constructor(
         MutableLiveData()
     val mutablePopulateSubjectProgramList: LiveData<List<PopulateSubjectProgramList>>
         get() = _mutablePopulateSubjectProgramList
+
+    private val _mutableSetSubjectProgramStatus: MutableLiveData<Int> = MutableLiveData()
+    val mutableSetSubjectProgramStatus: LiveData<Int>
+        get() = _mutableSetSubjectProgramStatus
 
     fun postSubjectInfo(postSubjectInfoParams: PostSubjectInfoParams) = launchIOCoroutine {
         postSubjectManagementInfoUseCase(postSubjectInfoParams).fold(
@@ -140,4 +145,15 @@ class SubjectManagementViewModel @Inject constructor(
                 )
             }
         }
+
+    fun setSubjectProgramStatus(params: SetStatusSubjectProgramParams) = launchIOCoroutine {
+        setSubjectProgramStatusUseCase(params).fold(
+            {
+                postError(it)
+            },
+            {
+                _mutableSetSubjectProgramStatus.postValue(it)
+            }
+        )
+    }
 }

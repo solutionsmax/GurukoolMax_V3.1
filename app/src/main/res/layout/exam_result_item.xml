@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="examResult"
+            type="com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_result.RetrieveExamResultsItems" />
+
+        <variable
+            name="clickListener"
+            type="com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExamResultAdapter.OnItemClick" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/routeName"
+            style="@style/AdapterTextView"
+            android:text="@string/student_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lblSubjectName"
+            style="@style/AdapterDataTextView"
+            android:text="@{examResult.SStudentName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/routeName" />
+
+        <TextView
+            android:id="@+id/stopName"
+            style="@style/AdapterTextView"
+            android:text="@string/marks_secured"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblSubjectName" />
+
+        <TextView
+            android:id="@+id/lblAcademicBoard"
+            style="@style/AdapterDataTextView"
+            android:text="@{String.valueOf(examResult.IMarksSecured)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stopName" />
+
+        <TextView
+            android:id="@+id/model"
+            style="@style/AdapterTextView"
+            android:text="@string/academic_board"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblAcademicBoard" />
+
+        <TextView
+            android:id="@+id/lblClass"
+            style="@style/AdapterDataTextView"
+            android:text="@{examResult.SAcademicBoard}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/model" />
+
+        <TextView
+            android:id="@+id/make"
+            style="@style/AdapterTextView"
+            android:text="@string/class_or_grade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblClass" />
+
+        <TextView
+            android:id="@+id/lblCalendarYear"
+            style="@style/AdapterDataTextView"
+            android:text="@{examResult.SClassStandard}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/make" />
+
+        <TextView
+            android:id="@+id/make1"
+            style="@style/AdapterTextView"
+            android:text="@string/examination_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblCalendarYear" />
+
+        <TextView
+            android:id="@+id/lblCalendarYear1"
+            style="@style/AdapterDataTextView"
+            android:text="@{examResult.SScheduleName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/make1" />
+
+        <TextView
+            android:id="@+id/make2"
+            style="@style/AdapterTextView"
+            android:text="@string/subject"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblCalendarYear1" />
+
+        <TextView
+            android:id="@+id/lblCalendarYear2"
+            style="@style/AdapterDataTextView"
+            android:text="@{examResult.SSubjectName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/make2" />
+
+
+        <TextView
+            android:id="@+id/lblStatus"
+            style="@style/AdapterStatusTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblCalendarYear2" />
+
+        <TextView
+            android:id="@+id/lblEdit"
+            style="@style/AdapterEditTextView"
+            android:onClick="@{()->clickListener.onEditClick(examResult)}"
+            android:text="@string/edit"
+            app:drawableStartCompat="@drawable/ic_baseline_edit_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblCalendarYear2" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblEdit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

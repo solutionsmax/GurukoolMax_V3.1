@@ -55,3 +55,10 @@ data class PopulateSubjectProgramsListParams(
     val iBoardID: Int,
     val iStatusID: Int
 )
+
+data class SetStatusSubjectProgramParams(
+    val url: String,
+    val sAuthorization: String,
+    val iStatusID: Int,
+    val id: Int
+)

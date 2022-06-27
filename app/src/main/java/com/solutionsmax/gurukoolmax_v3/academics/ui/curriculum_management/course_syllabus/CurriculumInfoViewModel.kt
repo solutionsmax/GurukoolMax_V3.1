@@ -17,7 +17,8 @@ class CurriculumInfoViewModel @Inject constructor(
     private val populateSessionTopicListUseCase: PopulateSessionTopicListUseCase,
     private val populateCurriculumListByClassReferenceUseCase: PopulateCurriculumListByClassReferenceUseCase,
     private val retrieveCurriculumDetailsUseCase: RetrieveCurriculumDetailsUseCase,
-    private val retrieveCurriculumListUseCase: RetrieveCurriculumListUseCase
+    private val retrieveCurriculumListUseCase: RetrieveCurriculumListUseCase,
+    private val setCurriculumStatusUseCase:SetCurriculumStatusUseCase
 ) : BaseViewModel() {
 
     private val _postMutableCurriculumInfo: MutableLiveData<Int> = MutableLiveData()
@@ -51,6 +52,10 @@ class CurriculumInfoViewModel @Inject constructor(
         MutableLiveData()
     val retrieveMutableCurriculumList: LiveData<List<RetrieveCurriculumInfoItems>>
         get() = _retrieveMutableCurriculumList
+
+    private val _mutableSetCurriculumStatus:MutableLiveData<Int> = MutableLiveData()
+    val mutableSetCurriculumStatus:LiveData<Int>
+        get() = _mutableSetCurriculumStatus
 
     fun postCurriculumInfo(postCurriculumInfoParams: PostCurriculumInfoParams) = launchIOCoroutine {
         postCurriculumInfoUseCase(postCurriculumInfoParams).fold(
@@ -91,11 +96,11 @@ class CurriculumInfoViewModel @Inject constructor(
         launchIOCoroutine {
             populateSessionTopicListUseCase(populateCurriculumSessionTopicListParams).collect {
                 it.fold(
-                    {
-                        postError(it)
+                    { error->
+                        postError(error)
                     },
-                    {
-                        _populateMutableSessionTopicList.postValue(it)
+                    { result->
+                        _populateMutableSessionTopicList.postValue(result)
                     }
                 )
             }
@@ -105,11 +110,11 @@ class CurriculumInfoViewModel @Inject constructor(
         launchIOCoroutine {
             populateCurriculumListByClassReferenceUseCase(populateCurriculumSessionTopicListParams).collect {
                 it.fold(
-                    {
-                        postError(it)
+                    { error->
+                        postError(error)
                     },
-                    {
-                        _populateMutableCurriculumListByClassReference.postValue(it)
+                    { result->
+                        _populateMutableCurriculumListByClassReference.postValue(result)
                     }
                 )
             }
@@ -140,4 +145,15 @@ class CurriculumInfoViewModel @Inject constructor(
                 )
             }
         }
+
+    fun setCurriculumStatus(setCurriculumStatusParams: SetCurriculumStatusParams) = launchIOCoroutine {
+        setCurriculumStatusUseCase(setCurriculumStatusParams).fold(
+            {
+                postError(it)
+            },
+            {
+                _mutableSetCurriculumStatus.postValue(it)
+            }
+        )
+    }
 }

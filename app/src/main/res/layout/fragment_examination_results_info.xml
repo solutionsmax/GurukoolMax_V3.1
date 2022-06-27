@@ -25,11 +25,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtClassStandard"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/academics_board"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboBoard"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -39,12 +37,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtMinScoreRange"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/class_standard"
-                        android:importantForAutofill="no"
-                        android:inputType="number" />
+                    <TextView
+                        android:id="@+id/cboClass"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -54,11 +49,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtCalendarYear"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/calendar_year"
-                        android:importantForAutofill="no" />
+                    <TextView
+                        android:id="@+id/cboCalendarYear"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -68,12 +61,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtGrade"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/examination_schedule"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                    <TextView
+                        android:id="@+id/cboExamSchedule"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -83,12 +73,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtStudentName"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/student_name"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                    <TextView
+                        android:id="@+id/cboStudentName"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -98,12 +85,9 @@
 
                 <LinearLayout style="@style/LinearLayoutForEditText">
 
-                    <EditText
-                        android:id="@+id/txtSubject"
-                        style="@style/EditTextInputFormInputTypeText"
-                        android:hint="@string/subject"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                    <TextView
+                        android:id="@+id/cboSubject"
+                        style="@style/TextViewSpinner" />
 
                 </LinearLayout>
 
@@ -117,8 +101,9 @@
                         android:id="@+id/txtMarksAllocated"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/marks_allocated"
+                        android:inputType="number"
                         android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:maxLength="3" />
 
                 </LinearLayout>
 

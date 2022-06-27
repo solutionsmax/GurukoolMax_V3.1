@@ -23,6 +23,7 @@ import com.solutionsmax.gurukoolmax_v3.academics.ui.examination.spinner_adapter.
 import com.solutionsmax.gurukoolmax_v3.academics.ui.examination.spinner_adapter.ES_Year
 import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POPULATE_MASTER_LIST
 import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
 import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
 import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
@@ -56,8 +57,8 @@ class ExamScheduleInfoFragment : BaseFragment() {
         var dialog: Dialog? = null
     }
 
-    private lateinit var boardItems: List<PopulateMasterListItem>
-    private lateinit var academicYearList: List<PopulateMasterListItem>
+    private var boardItems: List<PopulateMasterListItem> = emptyList()
+    private var academicYearList: List<PopulateMasterListItem> = emptyList()
 
     private var iEditID = -1
 
@@ -79,7 +80,7 @@ class ExamScheduleInfoFragment : BaseFragment() {
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
             setNavigationOnClickListener {
                 currentNavController.navigate(
-                    R.id.subjectManagementListFragment
+                    R.id.examScheduleListFragment
                 )
             }
         }
@@ -159,6 +160,8 @@ class ExamScheduleInfoFragment : BaseFragment() {
                         iAcademicYearID = items.iCalendarYearID
                         binding.txtExaminationName.setText(items.sScheduleName)
                         binding.txtRemarks.setText(items.sNotes)
+                        populateAcademicYear(sBaseURL, sToken)
+                        populateAcademicBoard(sBaseURL, sToken)
                     }
                 }
                 checkDuplicateMutableExamSchedule.observe(viewLifecycleOwner) { duplicate ->
@@ -268,7 +271,7 @@ class ExamScheduleInfoFragment : BaseFragment() {
      */
     private fun populateAcademicYear(sBaseURL: String, sToken: String) {
         mastersViewModel.populateManufactureYear(
-            sBaseURL, sToken,
+            sBaseURL + POPULATE_MASTER_LIST, sToken,
             MasterTableNames.MASTERS_CONFIGURATION_CALENDAR_YEAR
         )
         mastersViewModel.populateManufactureYearMutableData.observe(viewLifecycleOwner) {
@@ -306,7 +309,7 @@ class ExamScheduleInfoFragment : BaseFragment() {
      */
     private fun populateAcademicBoard(sBaseURL: String, sToken: String) {
         mastersViewModel.populateBoard(
-            sBaseURL, sToken,
+            sBaseURL + POPULATE_MASTER_LIST, sToken,
             MasterTableNames.MASTERS_ACADEMICS_EDUCATIONAL_BOARD
         )
 

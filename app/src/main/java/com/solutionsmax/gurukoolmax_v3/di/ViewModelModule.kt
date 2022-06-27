@@ -7,9 +7,12 @@ import com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.CceScholastic
 import com.solutionsmax.gurukoolmax_v3.academics.ui.cce_scholastic.recording.CceRecordingViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.SubjectManagementViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.CurriculumInfoViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.learning_sessions.SetupLearningSessionViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExamResultViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationScheduleViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.examination.ExaminationSetupViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.km.KmViewModel
+import com.solutionsmax.gurukoolmax_v3.academics.ui.map_subject_to_faculty.MapSubjectToFacultyViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.SettingsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.TokenViewModel
@@ -151,4 +154,19 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CceRecordingViewModel::class)
     abstract fun cceRecordingViewModel(cceRecordingViewModel: CceRecordingViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ExamResultViewModel::class)
+    abstract fun examResultViewModel(examResultViewModel: ExamResultViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SetupLearningSessionViewModel::class)
+    abstract fun setupLearningSessionViewModel(setupLearningSessionViewModel: SetupLearningSessionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MapSubjectToFacultyViewModel::class)
+    abstract fun mapSubjectToFacultyViewModel(mapSubjectToFacultyViewModel: MapSubjectToFacultyViewModel): ViewModel
 }

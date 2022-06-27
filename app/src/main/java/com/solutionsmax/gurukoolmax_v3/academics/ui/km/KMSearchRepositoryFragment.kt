@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,15 +23,13 @@ import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.PopulateSu
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.subject_management.PopulateSubjectProgramList
 import com.solutionsmax.gurukoolmax_v3.academics.ui.AcademicsViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.SubjectManagementViewModel
-import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.KM_Board
-import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.KM_Class
-import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.KM_ContentTypes
-import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.KM_Subject
+import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.search.KMS_Board
 import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.search.KMS_Class
 import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.search.KMS_ContentType
 import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.search.KMS_Subject
 import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POPULATE_MASTER_LIST
 import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
 import com.solutionsmax.gurukoolmax_v3.core.data.error_logs.PostErrorLogsItems
 import com.solutionsmax.gurukoolmax_v3.core.data.master.PopulateMasterListItem
@@ -44,6 +41,7 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.SettingsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentKMSearchRepositoryBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
@@ -99,8 +97,9 @@ class KMSearchRepositoryFragment : BaseFragment() {
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
 
             setNavigationOnClickListener {
+                val bundle = bundleOf("menu" to OperationMenuConstants.ACADEMICS)
                 currentNavController.navigate(
-                    R.id.administratorSubMenuFragment
+                    R.id.administratorSubMenuFragment, bundle
                 )
             }
         }
@@ -135,22 +134,12 @@ class KMSearchRepositoryFragment : BaseFragment() {
         }
 
         cboClass!!.setOnClickListener {
-            if (iAcademicBoardID > 0) {
-                if (iSettingsID == 1) {
-                    populateClass(iAcademicBoardID)
-                } else {
-                    populateSemesterClass(iAcademicBoardID)
-                }
-                if (::classItems.isInitialized) {
-                    showClassDialog()
-                }
+            if (::classItems.isInitialized) {
+                showClassDialog()
             }
         }
 
         cboSubject!!.setOnClickListener {
-            if (iAcademicBoardID > 0) {
-                populateSubject()
-            }
             if (::populateSubjectList.isInitialized) {
                 showSubjectDialog()
             }
@@ -233,11 +222,18 @@ class KMSearchRepositoryFragment : BaseFragment() {
         val dialogRecyclerView: RecyclerView = dialog!!.findViewById(R.id.spinnerItemsRecyclerView)
         dialogRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = KM_Board(
+            adapter = KMS_Board(
                 boardItems,
-                KM_Board.OnItemClick {
+                KMS_Board.OnItemClick {
                     cboBoard!!.text = it.sName
                     iAcademicBoardID = it.id
+                    if (iAcademicBoardID > 0) {
+                        if (iSettingsID == 1) {
+                            populateClass(iAcademicBoardID)
+                        } else {
+                            populateSemesterClass(iAcademicBoardID)
+                        }
+                    }
                 })
         }
         dialog!!.show()
@@ -257,7 +253,7 @@ class KMSearchRepositoryFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {
@@ -302,6 +298,9 @@ class KMSearchRepositoryFragment : BaseFragment() {
                     KMS_Class.OnItemClick {
                         cboClass!!.text = it.sClassStandard
                         iClassID = it.iClassStandardID
+                        if (iAcademicBoardID > 0) {
+                            populateSubject()
+                        }
                     })
             }
             dialog!!.show()
@@ -362,7 +361,7 @@ class KMSearchRepositoryFragment : BaseFragment() {
      */
     private fun populateContentTypes(sBaseURL: String, sToken: String) {
         mastersViewModel.populateKMContentType(
-            url = sBaseURL,
+            url = sBaseURL + POPULATE_MASTER_LIST,
             sAuthorization = sToken,
             sTableName = MasterTableNames.MASTERS_KNOWLEDGE_MANAGEMENT_CONTENT_TYPES
         )

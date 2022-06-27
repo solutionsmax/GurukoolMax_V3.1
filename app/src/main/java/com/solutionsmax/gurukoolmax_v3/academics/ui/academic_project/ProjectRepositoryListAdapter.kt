@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.project.RetrieveAcademicProjectItem
 import com.solutionsmax.gurukoolmax_v3.core.common.WorkflowStatus
+import com.solutionsmax.gurukoolmax_v3.core.extension.invisible
+import com.solutionsmax.gurukoolmax_v3.core.extension.visible
 import com.solutionsmax.gurukoolmax_v3.databinding.ProjectRepositoryListItemBinding
 
 class ProjectRepositoryListAdapter(
@@ -41,6 +43,11 @@ class ProjectRepositoryListAdapter(
             binding.clickListener = clickListener
             binding.lblStatus.text = WorkflowStatus.setStatus(item.iWorkflowStatusID)
             binding.lblStatus.setBackgroundColor(getStatusColors(item.iWorkflowStatusID))
+            if (item.iWorkflowStatusID == 3 || item.iWorkflowStatusID == 4) {
+                binding.lblEdit.invisible()
+            } else {
+                binding.lblEdit.visible()
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.M)

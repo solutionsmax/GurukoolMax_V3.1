@@ -226,6 +226,26 @@ object MethodConstants {
     const val RETRIEVE_LIST_CURRICULUM_SETUP_INFO = "/ACurriculumSetup/RetrieveList"
     const val RETRIEVE_DETAILS_CURRICULUM_SETUP_INFO = "/ACurriculumSetup/RetrieveDetails"
 
+    // Learning Sessions
+    const val POST_CURRICULUM_LESSON_PLANNER = "/ACurriculumLessonsPlanner/PostInfo"
+    const val AMEND_CURRICULUM_LESSON_PLANNER = "/ACurriculumLessonsPlanner/AmendInfo"
+    const val AMEND_PROGRESS_INFO_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/AmendProgressInfo"
+    const val CHECK_DUPLICATE_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/CheckDuplicateInfo"
+    const val SET_STATUS_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/SetStatusInfo"
+    const val RETRIEVE_TOPIC_LIST_BY_FACULTY_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/RetrieveCurriculumTopicsListByFaculty"
+    const val RETRIEVE_DETAILS_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/RetrieveDetails"
+    const val RETRIEVE_LIST_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/RetrieveList"
+    const val RETRIEVE_LIST_BY_FACULTY_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/RetrieveListByFaculty"
+    const val RETRIEVE_LIST_BY_FILTER_CURRICULUM_LESSON_PLANNER =
+        "/ACurriculumLessonsPlanner/RetrieveListByFilter"
+
     // Examination Schedule
     const val POST_EXAM_SCHEDULE = "/AExaminationSchedule/PostInfo"
     const val AMEND_EXAM_SCHEDULE = "/AExaminationSchedule/AmendInfo"
@@ -263,4 +283,16 @@ object MethodConstants {
     const val RETRIEVE_STUDENT_EXAM_SUMMARY_EXAM_SETUP =
         "/ExaminationConfig/RetrieveStudentExaminationSummary"
     const val RETRIEVE_SUBJECT_LIST_EXAM_SETUP = "/ExaminationConfig/RetrieveSubjectList"
+
+    // Exam result
+    const val POST_EXAM_RESULT = "/ExamResult/PostInfo"
+    const val AMEND_EXAM_RESULT = "/ExamResult/AmendInfo"
+    const val CHECK_DUPLICATE_EXAM_RESULT = "/ExamResult/CheckDuplicateInfo"
+    const val SET_STATUS_EXAM_RESULT = "/ExamResult/SetStatusInfo"
+    const val RETRIEVE_DETAILS_EXAM_RESULT = "/ExamResult/RetrieveDetails"
+    const val RETRIEVE_LIST_EXAM_RESULT = "/ExamResult/RetrieveList"
+
+    // Map Subject to Faculty
+    const val POPULATE_FACULTY_LIST_MAP_SUBJECT_TO_FACULTY =
+        "/MapSubject2Faculty/PopulateFacultyList"
 }

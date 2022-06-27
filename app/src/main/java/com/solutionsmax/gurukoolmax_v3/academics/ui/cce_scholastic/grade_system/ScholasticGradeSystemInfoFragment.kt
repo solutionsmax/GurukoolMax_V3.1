@@ -372,7 +372,7 @@ class ScholasticGradeSystemInfoFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {

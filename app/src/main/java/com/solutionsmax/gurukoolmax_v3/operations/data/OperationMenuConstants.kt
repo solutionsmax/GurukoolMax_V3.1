@@ -9,7 +9,15 @@ object OperationMenuConstants {
     const val FLEET_REGISTRY = "Registry"
     const val VEHICLE_MASTER = "Vehicle Master"
     const val ACADEMICS = "Academics"
-
+    const val ADMISSIONS = "Admissions"
+    const val SERVICES = "Services"
+    const val STUDENT = "Student"
+    const val STAFF = "Staff"
+    const val LIBRARY = "Library"
+    const val ACCOUNTING = "Accounting"
+    const val PRO_DESK = "PRO Desk"
+    const val MISCELLANEOUS = "Miscellaneous"
+    const val CRM = "CRM"
 }
 
 object OperationsSubMenuConstants {

@@ -46,3 +46,10 @@ data class RetrieveCurriculumListParams(
     val iSubjectID: Int,
     val iStatusID: Int
 )
+
+data class SetCurriculumStatusParams(
+    val url: String,
+    val sAuthorization: String,
+    val id: Int,
+    val iStatusId: Int
+)

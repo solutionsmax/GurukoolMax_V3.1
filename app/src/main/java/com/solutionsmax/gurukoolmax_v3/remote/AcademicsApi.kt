@@ -6,6 +6,8 @@ import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.common.PopulateCl
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.curriculum.PopulateCurriculumSessionTopicList
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.curriculum.PostCurriculumInfoItem
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.curriculum.RetrieveCurriculumInfoItems
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_result.PostExamResultItem
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_result.RetrieveExamResultsItems
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_schedule.PopulateExamScheduleListItem
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_schedule.PostExamScheduleItem
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_schedule.RetrieveExamScheduleItems
@@ -13,6 +15,9 @@ import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_setup.PostEx
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_setup.RetrieveExamSetupDetails
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.km.PostKMInfo
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.km.RetrieveKMInfo
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.learning_session.PostLearningSessionItem
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.learning_session.RetrieveLearningSessionItem
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.map_subject_to_faculty.PopulateMapSubjectToFacultyItem
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.project.PostProjectInfoItem
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.project.RetrieveAcademicProjectItem
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.scholastic_recording.PopulateStudentScholasticGradingItem
@@ -210,7 +215,7 @@ interface AcademicsApi {
         @Url url: String,
         @Header("Authorization") sAuthorization: String,
         @Query("id") id: Int
-    ):List<RetrieveScholasticRecordingItems>
+    ): List<RetrieveScholasticRecordingItems>
 
     @GET
     suspend fun retrieveScholasticRecordingList(
@@ -221,7 +226,7 @@ interface AcademicsApi {
         @Query("iBoardID") iBoardID: Int,
         @Query("iClassID") iClassID: Int,
         @Query("iStatusID") iStatusID: Int
-    ):List<RetrieveScholasticRecordingItems>
+    ): List<RetrieveScholasticRecordingItems>
 
     // Academic Project
     @POST
@@ -253,7 +258,7 @@ interface AcademicsApi {
     suspend fun setAcademicProjectStatus(
         @Url url: String,
         @Header("Authorization") sAuthorization: String,
-        @Query("iStatusID") iStatusID: String,
+        @Query("iStatusID") iStatusID: Int,
         @Query("id") id: Int
     ): Int
 
@@ -416,6 +421,14 @@ interface AcademicsApi {
     ): Int
 
     @GET
+    suspend fun setStatusSubjectManagement(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iStatusID") iStatusID: Int,
+        @Query("id") id: Int
+    ): Int
+
+    @GET
     suspend fun populateSubjectList(
         @Url url: String,
         @Header("Authorization") sAuthorization: String,
@@ -457,6 +470,107 @@ interface AcademicsApi {
     ): List<PopulateSubjectProgramList>
 
     /**
+     * Learning Session
+     */
+    @POST
+    suspend fun postLearningSessionInfo(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postLearningSessionItem: PostLearningSessionItem
+    ): Int
+
+    @POST
+    suspend fun amendLearningSessionInfo(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postLearningSessionItem: PostLearningSessionItem
+    ): Int
+
+    @GET
+    suspend fun amendLearningSessionProgress(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("sFacultyRemarks") sFacultyRemarks: String,
+        @Query("iProgressStatusID") iProgressStatusID: Int,
+        @Query("dCompletionDate") dCompletionDate: String,
+        @Query("iStatusID") iStatusID: Int,
+        @Query("id") id: Int
+    ): Int
+
+    @GET
+    suspend fun checkDuplicateLearningSessionInfo(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iBoardID") iBoardID: Int,
+        @Query("iClassStandardID") iClassStandardID: Int,
+        @Query("iYearID") iYearID: Int,
+        @Query("iSubjectID") iSubjectID: Int,
+        @Query("iSectionID") iSectionID: Int,
+        @Query("iSessionTopicID") iSessionTopicID: Int,
+        @Query("sTopicDetails") sTopicDetails: String
+    ): Int
+
+    @GET
+    suspend fun setLearningSessionStatus(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iStatusId") iStatusId: Int,
+        @Query("id") id: Int
+    ): Int
+
+    @GET
+    suspend fun retrieveCurriculumTopicListByFaculty(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iBoardID") iBoardID: Int,
+        @Query("iClassStandardID") iClassStandardID: Int,
+        @Query("iYearID") iYearID: Int,
+        @Query("iSubjectID") iSubjectID: Int,
+        @Query("iSectionID") iSectionID: Int,
+        @Query("iFacultyID") iFacultyID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<RetrieveLearningSessionItem>
+
+    @GET
+    suspend fun retrieveLearningSessionDetails(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int
+    ): List<RetrieveLearningSessionItem>
+
+    @GET
+    suspend fun retrieveLearningSessionList(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iBoardID") iBoardID: Int,
+        @Query("iClassStandardID") iClassStandardID: Int,
+        @Query("iSubjectID") iSubjectID: Int,
+        @Query("iCurriculumID") iCurriculumID: Int,
+        @Query("iFacultyID") iFacultyID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<RetrieveLearningSessionItem>
+
+    @GET
+    suspend fun retrieveLearningSessionListByFaculty(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iBoardID") iBoardID: Int,
+        @Query("iClassStandardID") iClassStandardID: Int,
+        @Query("iSubjectID") iSubjectID: Int,
+        @Query("iCurriculumID") iCurriculumID: Int,
+        @Query("iFacultyID") iFacultyID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<RetrieveLearningSessionItem>
+
+    /**
      * Curriculum
      */
     @POST
@@ -471,6 +585,14 @@ interface AcademicsApi {
         @Url url: String,
         @Header("Authorization") sAuthorization: String,
         @Body postCurriculumInfoItem: PostCurriculumInfoItem
+    ): Int
+
+    @GET
+    suspend fun setCurriculumStatus(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int,
+        @Query("iStatusID") iStatusID: Int
     ): Int
 
     @GET
@@ -643,4 +765,81 @@ interface AcademicsApi {
         @Query("iStatusID") iStatusID: Int,
         @Query("iStudentID") iStudentID: Int
     ): List<RetrieveExamSetupDetails>
+
+    @GET
+    suspend fun setExaminationConfigStatus(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iStatusID") iStatusID: Int,
+        @Query("id") id: Int
+    ):Int
+
+    /**
+     * Exam Result
+     */
+    @POST
+    suspend fun postExamResult(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postExamResultItem: PostExamResultItem
+    ): Int
+
+    @POST
+    suspend fun amendExamResult(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Body postExamResultItem: PostExamResultItem
+    ): Int
+
+    @GET
+    suspend fun checkDuplicateExamResult(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iBoardID") iBoardID: Int,
+        @Query("iClassID") iClassID: Int,
+        @Query("iYearID") iYearID: Int,
+        @Query("iScheduledID") iScheduledID: Int,
+        @Query("iSubjectID") iSubjectID: Int,
+        @Query("iStudentID") iStudentID: Int
+    ): Int
+
+    @GET
+    suspend fun retrieveExamResultDetails(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("id") id: Int
+    ): List<RetrieveExamResultsItems>
+
+    @GET
+    suspend fun retrieveExamResultList(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iBoardID") iBoardID: Int,
+        @Query("iClassID") iClassID: Int,
+        @Query("iYearID") iYearID: Int,
+        @Query("iSubjectID") iSubjectID: Int,
+        @Query("iStudentID") iStudentID: Int,
+        @Query("iScheduledID") iScheduledID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<RetrieveExamResultsItems>
+
+    /**
+     * Map Subject to Faculty
+     */
+    @GET
+    suspend fun populateMapSubjectToFacultyList(
+        @Url url: String,
+        @Header("Authorization") sAuthorization: String,
+        @Query("iGroupID") iGroupID: Int,
+        @Query("iSchoolID") iSchoolID: Int,
+        @Query("iBoardID") iBoardID: Int,
+        @Query("iClassID") iClassID: Int,
+        @Query("iFacultyID") iFacultyID: Int,
+        @Query("iSubjectID") iSubjectID: Int,
+        @Query("iStatusID") iStatusID: Int
+    ): List<PopulateMapSubjectToFacultyItem>
 }

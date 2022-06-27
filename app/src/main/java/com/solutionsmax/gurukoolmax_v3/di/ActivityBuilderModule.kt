@@ -20,6 +20,7 @@ import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.CurriculumSetupListFragment
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.learning_sessions.SetupLearningSessionInfoFragment
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.learning_sessions.SetupLearningSessionListFragment
+import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.learning_sessions.review_learning_session.ReviewLearningSessionListFragment
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.schedule_online_lesson_plan_sessions.OnlineSessionLessonsPlanInfoFragment
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.schedule_online_lesson_plan_sessions.OnlineSessionLessonsPlanListFragment
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.subject_management.SubjectManagementInfoFragment
@@ -242,4 +243,7 @@ abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun provideKMSearchResultFragment(): KmSearchResultListFragment
+
+    @ContributesAndroidInjector
+    abstract fun provideReviewLearningSessionFragment(): ReviewLearningSessionListFragment
 }

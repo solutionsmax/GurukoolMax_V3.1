@@ -426,5 +426,10 @@
             android:name="kmSearchBundle"
             app:argType="com.solutionsmax.gurukoolmax_v3.academics.ui.km.KMSearchBundle" />
     </fragment>
+    <fragment
+        android:id="@+id/reviewLearningSessionListFragment"
+        android:name="com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.learning_sessions.review_learning_session.ReviewLearningSessionListFragment"
+        android:label="fragment_review_learning_session_list"
+        tools:layout="@layout/fragment_review_learning_session_list" />
 
 </navigation>

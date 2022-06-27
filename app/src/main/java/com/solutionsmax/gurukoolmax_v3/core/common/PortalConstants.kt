@@ -43,7 +43,3 @@ object RequestBodyConstants {
 object PhotoConstants {
     const val MEDIA_BUS_IMAGE = "Media/Fleet/"
 }
-
-object ApiKey {
-    const val MOVIE_API_KEY = "AIzaSyAQIEp3ZXGu1mKVBwc4moU3LGXXIg9XO44"
-}

@@ -76,7 +76,7 @@
                     <TextView
                         android:id="@+id/lblExamDate"
                         style="@style/TextViewDateSelect"
-                        android:hint="@string/purchase_date" />
+                        android:hint="@string/exam_date" />
 
                 </LinearLayout>
 
@@ -128,7 +128,7 @@
                     <TextView
                         android:id="@+id/lblStartTime"
                         style="@style/TextViewTimeSelect"
-                        android:hint="@string/purchase_date" />
+                        android:hint="@string/start_time" />
 
                 </LinearLayout>
 
@@ -141,7 +141,7 @@
                     <TextView
                         android:id="@+id/lblEndTime"
                         style="@style/TextViewTimeSelect"
-                        android:hint="@string/purchase_date" />
+                        android:hint="@string/end_time" />
 
                 </LinearLayout>
 

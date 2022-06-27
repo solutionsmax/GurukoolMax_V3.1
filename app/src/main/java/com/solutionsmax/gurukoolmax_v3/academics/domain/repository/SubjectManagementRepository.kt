@@ -11,6 +11,7 @@ import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POPULATE_SUBJ
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.POST_SUBJECT_MANAGEMENT_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_SUBJECT_LIST_MAP_MAP_DETAILS_SUBJECT_MANAGEMENT_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.RETRIEVE_SUBJECT_LIST_SUBJECT_MANAGEMENT_INFO
+import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants.SET_ACTIVATION_STATUS_SUBJECT_MANAGEMENT_INFO
 import com.solutionsmax.gurukoolmax_v3.core.common.TokenConstants
 import com.solutionsmax.gurukoolmax_v3.core.exception.Failure
 import com.solutionsmax.gurukoolmax_v3.core.functional.Either
@@ -139,6 +140,20 @@ class SubjectManagementRepository @Inject constructor(
                 url = url + POPULATE_SUBJECT_PROGRAM_LIST,
                 "${TokenConstants.BEARER} $sAuthorization",
                 iGroupID, iSchoolID, iBoardID, iStatusID
+            )
+        )
+
+    suspend fun setStatusSubjectManagement(
+        url: String,
+        sAuthorization: String,
+        iStatusID: Int,
+        id: Int
+    ): Either<Failure, Int> =
+        Either.Right(
+            academicsApi.setStatusSubjectManagement(
+                url = url + SET_ACTIVATION_STATUS_SUBJECT_MANAGEMENT_INFO,
+                "${TokenConstants.BEARER} $sAuthorization",
+                iStatusID, id
             )
         )
 }

@@ -37,7 +37,7 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.SettingsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentProjectsRepositorySearchBinding
-import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
@@ -87,7 +87,7 @@ class ProjectsRepositorySearchFragment : BaseFragment() {
             title = getString(R.string.search_project_repo)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            val bundle = bundleOf("menu" to Academics.CURRICULUM_MANAGEMENT)
+            val bundle = bundleOf("menu" to OperationMenuConstants.ACADEMICS)
             setNavigationOnClickListener {
                 currentNavController.navigate(
                     R.id.administratorSubMenuFragment,
@@ -276,7 +276,7 @@ class ProjectsRepositorySearchFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {

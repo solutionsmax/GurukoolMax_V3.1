@@ -283,5 +283,14 @@
     <string name="examination_date">Examination Date</string>
 
     <string name="scholastic">Scholastic</string>
+    <string name="start_date">Start Date</string>
+    <string name="class_or_section">Class/Section</string>
+    <string name="curriculum_section_name">Curriculum Section Name</string>
+    <string name="learning_topic">Learning Topic</string>
+    <string name="topic_details">Topic Details</string>
+    <string name="progress_status">Progress Status</string>
+    <string name="submit_for_review">Submit for Review</string>
+    <string name="could_not_update_status">Could not update Status</string>
+    <string name="could_not_update_status_desc">Something went wrong. Could not update status. Please try again.</string>
 
 </resources>

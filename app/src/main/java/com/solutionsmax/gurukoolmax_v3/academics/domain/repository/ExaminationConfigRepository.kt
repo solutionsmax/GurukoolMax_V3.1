@@ -115,4 +115,19 @@ class ExaminationConfigRepository @Inject constructor(
                 iStudentID
             )
         )
+
+    suspend fun setExaminationConfigStatus(
+        url: String,
+        sAuthorization: String,
+        iStatusID: Int,
+        id: Int
+    ): Either<Failure, Int> =
+        Either.Right(
+            academicsApi.setExaminationConfigStatus(
+                url = "$url${MethodConstants.SET_STATUS_EXAM_SETUP}",
+                sAuthorization = "${TokenConstants.BEARER} $sAuthorization",
+                iStatusID,
+                id
+            )
+        )
 }

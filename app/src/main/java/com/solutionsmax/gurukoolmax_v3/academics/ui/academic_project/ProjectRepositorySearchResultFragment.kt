@@ -22,6 +22,7 @@ import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentProjectRepositorySearchResultBinding
 import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
@@ -52,7 +53,7 @@ class ProjectRepositorySearchResultFragment : BaseFragment() {
             title = getString(R.string.project_repository)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            val bundle = bundleOf("menu" to Academics.CURRICULUM_MANAGEMENT)
+            val bundle = bundleOf("menu" to OperationMenuConstants.ACADEMICS)
             setNavigationOnClickListener {
                 currentNavController.navigate(
                     R.id.projectsRepositorySearchFragment,

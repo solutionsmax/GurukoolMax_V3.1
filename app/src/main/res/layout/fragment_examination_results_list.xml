@@ -20,7 +20,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/scholasticGradeList"
+            android:id="@+id/examResultList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -99,6 +100,7 @@ class AcademicsCommonBottomDialogSheetFragment : BottomSheetDialogFragment() {
                 requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController = navHostFragment.navController
             layoutManager = LinearLayoutManager(requireContext())
+            val bundle = bundleOf("id" to -1)
             adapter = AcademicsCommonBottomDialogAdapter(
                 academicMenuOptions,
                 AcademicsCommonBottomDialogAdapter.OnItemClick {
@@ -111,10 +113,14 @@ class AcademicsCommonBottomDialogSheetFragment : BottomSheetDialogFragment() {
 
                         SUBJECT_MANAGEMENT -> navController.navigate(R.id.subjectManagementListFragment)
                         COURSE_SYLLABUS_MANAGEMENT -> navController.navigate(R.id.curriculumSetupListFragment)
-                        SETUP_LEARNING_SESSIONS -> navController.navigate(R.id.setupLearningSessionInfoFragment)
+                        SETUP_LEARNING_SESSIONS -> navController.navigate(R.id.setupLearningSessionListFragment)
+                        REVIEW_LEARNING_SESSIONS -> navController.navigate(R.id.reviewLearningSessionListFragment)
                         SCHEDULE_ONLINE_LESSON_PLAN_SESSION -> navController.navigate(R.id.onlineSessionLessonsPlanListFragment)
 
-                        SUBMISSION_SETUP -> navController.navigate(R.id.projectSubmissionInfoFragment)
+                        SUBMISSION_SETUP -> navController.navigate(
+                            R.id.projectSubmissionInfoFragment,
+                            bundle
+                        )
                         PROJECT_LIST -> navController.navigate(R.id.projectsRepositoryListFragment)
                         SEARCH -> navController.navigate(R.id.projectsRepositorySearchFragment)
 

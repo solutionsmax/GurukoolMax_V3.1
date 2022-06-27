@@ -13,6 +13,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.SettingsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentExaminationSetupInfoBinding
+import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import java.text.SimpleDateFormat
@@ -111,9 +113,10 @@ class ExaminationSetupInfoFragment : BaseFragment() {
             title = getString(R.string.examination_registration)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+            val bundle = bundleOf("menu" to Academics.EXAMINATION_MANAGEMENT)
             setNavigationOnClickListener {
                 currentNavController.navigate(
-                    R.id.examinationSetupListFragment
+                    R.id.examinationSetupListFragment,bundle
                 )
             }
         }
@@ -171,6 +174,8 @@ class ExaminationSetupInfoFragment : BaseFragment() {
             ViewModelProvider(this, viewModelFactory)[SubjectManagementViewModel::class.java]
         examScheduleViewModel =
             ViewModelProvider(this, viewModelFactory)[ExaminationScheduleViewModel::class.java]
+        examSetupViewModel =
+            ViewModelProvider(this, viewModelFactory)[ExaminationSetupViewModel::class.java]
 
         tokenLicenseViewModel.retrieveTokenLicenseInfo()
         settingsViewModel.retrieveSettings()
@@ -189,31 +194,18 @@ class ExaminationSetupInfoFragment : BaseFragment() {
         }
 
         cboClass!!.setOnClickListener {
-            if (iBoardID > 0) {
-                if (iSettingsID == 1) {
-                    populateClass(iBoardID)
-                } else {
-                    populateSemesterClass(iBoardID)
-                }
-                if (::classItems.isInitialized) {
-                    showClassDialog()
-                }
+            if (::classItems.isInitialized) {
+                showClassDialog()
             }
         }
 
         cboSubject!!.setOnClickListener {
-            if (iBoardID > 0) {
-                populateSubject()
-            }
             if (::populateSubjectList.isInitialized) {
                 showSubjectDialog()
             }
         }
 
         cboExaminationSchedule!!.setOnClickListener {
-            if (iBoardID > 0 && iAcademicYearID > 0) {
-                populateExamSchedule(iBoardID, iAcademicYearID)
-            }
             if (::populateExamScheduleList.isInitialized) {
                 shoExamScheduleDialog()
             }
@@ -446,7 +438,7 @@ class ExaminationSetupInfoFragment : BaseFragment() {
      */
     private fun populateExamFocusAssignment(sBaseURL: String, sToken: String) {
         mastersViewModel.populateFocusAssignment(
-            sBaseURL, sToken, MASTERS_ACADEMICS_ASSIGNMENT_CATEGORIES
+            sBaseURL+ MethodConstants.POPULATE_MASTER_LIST, sToken, MASTERS_ACADEMICS_ASSIGNMENT_CATEGORIES
         )
         mastersViewModel.populateFocusAssignmentMutableData.observe(viewLifecycleOwner) {
             focusList = it
@@ -483,7 +475,7 @@ class ExaminationSetupInfoFragment : BaseFragment() {
      */
     private fun populateExamAcademicYear(sBaseURL: String, sToken: String) {
         mastersViewModel.populateAcademicYear(
-            sBaseURL, sToken, MASTERS_ENQUIRY_CALENDAR_YEAR
+            sBaseURL+ MethodConstants.POPULATE_MASTER_LIST, sToken, MASTERS_ENQUIRY_CALENDAR_YEAR
         )
         mastersViewModel.populateAcademicYearMutableData.observe(viewLifecycleOwner) {
             academicYearList = it
@@ -505,8 +497,11 @@ class ExaminationSetupInfoFragment : BaseFragment() {
             adapter = ExamSetupAcademicYear(
                 academicYearList,
                 ExamSetupAcademicYear.OnItemClick {
-                    cboBoard!!.text = it.sName
-                    iBoardID = it.id
+                    cboAcademicYear!!.text = it.sName
+                    iAcademicYearID = it.id
+                    if (iBoardID > 0 && iAcademicYearID > 0) {
+                        populateExamSchedule(iBoardID, iAcademicYearID)
+                    }
                 })
         }
         dialog!!.show()
@@ -546,6 +541,13 @@ class ExaminationSetupInfoFragment : BaseFragment() {
                 ExamSetupBoard.OnItemClick {
                     cboBoard!!.text = it.sName
                     iBoardID = it.id
+                    if (iBoardID > 0) {
+                        if (iSettingsID == 1) {
+                            populateClass(iBoardID)
+                        } else {
+                            populateSemesterClass(iBoardID)
+                        }
+                    }
                 })
         }
         dialog!!.show()
@@ -610,7 +612,7 @@ class ExaminationSetupInfoFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {
@@ -655,6 +657,9 @@ class ExaminationSetupInfoFragment : BaseFragment() {
                     ExamSetupClass.OnItemClick {
                         cboClass!!.text = it.sClassStandard
                         iClassID = it.iClassStandardID
+                        if (iBoardID > 0) {
+                            populateSubject()
+                        }
                     })
             }
             dialog!!.show()

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_setup.RetrieveExamSetupDetails
 import com.solutionsmax.gurukoolmax_v3.core.common.WorkflowStatus
+import com.solutionsmax.gurukoolmax_v3.core.extension.invisible
+import com.solutionsmax.gurukoolmax_v3.core.extension.visible
 import com.solutionsmax.gurukoolmax_v3.databinding.ExaminationSetupListItemBinding
 
 class ExaminationSetupListAdapter(
@@ -24,6 +26,11 @@ class ExaminationSetupListAdapter(
             binding.clickListener = clickListener
             binding.lblStatus.text = WorkflowStatus.setStatus(items.iWorkflowStatusID)
             binding.lblStatus.setBackgroundColor(getStatusColors(items.iWorkflowStatusID))
+            if (items.iWorkflowStatusID == 3 || items.iWorkflowStatusID == 4) {
+                binding.lblEdit.invisible()
+            } else {
+                binding.lblEdit.visible()
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.M)

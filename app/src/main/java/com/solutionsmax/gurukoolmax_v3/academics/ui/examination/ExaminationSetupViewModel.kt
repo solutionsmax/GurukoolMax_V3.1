@@ -3,10 +3,7 @@ package com.solutionsmax.gurukoolmax_v3.academics.ui.examination
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.exam_setup.RetrieveExamSetupDetails
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.CheckDuplicateExamParams
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.PostExamSetupParams
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.RetrieveExamSetupDetailsParams
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.RetrieveExamSetupListParams
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.*
 import com.solutionsmax.gurukoolmax_v3.academics.domain.interactors.examination.*
 import com.solutionsmax.gurukoolmax_v3.core.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.collect
@@ -17,7 +14,8 @@ class ExaminationSetupViewModel @Inject constructor(
     private val amendExamSetupInfoUseCase: AmendExamSetupInfoUseCase,
     private val checkDuplicateExamSetupUseCase: CheckDuplicateExamSetupUseCase,
     private val retrieveExamSetupDetailUseCase: RetrieveExamSetupDetailUseCase,
-    private val retrieveExamSetupListUseCase: RetrieveExamSetupListUseCase
+    private val retrieveExamSetupListUseCase: RetrieveExamSetupListUseCase,
+    private val setExamSetupStatusUseCase: SetExamSetupStatusUseCase
 ) : BaseViewModel() {
 
     private val _postExaminationSetupMutableData: MutableLiveData<Int> = MutableLiveData()
@@ -41,6 +39,10 @@ class ExaminationSetupViewModel @Inject constructor(
         MutableLiveData()
     val retrieveExamSetupListMutableData: LiveData<List<RetrieveExamSetupDetails>>
         get() = _retrieveExamSetupListMutableData
+
+    private val _setExamStatusMutableData: MutableLiveData<Int> = MutableLiveData()
+    val setExamStatusMutableData: LiveData<Int>
+        get() = _setExamStatusMutableData
 
     fun postExamSetupInfo(postExamSetupParams: PostExamSetupParams) = launchIOCoroutine {
         postExamSetupInfoUseCase(postExamSetupParams).fold(
@@ -100,7 +102,18 @@ class ExaminationSetupViewModel @Inject constructor(
                     }
                 )
             }
+        }
 
+    fun setExamConfigStatus(setExamSetupStatusParams: SetExamSetupStatusParams) =
+        launchIOCoroutine {
+            setExamSetupStatusUseCase(setExamSetupStatusParams).fold(
+                {
+                    postError(it)
+                },
+                {
+                    _setExamStatusMutableData.postValue(it)
+                }
+            )
         }
 
 }

@@ -72,12 +72,12 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
         var dialog: Dialog? = null
     }
 
-    private lateinit var boardItems: List<PopulateMasterListItem>
-    private lateinit var classItems: List<PopulateClassItems>
-    private lateinit var populateSubjectList: List<PopulateSubjectProgramList>
-    private lateinit var contentTypesItems: List<PopulateMasterListItem>
-    private lateinit var submissionCategoryItems: List<PopulateMasterListItem>
-    private lateinit var formatTypeItems: List<PopulateMasterListItem>
+    private var boardItems: List<PopulateMasterListItem> = emptyList()
+    private var classItems: List<PopulateClassItems> = emptyList()
+    private var populateSubjectList: List<PopulateSubjectProgramList> = emptyList()
+    private var contentTypesItems: List<PopulateMasterListItem> = emptyList()
+    private var submissionCategoryItems: List<PopulateMasterListItem> = emptyList()
+    private var formatTypeItems: List<PopulateMasterListItem> = emptyList()
 
     private var iEditID = -1
     private var sClassMethod = ""
@@ -148,25 +148,11 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
         }
 
         cboClass!!.setOnClickListener {
-            if (iAcademicBoardID > 0) {
-                if (iSettingsID == 1) {
-                    populateClass(iAcademicBoardID)
-                } else {
-                    populateSemesterClass(iAcademicBoardID)
-                }
-                if (::classItems.isInitialized) {
-                    showClassDialog()
-                }
-            }
+            showClassDialog()
         }
 
         cboSubject!!.setOnClickListener {
-            if (iAcademicBoardID > 0) {
-                populateSubject()
-            }
-            if (::populateSubjectList.isInitialized) {
-                showSubjectDialog()
-            }
+            showSubjectDialog()
         }
 
         binding.btnSubmit.setOnClickListener {
@@ -284,6 +270,10 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
             with(kmViewModel) {
                 mutableKmDetails.observe(viewLifecycleOwner) { details ->
                     for (items in details) {
+                        populateAcademicBoard(sBaseURL, sToken)
+                        populateContentTypes(sBaseURL, sToken)
+                        populateSubmissionCategory(sBaseURL, sToken)
+                        populateSubmissionFormat(sBaseURL, sToken)
                         cboBoard!!.text = items.sAcademicBoard
                         iAcademicBoardID = items.iAcademicBoardID
                         cboClass!!.text = items.sClassStandard
@@ -369,6 +359,13 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
                 KM_Board.OnItemClick {
                     cboBoard!!.text = it.sName
                     iAcademicBoardID = it.id
+                    if (iAcademicBoardID > 0) {
+                        if (iSettingsID == 1) {
+                            populateClass(iAcademicBoardID)
+                        } else {
+                            populateSemesterClass(iAcademicBoardID)
+                        }
+                    }
                 })
         }
         dialog!!.show()
@@ -388,7 +385,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iBoardID,
-                iStatusID = -1
+                iStatusID = 4
             )
         )
         academicsViewModel.mutablePopulateSemesterClass.observe(viewLifecycleOwner) {
@@ -433,6 +430,9 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
                     KM_Class.OnItemClick {
                         cboClass!!.text = it.sClassStandard
                         iClassID = it.iClassStandardID
+                        if (iAcademicBoardID > 0) {
+                            populateSubject()
+                        }
                     })
             }
             dialog!!.show()
@@ -493,7 +493,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
      */
     private fun populateContentTypes(sBaseURL: String, sToken: String) {
         mastersViewModel.populateKMContentType(
-            url = sBaseURL,
+            url = sBaseURL + MethodConstants.POPULATE_MASTER_LIST,
             sAuthorization = sToken,
             sTableName = MASTERS_KNOWLEDGE_MANAGEMENT_CONTENT_TYPES
         )
@@ -515,7 +515,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
         dialogRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = KM_ContentTypes(
-                boardItems,
+                contentTypesItems,
                 KM_ContentTypes.OnItemClick {
                     cboBoard!!.text = it.sName
                     iAcademicBoardID = it.id
@@ -532,7 +532,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
      */
     private fun populateSubmissionCategory(sBaseURL: String, sToken: String) {
         mastersViewModel.populateKMSubmissionCategory(
-            url = sBaseURL,
+            url = sBaseURL + MethodConstants.POPULATE_MASTER_LIST,
             sAuthorization = sToken,
             sTableName = MASTERS_KNOWLEDGE_MANAGEMENT_SOURCES
         )
@@ -554,7 +554,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
         dialogRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = KM_SubmissionCategory(
-                boardItems,
+                submissionCategoryItems,
                 KM_SubmissionCategory.OnItemClick {
                     cboBoard!!.text = it.sName
                     iAcademicBoardID = it.id
@@ -571,7 +571,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
      */
     private fun populateSubmissionFormat(sBaseURL: String, sToken: String) {
         mastersViewModel.populateKmFormatTypes(
-            url = sBaseURL,
+            url = sBaseURL + MethodConstants.POPULATE_MASTER_LIST,
             sAuthorization = sToken,
             sTableName = MASTERS_KNOWLEDGE_MANAGEMENT_FORMAT_TYPES
         )
@@ -593,7 +593,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
         dialogRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = KM_FormatTypes(
-                boardItems,
+                formatTypeItems,
                 KM_FormatTypes.OnItemClick {
                     cboBoard!!.text = it.sName
                     iAcademicBoardID = it.id

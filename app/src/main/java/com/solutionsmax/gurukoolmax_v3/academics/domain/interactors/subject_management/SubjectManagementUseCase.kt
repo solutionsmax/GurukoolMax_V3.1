@@ -119,5 +119,17 @@ class PopulateSubjectProgramsListUseCase @Inject constructor(
             )
         )
     }
+}
 
+class SetSubjectProgramStatusUseCase @Inject constructor(
+    private val subjectManagementRepository: SubjectManagementRepository
+) : UseCase<Int, SetStatusSubjectProgramParams>() {
+    override suspend fun run(params: SetStatusSubjectProgramParams): Either<Failure, Int> {
+        return subjectManagementRepository.setStatusSubjectManagement(
+            url = params.url,
+            sAuthorization = params.sAuthorization,
+            iStatusID = params.iStatusID,
+            id = params.id
+        )
+    }
 }

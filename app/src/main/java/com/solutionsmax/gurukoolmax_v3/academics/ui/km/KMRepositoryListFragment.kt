@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.KmRetrieveListParams
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
@@ -21,7 +22,7 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentKMRepositoryListBinding
-import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
+import com.solutionsmax.gurukoolmax_v3.operations.data.OperationMenuConstants
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.TokenLicenseViewModel
 import javax.inject.Inject
 
@@ -52,7 +53,7 @@ class KMRepositoryListFragment : BaseFragment() {
             title = getString(R.string.knowledge_management)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            val bundle = bundleOf("menu" to Academics.CURRICULUM_MANAGEMENT)
+            val bundle = bundleOf("menu" to OperationMenuConstants.ACADEMICS)
             setNavigationOnClickListener {
                 currentNavController.navigate(
                     R.id.administratorSubMenuFragment,
@@ -81,8 +82,8 @@ class KMRepositoryListFragment : BaseFragment() {
         tokenLicenseViewModel.tokenLicenseMutableData.observe(viewLifecycleOwner) {
             kmViewModel.retrieveKmList(
                 KmRetrieveListParams(
-                    url = sBaseURL,
-                    sAuthorization = sToken,
+                    url = it.sBaseURL,
+                    sAuthorization = it.sToken,
                     iGroupID = 1,
                     iSchoolID = 1,
                     iBoardID = -1,
@@ -109,6 +110,24 @@ class KMRepositoryListFragment : BaseFragment() {
                         adapter = KmRepositoryAdapter(it, KmRepositoryAdapter.OnItemClick { item ->
                             val bundle = bundleOf("id" to item)
                             currentNavController.navigate(R.id.KMPostRepositoryInfoFragment, bundle)
+                        })
+                        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                                super.onScrolled(recyclerView, dx, dy)
+                                if (dy > 0 || dy < 0 && binding.fabCreateNew.isShown) {
+                                    binding.fabCreateNew.hide();
+                                }
+                            }
+
+                            override fun onScrollStateChanged(
+                                recyclerView: RecyclerView,
+                                newState: Int
+                            ) {
+                                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                    binding.fabCreateNew.show();
+                                }
+                                super.onScrollStateChanged(recyclerView, newState)
+                            }
                         })
                     }
                 }
