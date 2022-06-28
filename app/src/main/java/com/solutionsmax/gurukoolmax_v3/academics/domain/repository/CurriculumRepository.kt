@@ -142,7 +142,8 @@ class CurriculumRepository @Inject constructor(
         Either.Right(
             academicsApi.retrieveCurriculumList(
                 url = url + RETRIEVE_LIST_CURRICULUM_SETUP_INFO,
-                sAuthorization, iGroupID, iSchoolID, iBoardID, iGradeID, iSubjectID, iStatusID
+                sAuthorization = "${TokenConstants.BEARER} $sAuthorization",
+                iGroupID, iSchoolID, iBoardID, iGradeID, iSubjectID, iStatusID
             )
         )
 }

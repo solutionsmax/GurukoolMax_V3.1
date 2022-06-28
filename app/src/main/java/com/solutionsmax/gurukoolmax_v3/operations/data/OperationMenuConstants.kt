@@ -49,7 +49,7 @@ object Academics {
 
 object CurriculumManagement {
     const val SUBJECT_MANAGEMENT = "Subject Management"
-    const val COURSE_SYLLABUS_MANAGEMENT = "Course Syllabus Management"
+    const val COURSE_SYLLABUS_MANAGEMENT = "Courses Syllabus Management"
     const val SETUP_LEARNING_SESSIONS = "Setup Learning Sessions"
     const val REVIEW_LEARNING_SESSIONS = "Review Learning Sessions"
     const val SCHEDULE_ONLINE_LESSON_PLAN_SESSION = "Schedule Online Lesson Plan Session"

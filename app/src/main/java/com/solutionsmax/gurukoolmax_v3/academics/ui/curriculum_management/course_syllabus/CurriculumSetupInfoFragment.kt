@@ -24,7 +24,6 @@ import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.Subjec
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.spinner_adapter.CS_AcademicBoard
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.spinner_adapter.CS_Class
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.course_syllabus.spinner_adapter.CS_Subject
-import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.subject_management.SubjectManagementInfoFragment
 import com.solutionsmax.gurukoolmax_v3.core.common.MasterTableNames
 import com.solutionsmax.gurukoolmax_v3.core.common.MethodConstants
 import com.solutionsmax.gurukoolmax_v3.core.common.PortalIdConstants
