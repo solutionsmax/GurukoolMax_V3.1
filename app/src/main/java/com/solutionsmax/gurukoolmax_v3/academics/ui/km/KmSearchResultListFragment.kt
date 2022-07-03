@@ -41,9 +41,10 @@ class KmSearchResultListFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_km_search_result_list, container, false)
+        binding=FragmentKmSearchResultListBinding.inflate(inflater)
+        return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

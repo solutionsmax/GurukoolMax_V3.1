@@ -292,5 +292,6 @@
     <string name="submit_for_review">Submit for Review</string>
     <string name="could_not_update_status">Could not update Status</string>
     <string name="could_not_update_status_desc">Something went wrong. Could not update status. Please try again.</string>
+    <string name="course_learning_session">Course Learning Session</string>
 
 </resources>

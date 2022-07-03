@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../../layout/custom_preview.xml" value="0.20153985507246377" />
         <entry key="..\:/Projects/Android/GurukoolMax_V3.1/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.2925" />
         <entry key="..\:/Projects/Android/GurukoolMax_V3.1/app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.2925" />
         <entry key="..\:/Projects/Android/GurukoolMax_V3.1/app/src/main/res/drawable/indicator_selected.xml" value="0.18" />
@@ -129,12 +130,17 @@
         <entry key="..\:/Projects/Android/GurukoolMax_V3/app/src/main/res/menu/main_toolbar_menu.xml" value="0.3009833262077811" />
         <entry key="app/src/main/res/layout/curriculum_setup_list_item.xml" value="0.2375" />
         <entry key="app/src/main/res/layout/examination_schedule_item.xml" value="0.2375" />
+        <entry key="app/src/main/res/layout/examination_setup_list_item.xml" value="0.2375" />
         <entry key="app/src/main/res/layout/fragment_exam_schedule_info.xml" value="0.2375" />
         <entry key="app/src/main/res/layout/fragment_examination_setup_info.xml" value="0.2375" />
         <entry key="app/src/main/res/layout/fragment_k_m_post_repository_info.xml" value="0.2375" />
+        <entry key="app/src/main/res/layout/fragment_km_search_result_list.xml" value="0.12222222222222222" />
+        <entry key="app/src/main/res/layout/fragment_project_submission_info.xml" value="0.23505154639175257" />
         <entry key="app/src/main/res/layout/fragment_review_learning_session_list.xml" value="0.2375" />
         <entry key="app/src/main/res/layout/fragment_setup_learning_session_info.xml" value="0.2375" />
         <entry key="app/src/main/res/layout/fragment_setup_learning_session_list.xml" value="0.2375" />
+        <entry key="app/src/main/res/layout/fragment_slider_four.xml" value="0.12916666666666668" />
+        <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.12916666666666668" />
         <entry key="app/src/main/res/layout/fragment_subject_management_info.xml" value="0.2263888888888889" />
         <entry key="app/src/main/res/layout/review_edit_alert_dialog.xml" value="0.23680555555555555" />
         <entry key="app/src/main/res/layout/review_learning_session_item.xml" value="0.23680555555555555" />

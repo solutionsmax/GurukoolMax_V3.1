@@ -87,7 +87,7 @@ class KMRepositoryListFragment : BaseFragment() {
                     iGroupID = 1,
                     iSchoolID = 1,
                     iBoardID = -1,
-                    iClassStandardID = 1,
+                    iClassStandardID = -1,
                     iSubjectID = -1,
                     iFormateTypeID = -1,
                     iContentTypeID = -1,

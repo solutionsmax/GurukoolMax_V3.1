@@ -272,7 +272,7 @@ class ExamScheduleInfoFragment : BaseFragment() {
     private fun populateAcademicYear(sBaseURL: String, sToken: String) {
         mastersViewModel.populateManufactureYear(
             sBaseURL + POPULATE_MASTER_LIST, sToken,
-            MasterTableNames.MASTERS_CONFIGURATION_CALENDAR_YEAR
+            MasterTableNames.MASTERS_ENQUIRY_CALENDAR_YEAR
         )
         mastersViewModel.populateManufactureYearMutableData.observe(viewLifecycleOwner) {
             academicYearList = it
@@ -309,7 +309,7 @@ class ExamScheduleInfoFragment : BaseFragment() {
      */
     private fun populateAcademicBoard(sBaseURL: String, sToken: String) {
         mastersViewModel.populateBoard(
-            sBaseURL + POPULATE_MASTER_LIST, sToken,
+            sBaseURL, sToken,
             MasterTableNames.MASTERS_ACADEMICS_EDUCATIONAL_BOARD
         )
 

@@ -108,7 +108,7 @@ class SetupLearningSessionInfoFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.apply {
-            title = getString(R.string.link_class_sections_with_subject)
+            title = getString(R.string.course_learning_session)
             setTitleTextColor(resources.getColor(R.color.white, activity?.theme))
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
 

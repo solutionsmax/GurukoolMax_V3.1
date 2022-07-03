@@ -115,7 +115,7 @@
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/marks_allocated"
                         android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:maxLength="3" />
 
                 </LinearLayout>
 

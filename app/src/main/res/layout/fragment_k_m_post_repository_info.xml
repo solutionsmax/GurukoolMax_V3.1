@@ -70,7 +70,7 @@
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/recommended_title"
                         android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        />
 
                 </LinearLayout>
 
@@ -98,7 +98,7 @@
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/abstract_of_submission"
                         android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        />
 
                 </LinearLayout>
 
@@ -138,8 +138,7 @@
                         android:id="@+id/txtTaggedKeywords"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/tagged_keywords"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
@@ -153,8 +152,7 @@
                         android:id="@+id/txtComments"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/comments"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 

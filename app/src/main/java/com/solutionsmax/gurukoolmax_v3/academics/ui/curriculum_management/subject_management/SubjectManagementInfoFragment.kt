@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.common.PopulateClassItems
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.*
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.subject_management.PopulateSubjectProgramList
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.subject_management.PopulateSubjectList
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.subject_management.PostSubjectManagementInfo
 import com.solutionsmax.gurukoolmax_v3.academics.ui.AcademicsViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.SubjectManagementViewModel
@@ -71,7 +71,7 @@ class SubjectManagementInfoFragment : BaseFragment() {
     private var boardItems: List<PopulateMasterListItem> = emptyList()
     private var classItems: List<PopulateClassItems> = emptyList()
     private var academicYearList: List<PopulateMasterListItem> = emptyList()
-    private var populateSubjectList: List<PopulateSubjectProgramList> = emptyList()
+    private var populateSubjectList: List<PopulateSubjectList> = emptyList()
 
     private var iEditID = -1
     private var sClassMethod = ""
@@ -494,17 +494,19 @@ class SubjectManagementInfoFragment : BaseFragment() {
      * Populate Subject
      */
     private fun populateSubject() {
-        subjectManagementViewModel.populateSubjectProgramList(
-            PopulateSubjectProgramsListParams(
+        subjectManagementViewModel.populateSubjectList(
+            PopulateSubjectListParams(
                 url = sBaseURL,
                 sAuthorization = sToken,
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iAcademicBoard,
+                iClassID = iClassID,
+                iYearID = -1,
                 iStatusID = -1
             )
         )
-        subjectManagementViewModel.mutablePopulateSubjectProgramList.observe(viewLifecycleOwner) {
+        subjectManagementViewModel.populateMutableSubjectList.observe(viewLifecycleOwner) {
             populateSubjectList = it
         }
     }
@@ -525,7 +527,7 @@ class SubjectManagementInfoFragment : BaseFragment() {
                 populateSubjectList,
                 SM_Subject.OnItemClick {
                     cboSubject!!.text = it.sSubjectName
-                    iSubjectID = it.id
+                    iSubjectID = it.iSubjectID
                 })
         }
         dialog!!.show()

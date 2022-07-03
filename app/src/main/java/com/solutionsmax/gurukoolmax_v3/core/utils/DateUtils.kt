@@ -1,6 +1,7 @@
 package com.solutionsmax.gurukoolmax_v3.core.utils
 
 import android.annotation.SuppressLint
+import android.app.TimePickerDialog
 import android.content.Context
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -12,7 +13,7 @@ import java.util.regex.Pattern
 object DateUtils {
     private const val DEFAULT_FORMAT_DATE_WITHOUT_TIME = "yyyy-MM-dd"
     private const val DEFAULT_FORMAT_DATE = "yyyy-MM-dd HH:mm:ss"
-      const val DATE_FORMAT = "yyyy-MM-dd"
+    const val DATE_FORMAT = "yyyy-MM-dd"
     val BASETIME = BigDecimal("60.00")
     private val DATE_PATTERN =
         Pattern.compile("^(?:(?!0000)[0-9]{4}([-/.]?)(?:(?:0?[1-9]|1[0-2])([-/.]?)(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])([-/.]?)(?:29|30)|(?:0?[13578]|1[02])([-/.]?)31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2([-/.]?)29)$")
@@ -188,7 +189,6 @@ object DateUtils {
         return resetTime(c.time)
     }
 
-    //减少一天
     fun lessenOneDay(date: Date?): Date {
         val c = Calendar.getInstance()
         c.time = date
@@ -525,5 +525,22 @@ object DateUtils {
     @Throws(Exception::class)
     fun formatTimestamp(date: Date): Timestamp {
         return Timestamp(date.time)
+    }
+
+    fun getTime(hourOfDay: Int, minute: Int): String {
+        var am_pm = ""
+        val datetime = Calendar.getInstance()
+        datetime.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        datetime.set(Calendar.MINUTE, minute)
+        am_pm = if (datetime.get(Calendar.AM_PM) == Calendar.AM) {
+            "AM"
+        } else {
+            "PM"
+        }
+        val strHrsToShow =
+            datetime[Calendar.HOUR_OF_DAY].toString()
+        val minToShow =
+            if (datetime[Calendar.MINUTE] < 10) "0" + datetime[Calendar.MINUTE].toString() else datetime[Calendar.MINUTE].toString()
+        return "$strHrsToShow:$minToShow"
     }
 }

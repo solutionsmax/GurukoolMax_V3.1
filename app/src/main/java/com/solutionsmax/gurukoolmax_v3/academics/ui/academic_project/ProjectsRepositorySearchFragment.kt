@@ -192,7 +192,7 @@ class ProjectsRepositorySearchFragment : BaseFragment() {
      */
     private fun populateCurrentApprovalStatus(sBaseURL: String, sToken: String) {
         mastersViewModel.populateApprovalStatus(
-            url = sBaseURL,
+            url = sBaseURL+ MethodConstants.POPULATE_MASTER_LIST,
             sAuthorization = sToken,
             sTableName = MASTERS_PROJECTS_REPOSITORY_WORKFLOW_STATUS
         )

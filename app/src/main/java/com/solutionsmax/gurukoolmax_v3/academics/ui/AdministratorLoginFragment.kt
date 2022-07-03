@@ -2,6 +2,8 @@ package com.solutionsmax.gurukoolmax_v3.academics.ui
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,6 +71,24 @@ class AdministratorLoginFragment : BaseFragment() {
 
         binding.imgBack.setOnClickListener {
             currentNavController.navigate(R.id.mainMenuFragment)
+        }
+
+        binding.passwordHide.setOnClickListener {
+            if (!TextUtils.isEmpty(binding.txtPassword.text)) {
+                binding.passwordShow.visibility = View.VISIBLE
+                binding.passwordHide.visibility = View.GONE
+                binding.txtPassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+            }
+        }
+
+        binding.passwordShow.setOnClickListener {
+            if (!TextUtils.isEmpty(binding.txtPassword.text)) {
+                binding.passwordShow.visibility = View.GONE
+                binding.passwordHide.visibility = View.VISIBLE
+                binding.txtPassword.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
+            }
         }
 
         binding.btnLogin.setOnClickListener {

@@ -40,6 +40,7 @@ import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.ErrorLogsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.ui.viewmodel.SettingsViewModel
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils
 import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getMediumDateFormat
+import com.solutionsmax.gurukoolmax_v3.core.utils.DateUtils.getTime
 import com.solutionsmax.gurukoolmax_v3.databinding.FragmentExaminationSetupInfoBinding
 import com.solutionsmax.gurukoolmax_v3.operations.data.Academics
 import com.solutionsmax.gurukoolmax_v3.operations.ui.viewmodel.MastersViewModel
@@ -80,8 +81,8 @@ class ExaminationSetupInfoFragment : BaseFragment() {
         var dialog: Dialog? = null
         val TIME_DIALOG_ID = 1111
     }
-    var hour:Int = -1
-    var minute:Int = -1
+
+
     private lateinit var timePickerDialog: TimePickerDialog
 
     private lateinit var academicYearList: List<PopulateMasterListItem>
@@ -96,6 +97,10 @@ class ExaminationSetupInfoFragment : BaseFragment() {
     private var iEditID: Int = -1
     private var sClassMethod = ""
     private var iSettingsID = -1
+
+    val mcurrentTime = Calendar.getInstance()
+    val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
+    val minutes = mcurrentTime.get(Calendar.MINUTE)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -116,7 +121,7 @@ class ExaminationSetupInfoFragment : BaseFragment() {
             val bundle = bundleOf("menu" to Academics.EXAMINATION_MANAGEMENT)
             setNavigationOnClickListener {
                 currentNavController.navigate(
-                    R.id.examinationSetupListFragment,bundle
+                    R.id.examinationSetupListFragment, bundle
                 )
             }
         }
@@ -149,15 +154,20 @@ class ExaminationSetupInfoFragment : BaseFragment() {
         }
 
         binding.lblStartTime.setOnClickListener {
-            timePickerDialog = TimePickerDialog(context,
-                { tp, sHour, sMinute -> binding.lblStartTime.text = "$sHour:$sMinute" }, hour, minute, true
+            timePickerDialog = TimePickerDialog(
+                context, { _, hourOfDay, minute ->
+                    binding.lblStartTime.text = getTime(hourOfDay,minute)
+                }, hour, minutes, true
             )
             timePickerDialog.show()
         }
 
         binding.lblEndTime.setOnClickListener {
-            timePickerDialog = TimePickerDialog(context,
-                { tp, sHour, sMinute -> binding.lblEndTime.text = "$sHour:$sMinute" }, hour, minute, true
+
+            timePickerDialog = TimePickerDialog(
+                context, { _, hourOfDay, minute ->
+                    binding.lblEndTime.text = getTime(hourOfDay,minute)
+                }, hour, minutes, true
             )
             timePickerDialog.show()
         }
@@ -235,7 +245,7 @@ class ExaminationSetupInfoFragment : BaseFragment() {
                         iSubjectID = iSubjectID,
                         tStartTime = binding.lblStartTime.text.toString(),
                         tEndTime = binding.lblEndTime.text.toString(),
-                        dExamDate = binding.txtExamDetails.text.toString(),
+                        dExamDate = binding.lblExamDate.text.toString(),
                         iStatusID = 1
                     )
                 )
@@ -438,7 +448,9 @@ class ExaminationSetupInfoFragment : BaseFragment() {
      */
     private fun populateExamFocusAssignment(sBaseURL: String, sToken: String) {
         mastersViewModel.populateFocusAssignment(
-            sBaseURL+ MethodConstants.POPULATE_MASTER_LIST, sToken, MASTERS_ACADEMICS_ASSIGNMENT_CATEGORIES
+            sBaseURL + MethodConstants.POPULATE_MASTER_LIST,
+            sToken,
+            MASTERS_ACADEMICS_ASSIGNMENT_CATEGORIES
         )
         mastersViewModel.populateFocusAssignmentMutableData.observe(viewLifecycleOwner) {
             focusList = it
@@ -460,8 +472,8 @@ class ExaminationSetupInfoFragment : BaseFragment() {
             adapter = ExamSetupFocusAssignment(
                 focusList,
                 ExamSetupFocusAssignment.OnItemClick {
-                    cboBoard!!.text = it.sName
-                    iBoardID = it.id
+                    cboFocusAssignment!!.text = it.sName
+                    iFocusAssignmentID = it.id
                 })
         }
         dialog!!.show()
@@ -475,7 +487,7 @@ class ExaminationSetupInfoFragment : BaseFragment() {
      */
     private fun populateExamAcademicYear(sBaseURL: String, sToken: String) {
         mastersViewModel.populateAcademicYear(
-            sBaseURL+ MethodConstants.POPULATE_MASTER_LIST, sToken, MASTERS_ENQUIRY_CALENDAR_YEAR
+            sBaseURL + MethodConstants.POPULATE_MASTER_LIST, sToken, MASTERS_ENQUIRY_CALENDAR_YEAR
         )
         mastersViewModel.populateAcademicYearMutableData.observe(viewLifecycleOwner) {
             academicYearList = it

@@ -18,7 +18,7 @@ import com.solutionsmax.gurukoolmax_v3.R
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.common.PopulateClassItems
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.km.PostKMInfo
 import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.params.*
-import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.subject_management.PopulateSubjectProgramList
+import com.solutionsmax.gurukoolmax_v3.academics.domain.entity.subject_management.PopulateSubjectList
 import com.solutionsmax.gurukoolmax_v3.academics.ui.AcademicsViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.curriculum_management.SubjectManagementViewModel
 import com.solutionsmax.gurukoolmax_v3.academics.ui.km.spinner_adapter.*
@@ -74,7 +74,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
 
     private var boardItems: List<PopulateMasterListItem> = emptyList()
     private var classItems: List<PopulateClassItems> = emptyList()
-    private var populateSubjectList: List<PopulateSubjectProgramList> = emptyList()
+    private var populateSubjectList: List<PopulateSubjectList> = emptyList()
     private var contentTypesItems: List<PopulateMasterListItem> = emptyList()
     private var submissionCategoryItems: List<PopulateMasterListItem> = emptyList()
     private var formatTypeItems: List<PopulateMasterListItem> = emptyList()
@@ -447,17 +447,19 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
      * Populate Subject
      */
     private fun populateSubject() {
-        subjectManagementViewModel.populateSubjectProgramList(
-            PopulateSubjectProgramsListParams(
+        subjectManagementViewModel.populateSubjectList(
+            PopulateSubjectListParams(
                 url = sBaseURL,
                 sAuthorization = sToken,
                 iGroupID = 1,
                 iSchoolID = 1,
                 iBoardID = iAcademicBoardID,
+                iClassID = iClassID,
+                iYearID = -1,
                 iStatusID = -1
             )
         )
-        subjectManagementViewModel.mutablePopulateSubjectProgramList.observe(viewLifecycleOwner) {
+        subjectManagementViewModel.populateMutableSubjectList.observe(viewLifecycleOwner) {
             populateSubjectList = it
         }
     }
@@ -478,7 +480,7 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
                 populateSubjectList,
                 KM_Subject.OnItemClick {
                     cboSubject!!.text = it.sSubjectName
-                    iSubjectID = it.id
+                    iSubjectID = it.iSubjectID
                 })
         }
         dialog!!.show()
@@ -595,8 +597,8 @@ class KMPostRepositoryInfoFragment : BaseFragment() {
             adapter = KM_FormatTypes(
                 formatTypeItems,
                 KM_FormatTypes.OnItemClick {
-                    cboBoard!!.text = it.sName
-                    iAcademicBoardID = it.id
+                    cboSubmissionFormat!!.text = it.sName
+                    iSubmissionFormatID = it.id
                 })
         }
         dialog!!.show()

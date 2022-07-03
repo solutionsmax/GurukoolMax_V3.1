@@ -55,8 +55,7 @@
                         android:id="@+id/txtProjectName"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/project_name"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no"/>
 
                 </LinearLayout>
 
@@ -70,8 +69,7 @@
                         android:id="@+id/txtTechInvolved"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/technology_involved"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
@@ -85,8 +83,7 @@
                         android:id="@+id/txtWhoSuggestedProject"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/who_suggested_project"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
@@ -100,8 +97,7 @@
                         android:id="@+id/txtAgencyName"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/agency_name"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
@@ -115,8 +111,7 @@
                         android:id="@+id/txtAbstract"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/abstract_project_condensed"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
@@ -130,8 +125,7 @@
                         android:id="@+id/txtDescription"
                         style="@style/EditTextInputFormInputTypeText"
                         android:hint="@string/description_project"
-                        android:importantForAutofill="no"
-                        android:maxLength="2" />
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
